@@ -13,7 +13,7 @@ runs:
 
         - name: Install test browsers
           shell: bash
-          run: playwright install chromium
+          run: pnpm playwright install chromium --with-deps
 
         - name: Check formatting
           shell: bash
