@@ -8,6 +8,13 @@ trustPolicyIgnoreAfter: 4320
 # CLI Settings
 engineStrict: true
 
+# Build Settings
+allowBuilds:
+  "@parcel/watcher": false
+  esbuild: false
+  lmdb: false
+  msgpackr-extract: false
+
 # Other Settings
 catalogMode: strict
 savePrefix: "~"
