@@ -1,0 +1,5 @@
+{
+    "$schema": "https://json.schemastore.org/stylelintrc",
+    "extends": ["stylelint-config-standard-scss", "stylelint-config-clean-order/error"],
+    "ignoreFiles": ["**/dist/**", "**/.angular/**", "**/coverage/**", "**/reports/**", "**/node_modules/**"]
+}

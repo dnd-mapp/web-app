@@ -1,0 +1,16 @@
+$schema: "https://raw.githubusercontent.com/DavidAnson/markdownlint-cli2/main/schema/markdownlint-cli2-config-schema.json"
+globs:
+    - "**/*.md"
+gitignore: true
+config:
+    default: true
+
+    # Line length is intentionally unconstrained for Markdown (see .editorconfig).
+    MD013: false
+
+    # Allow inline HTML in documentation.
+    MD033: false
+
+    # Allow duplicate headings as long as they are not siblings.
+    MD024:
+        siblings_only: true

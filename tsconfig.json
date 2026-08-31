@@ -1,0 +1,48 @@
+{
+    "references": [
+        { "path": "./projects/web-app/tsconfig.app.json" },
+        { "path": "./projects/web-app/tsconfig.spec.json" }
+    ],
+    "files": [],
+    "compileOnSave": false,
+    "compilerOptions": {
+        "allowUnreachableCode": false,
+        "allowUnusedLabels": false,
+        "exactOptionalPropertyTypes": true,
+        "experimentalDecorators": true,
+        "forceConsistentCasingInFileNames": true,
+        "importHelpers": true,
+        "isolatedModules": true,
+        "module": "preserve",
+        "newLine": "lf",
+        "noErrorTruncation": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitAny": true,
+        "noImplicitOverride": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noPropertyAccessFromIndexSignature": true,
+        "noUncheckedIndexedAccess": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "paths": {
+            "@/app/core": ["./projects/web-app/src/core"],
+            "@/app/core/testing": ["./projects/web-app/src/core/testing"]
+        },
+        "skipLibCheck": true,
+        "strict": true,
+        "strictBindCallApply": true,
+        "strictBuiltinIteratorReturn": true,
+        "strictFunctionTypes": true,
+        "strictNullChecks": true,
+        "strictPropertyInitialization": true,
+        "target": "ES2025",
+        "useUnknownInCatchVariables": true,
+        "verbatimModuleSyntax": true
+    },
+    "angularCompilerOptions": {
+        "enableI18nLegacyMessageIdFormat": false,
+        "strictInjectionParameters": true,
+        "strictInputAccessModifiers": true
+    }
+}

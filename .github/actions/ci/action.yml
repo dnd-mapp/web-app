@@ -1,0 +1,40 @@
+name: CI
+description: Runs CI checks
+
+runs:
+    using: composite
+    steps:
+        - name: Setup Pnpm
+          uses: pnpm/setup@703c52620218391530e48b9e8870d5c0082e1b9b # v2.1.0
+          with:
+              cache: true
+              require-lockfile: true
+              runtime: node
+
+        - name: Install test browsers
+          shell: bash
+          run: playwright install chromium
+
+        - name: Check formatting
+          shell: bash
+          run: pnpm format-check
+
+        - name: Lint TypeScript
+          shell: bash
+          run: pnpm lint-ts
+
+        - name: Lint Markdown
+          shell: bash
+          run: pnpm lint-md
+
+        - name: Lint styles
+          shell: bash
+          run: pnpm lint-styles
+
+        - name: Compile app
+          shell: bash
+          run: pnpm build
+
+        - name: Run tests
+          shell: bash
+          run: pnpm test-ci

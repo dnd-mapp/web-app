@@ -1,0 +1,16 @@
+.angular/
+dist/
+
+node_modules/
+
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/settings.json
+!.vscode/tasks.json
+
+coverage/
+reports/
+
+.ssl/

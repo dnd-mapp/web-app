@@ -1,0 +1,7 @@
+{
+    "$schema": "https://json.schemastore.org/lintstagedrc",
+    "*.{ts,html}": ["eslint --fix", "prettier -w"],
+    "*.scss": ["stylelint --fix", "prettier -w"],
+    "*.md": "markdownlint-cli2 --fix --no-globs",
+    "*.{js,cjs,mjs,cts,mts,css,json,yml,yaml}": "prettier -w"
+}

@@ -1,0 +1,80 @@
+{
+  "$schema": "https://www.schemastore.org/package.json",
+  "name": "web-app",
+  "version": "0.0.0",
+  "description": "Browser front-end of D&D Mapp, built with Angular.",
+  "homepage": "https://github.com/dnd-mapp/web-app#readme",
+  "bugs": {
+    "url": "https://github.com/dnd-mapp/web-app/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dnd-mapp/web-app.git"
+  },
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "prepare": "husky",
+    "commitlint": "commitlint",
+    "start": "ng serve",
+    "build": "ng build",
+    "test": "ng test",
+    "test-ci": "ng test -c ci",
+    "format": "prettier -w .",
+    "format-check": "prettier -l .",
+    "lint-ts": "ng lint",
+    "lint-md": "markdownlint-cli2",
+    "lint-styles": "stylelint \"**/*.scss\""
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": "24.20.0",
+      "onFail": "error"
+    },
+    "packageManager": {
+      "name": "pnpm",
+      "version": "11.24.0",
+      "onFail": "error"
+    }
+  },
+  "dependencies": {
+    "@angular/cdk": "catalog:angular",
+    "@angular/common": "catalog:angular",
+    "@angular/core": "catalog:angular",
+    "@angular/platform-browser": "catalog:angular",
+    "@angular/router": "catalog:angular",
+    "tslib": "catalog:angular"
+  },
+  "devDependencies": {
+    "@angular-eslint/builder": "catalog:eslint",
+    "@angular/build": "catalog:angular",
+    "@angular/cli": "catalog:angular",
+    "@angular/compiler-cli": "catalog:angular",
+    "@commitlint/cli": "catalog:commitlint",
+    "@commitlint/config-conventional": "catalog:commitlint",
+    "@eslint/js": "catalog:eslint",
+    "@vitest/browser-playwright": "catalog:vitest",
+    "@vitest/coverage-v8": "catalog:vitest",
+    "@vitest/ui": "catalog:vitest",
+    "angular-eslint": "catalog:eslint",
+    "eslint": "catalog:eslint",
+    "husky": "catalog:commitlint",
+    "lint-staged": "catalog:commitlint",
+    "markdownlint-cli2": "catalog:markdown",
+    "eslint-config-prettier": "catalog:eslint",
+    "playwright": "catalog:vitest",
+    "prettier": "catalog:prettier",
+    "prettier-plugin-organize-imports": "catalog:prettier",
+    "stylelint": "catalog:stylelint",
+    "stylelint-config-clean-order": "catalog:stylelint",
+    "stylelint-config-standard-scss": "catalog:stylelint",
+    "stylelint-order": "catalog:stylelint",
+    "typescript": "catalog:angular",
+    "typescript-eslint": "catalog:eslint",
+    "vitest": "catalog:vitest"
+  }
+}
