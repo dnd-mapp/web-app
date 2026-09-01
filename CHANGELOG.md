@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - GitHub Actions CI for pushes to `main` and pull requests via a shared composite action, plus pull-request commit-message validation.
 - pnpm workspace with strict catalogs (`angular`, `eslint`, `vitest`, `prettier`, `stylelint`, `markdown`, `commitlint`) and a `minimumReleaseAge` supply-chain policy.
 - HTTPS dev server on `localhost.www.dnd-mapp.dev` with local certificate and hosts-file setup.
+- Multi-stage `Dockerfile` building the SPA with pnpm and serving it from a rootless nginx image (non-root, unprivileged port 4200, read-only-root-filesystem friendly), with `.docker/` nginx config and a `.dockerignore`.
 - `README.md` and `CONTRIBUTING.md`.
 - MIT `LICENSE` and package manifest metadata.
 

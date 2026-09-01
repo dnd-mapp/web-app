@@ -52,7 +52,6 @@
                         ],
                         "browser": "projects/web-app/src/main.ts",
                         "inlineStyleLanguage": "scss",
-                        "sourceMap": true,
                         "styles": ["projects/web-app/src/styles.scss"],
                         "tsConfig": "projects/web-app/tsconfig.app.json"
                     },
@@ -77,7 +76,8 @@
                         "development": {
                             "extractLicenses": false,
                             "namedChunks": true,
-                            "optimization": false
+                            "optimization": false,
+                            "sourceMap": true
                         }
                     }
                 },
