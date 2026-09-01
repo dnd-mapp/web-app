@@ -1,0 +1,13 @@
+# Deny-all-then-allow: nothing enters the build context unless `pnpm install` or
+# `ng build` needs it. Keeps the context small and stops unrelated file changes
+# from busting the dependency/build cache layers.
+
+*
+
+!package.json
+!pnpm-lock.yaml
+!pnpm-workspace.yaml
+!angular.json
+!tsconfig.json
+!projects
+!.docker
