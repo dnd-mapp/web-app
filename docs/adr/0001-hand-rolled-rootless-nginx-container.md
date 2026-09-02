@@ -15,5 +15,5 @@ The runtime stage starts from the official `nginx:<version>-alpine` image and is
 
 ## Consequences
 
-- The `nginx.conf` and `.docker/default.conf` in this repo are load-bearing: a base-image bump can change stock paths/permissions and must be re-verified against the rootless assumptions (writable `/tmp` only).
+- The `nginx.conf` and `.docker/default.conf` in this repo are load-bearing: a base-image bump can change stock paths/permissions and must be re-verified against the rootless assumptions (writable `/tmp` only). See `0002-track-base-images-with-dependabot.md` for how these bumps are delivered and the `devEngines` coupling on the `node` image.
 - Multi-arch, OCI labels, and provenance/attestation are deliberately **not** in the Dockerfile. The build stage is arch-neutral (`--platform=$BUILDPLATFORM`, the Angular output is architecture-independent) and a follow-up Docker Bake file owns the per-arch runtime build and all image metadata.

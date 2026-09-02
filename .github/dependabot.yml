@@ -1,0 +1,43 @@
+# Dependabot keeps the container base images (Dockerfile) and the pinned GitHub Actions (workflows + composite actions)
+# current. See docs/adr/0002-track-base-images-with-dependabot.md.
+#
+# Commit prefix is "chore(deps):" to match CONTRIBUTING.md. The 3-day cooldown mirrors minimumReleaseAge
+# in pnpm-workspace.yaml.
+version: 2
+updates:
+    - package-ecosystem: "docker"
+      directory: "/"
+      schedule:
+          interval: "weekly"
+          day: "monday"
+      cooldown:
+          default-days: 3
+      open-pull-requests-limit: 5
+      commit-message:
+          prefix: "chore"
+          include: "scope"
+      # The node image tag is locked to devEngines.runtime in package.json (engineStrict). Ignoring node tag bumps
+      # leaves Dependabot raising only digest-only refreshes, which run through a separate code path that the ignore
+      # rules do not touch. Bump the node tag by hand together with devEngines.runtime.
+      ignore:
+          - dependency-name: "node"
+            versions: [">= 0"]
+      # No grouping: a stuck node PR must not block an nginx security bump.
+
+    - package-ecosystem: "github-actions"
+      directories:
+          - "/"
+          - "/.github/actions/*"
+      schedule:
+          interval: "weekly"
+          day: "monday"
+      cooldown:
+          default-days: 3
+      open-pull-requests-limit: 5
+      commit-message:
+          prefix: "chore"
+          include: "scope"
+      groups:
+          actions:
+              patterns:
+                  - "*"

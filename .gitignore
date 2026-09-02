@@ -14,3 +14,5 @@ coverage/
 reports/
 
 .ssl/
+
+docs/wayfinder/
