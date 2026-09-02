@@ -1,0 +1,36 @@
+name: Story
+description: A user-facing slice of work — role, goal, and how we'll know it's done
+title: "<role> can <outcome>"
+type: Story
+labels: ["status: triage"]
+body:
+    - type: textarea
+      id: user-story
+      attributes:
+          label: User story
+          description: Who is this for, what do they want, and why? Drop "so that…" only if it truly adds nothing.
+          value: "As a <role>, I want <goal>, so that <benefit>"
+      validations:
+          required: true
+    - type: textarea
+      id: acceptance-criteria
+      attributes:
+          label: Acceptance criteria
+          description: Checklist of verifiable conditions for "done". Gherkin (Given/When/Then) is fine inside an item.
+          value: "- [ ] "
+      validations:
+          required: true
+    - type: textarea
+      id: context
+      attributes:
+          label: Context
+          description: Background, constraints, links to discussion, mockups, or ADRs. Wire epic/blocked-by links via the sidebar.
+      validations:
+          required: false
+    - type: textarea
+      id: out-of-scope
+      attributes:
+          label: Out of scope
+          description: What this Story explicitly will NOT do — cheap insurance against scope creep.
+      validations:
+          required: false

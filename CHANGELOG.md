@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - pnpm workspace with strict catalogs (`angular`, `eslint`, `vitest`, `prettier`, `stylelint`, `markdown`, `commitlint`) and a `minimumReleaseAge` supply-chain policy.
 - HTTPS dev server on `localhost.www.dnd-mapp.dev` with local certificate and hosts-file setup.
 - Multi-stage `Dockerfile` building the SPA with pnpm and serving it from a rootless nginx image (non-root, unprivileged port 4200, read-only-root-filesystem friendly), with `.docker/` nginx config and a `.dockerignore`.
+- `Story` issue form (`.github/ISSUE_TEMPLATE/story.yml`) using the native `Story` issue type, plus `priority: *` and `status: *` label sets; new Stories open as `status: triage`.
 - `README.md` and `CONTRIBUTING.md`.
 - MIT `LICENSE` and package manifest metadata.
 
