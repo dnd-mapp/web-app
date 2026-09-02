@@ -11,19 +11,19 @@
 # Multi-arch, OCI labels, and provenance/attestation are owned by a separate
 # Docker Bake file, not this Dockerfile.
 #
-# Base images are pinned by digest. Bump them together with `devEngines` in
-# package.json (Node) and the nginx tag below. A `docker` Dependabot ecosystem
-# entry is the intended way to keep them current.
-
-# node:24.20.0-alpine  (exact patch to satisfy devEngines.runtime + engineStrict)
-ARG NODE_IMAGE=node:24.20.0-alpine@sha256:e67514e5d0f6c46656005e1b693b2ec9d52e80b641307de684d4a015ba7a4eaf
-# nginx:1.31.4-alpine3.24
-ARG NGINX_IMAGE=nginx:1.31.4-alpine3.24@sha256:db35bfc6b2951e7f8a72db5db120288c127ffaeeb4a6d4b95a26fead017d5913
+# Base images are pinned as tag@digest on the FROM lines below (Dependabot only
+# tracks images it can see there, not ones hidden behind an ARG). The node tag is
+# locked to devEngines.runtime in package.json under engineStrict, so Dependabot
+# only auto-bumps the node digest; a node tag bump is done by hand alongside
+# devEngines.runtime. The nginx image has no such coupling and Dependabot updates
+# its tag and digest together. See .github/dependabot.yml and
+# docs/adr/0002-track-base-images-with-dependabot.md.
 ARG PNPM_VERSION=11.24.0
 
 
 # ---- build ------------------------------------------------------------------
-FROM --platform=$BUILDPLATFORM ${NODE_IMAGE} AS build
+# node:24.20.0-alpine (exact patch, locked to devEngines.runtime; see header)
+FROM --platform=$BUILDPLATFORM node:24.20.0-alpine@sha256:e67514e5d0f6c46656005e1b693b2ec9d52e80b641307de684d4a015ba7a4eaf AS build
 
 ARG PNPM_VERSION
 ENV PNPM_HOME=/pnpm \
@@ -62,7 +62,8 @@ RUN find dist/web-app/browser -type f \
 
 
 # ---- runtime --------------------------------------------------------------
-FROM ${NGINX_IMAGE} AS runtime
+# nginx:1.31.4-alpine3.24
+FROM nginx:1.31.4-alpine3.24@sha256:db35bfc6b2951e7f8a72db5db120288c127ffaeeb4a6d4b95a26fead017d5913 AS runtime
 
 # Rootless nginx config. Replaces the stock files; see .docker/ for details.
 # The ipv6 entrypoint helper is dropped: our default.conf already listens on
