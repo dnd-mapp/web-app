@@ -16,4 +16,4 @@ Not allowed. The `main` branch has a repository ruleset that requires every chan
 
 ## PR template
 
-This repository has no `.github/PULL_REQUEST_TEMPLATE.md` of its own. GitHub falls back to the organisation template in [`dnd-mapp/.github`](https://github.com/dnd-mapp/.github/blob/main/.github/PULL_REQUEST_TEMPLATE.md).
+This repository has no `.github/PULL_REQUEST_TEMPLATE.md` of its own, and the organisation repository [`dnd-mapp/.github`](https://github.com/dnd-mapp/.github) has none either, so GitHub applies no template. Write the description from scratch.

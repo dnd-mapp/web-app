@@ -98,4 +98,4 @@ pnpm test-ci
 
 ## Changelog
 
-Add a bullet under `## [Unreleased]` in [CHANGELOG.md](CHANGELOG.md) for any user-facing change. The file follows [Keep a Changelog](https://keepachangelog.com/).
+Add a bullet under `## [Unreleased]` in [CHANGELOG.md](CHANGELOG.md) for any change someone using the web app would notice. Build tooling, CI, dependency bumps, and repository housekeeping do not belong there. The file follows [Keep a Changelog](https://keepachangelog.com/).
