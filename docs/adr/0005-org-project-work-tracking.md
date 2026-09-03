@@ -21,7 +21,9 @@ Issue types are already the right shape. `Story` is an org-level object (`orgs/d
 
 **The board is issues only.** Pull requests are short-lived here and the pull request list already tracks them. A PR that closes an issue still moves that issue's card, through the issue-closed path, not by being on the board itself.
 
-**Automation is moderate.** Built-in workflows handle the mechanical ends. Adding an item to the project sets `Status: Triage`, closing it sets `Status: Done`, reopening it sets `Status: Triage`, and linking a pull request sets `Status: In review`. The middle transitions (`Ready`, `In progress`, `Blocked`, `Needs info`) are deliberate manual moves, so status carries human intent. Auto-add covers every issue in the org (`is:issue`) however it is filed. Closed issues auto-archive after two weeks of inactivity.
+**Automation is moderate.** Built-in workflows handle the mechanical ends. Adding an item to the project sets `Status: Triage`, closing it sets `Status: Done`, reopening it sets `Status: Triage`, and linking a pull request sets `Status: In review`. The middle transitions (`Ready`, `In progress`, `Blocked`, `Needs info`) are deliberate manual moves, so status carries human intent. Closed issues auto-archive after two weeks of inactivity.
+
+**Auto-add targets `web-app` only.** The `dnd-mapp` org is on the GitHub Free plan, which allows a single auto-add workflow per Project, targeting one repository. That workflow points at `web-app` and adds every issue there (`is:issue`). Issues in other repos reach the board through the issue-template `projects:` key or a manual add. Making the template carry that key for every repo is folded into the follow-up Story that moves `story.yml` to `dnd-mapp/.github`.
 
 **`story.yml` stops auto-applying `status: triage`.** New issues get their status from the item-added workflow instead. The form keeps `type: Story`.
 
@@ -34,11 +36,12 @@ Issue types are already the right shape. `Story` is an org-level object (`orgs/d
 - **A `type: *`-style label mirror of status and priority for portability.** Rejected: no issue here transfers to a foreign org, and the `work-item-type-mechanism` research already ruled this pattern out for the type facet for the same reasons.
 - **Full automation, with workflows driving every status transition.** Rejected: on a small team, `Ready` and `In progress` are signals a person sends, not events a system infers. Only the unambiguous edges are automated.
 - **Iteration and estimate fields now.** Rejected: no fixed cadence, and the `story-work-item-fields` research already ruled out story points. Add on demand.
-- **Move `story.yml` to `dnd-mapp/.github` as an org-wide default template in this change.** Deferred to a follow-up Story: it means deleting `web-app`'s own form and enabling issues on `.github` / `.github-private`, which is wider than this Story needs to be.
+- **Move `story.yml` to `dnd-mapp/.github` as an org-wide default template in this change.** Deferred to a follow-up Story: it means deleting `web-app`'s own form and enabling issues on `.github` / `.github-private`, which is wider than this Story needs to be. That Story is also where the template gains a `projects:` key, which is how repos other than `web-app` get onto the board given the Free-plan auto-add cap.
 
 ## Consequences
 
 - Status and priority are no longer visible in the plain issue list or via `label:` search. They live on the board instead. This is the accepted cost of a single source of truth.
-- Repos with issues disabled (`wiki`, `.github`, `.github-private`) contribute nothing to the board until issues are enabled. The auto-add filter already lists them, so no extra wiring is needed when that happens.
+- Repos with issues disabled (`wiki`, `.github`, `.github-private`) contribute nothing to the board until issues are enabled.
+- Cross-repo board membership leans on the issue-template `projects:` key, not auto-add, because of the Free-plan one-workflow cap. An issue filed by API or `gh` in a repo other than `web-app`, before the org-wide template lands, has to be added to the board by hand. Lifting the org to a paid plan, or adding an `actions/add-to-project` workflow per repo, would remove that gap if it starts to bite.
 - The Project's field and workflow configuration is org state, not in this repo. The exact settings and the migration steps live in the pull request that introduced this ADR and in the team's local wayfinder notes. Applying them needs a `dnd-mapp` owner with a `project`-scoped token.
 - `agent-skills` #22 has no issue type. The board's `Type` field shows blank for it until the `Task` type is seeded by its own Story.
