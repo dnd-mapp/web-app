@@ -14,7 +14,7 @@ Issue types are already the right shape. `Story` is an org-level object (`orgs/d
 
 **Fields.**
 
-- `Status`: `Triage`, `Ready`, `In progress`, `In review`, `Blocked`, `Needs info`, `Done`. The first six are ported from the `status: *` labels one-for-one. `Done` is new, because a Project needs an explicit terminal option where closing the issue used to carry that meaning. Each option is filed under one of GitHub's fixed status groups: `Triage` and `Ready` under Todo, `Done` under Done, the rest under In Progress.
+- `Status`: `Triage`, `Ready`, `In progress`, `In review`, `Blocked`, `Needs info`, `Done`, listed in that order. The first six are ported from the `status: *` labels one-for-one. `Done` is new, because a Project needs an explicit terminal option where closing the issue used to carry that meaning. A GitHub Projects status option has only a name, a colour, and a description, with no category above it, so the option order is the only structure the board gets.
 - `Priority`: `Critical`, `High`, `Medium`, `Low`, ported from the `priority: *` labels. No default. Priority is set at triage.
 - `Type`: the built-in read-only field, shown on the board. It mirrors the issue type. It is not set in the Project and cannot drift.
 - No iteration, estimate, or date fields. They are cheap to add later if a real need appears, unlike removing a field that tools have started keying off.
