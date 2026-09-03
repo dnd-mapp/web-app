@@ -40,18 +40,17 @@ runs:
               docker build --check .
 
         - name: Build and push
-          shell: bash
+          uses: docker/bake-action@d3418bd7d0e9324001bca92fa8ba175ea7e6dc9b # v7.3.0
           env:
               IMAGE: ${{ inputs.repository }}
               TAGS: pr-${{ inputs.pr-number }}
-          run: |
-              set -euo pipefail
-
-              docker buildx bake \
-                  --file docker-bake.hcl \
-                  --file "${{ steps.meta.outputs.bake-file }}" \
-                  --file "${{ steps.meta.outputs.bake-file-annotations }}" \
-                  --set "*.cache-from=type=gha" \
-                  --set "*.cache-to=type=gha,mode=max" \
-                  --push \
-                  default
+          with:
+              files: |
+                  ./docker-bake.hcl
+                  cwd://${{ steps.meta.outputs.bake-file }}
+                  cwd://${{ steps.meta.outputs.bake-file-annotations }}
+              targets: default
+              push: true
+              set: |
+                  *.cache-from=type=gha
+                  *.cache-to=type=gha,mode=max
