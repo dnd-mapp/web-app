@@ -110,6 +110,12 @@ docker run --rm -p 4200:4200 dndmapp/web-app:local
 
 The app is then served at <http://localhost:4200>. The `default` bake target is the multi-arch release build used by CI. See [ADR 0003](docs/adr/0003-docker-bake-release-build.md).
 
+### Published images
+
+Images are published to [`dndmapp/web-app`](https://hub.docker.com/r/dndmapp/web-app) on Docker Hub. A pull request that touches build-relevant files (the path list lives in [`detect-image-changes`](.github/actions/detect-image-changes/action.yml)) builds the multi-arch image and pushes it as `pr-<number>`. Merging promotes that exact image, with no rebuild, to `edge` and to an immutable `sha-<short>` tag, then removes the `pr-<number>` tag. Closing a pull request without merging also removes it. `latest` and version tags are added by the release process, which is not yet wired up. See [ADR 0004](docs/adr/0004-promotion-chain-docker-hub.md).
+
+One-off setup: create the `dndmapp/web-app` repository on Docker Hub, set it public, and give it a description. The workflows read `DH_USERNAME`, `DH_READ_WRITE`, and `DH_READ_WRITE_DELETE` (scoped Docker Hub access tokens) from both the GitHub Actions and Dependabot secret stores.
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the workflow, commit conventions, and dependency policy. Notable changes are recorded in [CHANGELOG.md](CHANGELOG.md).

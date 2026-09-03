@@ -1,0 +1,89 @@
+name: Promote the container image
+description: Retag the pull-request image to edge and an immutable short-SHA tag, then drop the pr-<N> tag.
+
+inputs:
+    repository:
+        description: Docker Hub repository in "namespace/name" form.
+        required: false
+        default: dndmapp/web-app
+    username:
+        description: Docker Hub username.
+        required: true
+    token:
+        description: Docker Hub access token with delete scope.
+        required: true
+    github-token:
+        description: Token used to look up the pull request behind the merge commit.
+        required: true
+
+runs:
+    using: composite
+    steps:
+        - name: Docker Hub setup
+          uses: ./.github/actions/dockerhub-setup
+          with:
+              username: ${{ inputs.username }}
+              token: ${{ inputs.token }}
+
+        - name: Resolve the merged pull request
+          id: pr
+          shell: bash
+          env:
+              GH_TOKEN: ${{ inputs.github-token }}
+              GH_REPO: ${{ github.repository }}
+              MERGE_SHA: ${{ github.sha }}
+          run: |
+              set -euo pipefail
+
+              number="$(gh api "repos/${GH_REPO}/commits/${MERGE_SHA}/pulls" --jq ".[0].number // empty")"
+
+              echo "number=${number}" >> "${GITHUB_OUTPUT}"
+
+              if [ -z "${number}" ]; then
+                  echo "No pull request is associated with ${MERGE_SHA}; nothing to promote."
+              fi
+
+        - name: Promote
+          id: promote
+          if: steps.pr.outputs.number != ''
+          shell: bash
+          env:
+              IMAGE: ${{ inputs.repository }}
+              PR_TAG: pr-${{ steps.pr.outputs.number }}
+              MERGE_SHA: ${{ github.sha }}
+          run: |
+              set -euo pipefail
+
+              short="${MERGE_SHA:0:7}"
+
+              source_ref="${IMAGE}:${PR_TAG}"
+
+              if ! docker buildx imagetools inspect "${source_ref}" > /dev/null 2>&1; then
+                  echo "::warning::${source_ref} does not exist. Skipping promotion."
+                  echo "skipped=true" >> "${GITHUB_OUTPUT}"
+                  exit 0
+              fi
+
+              docker buildx imagetools create \
+                  --tag "${IMAGE}:edge" \
+                  --tag "${IMAGE}:sha-${short}" \
+                  "${source_ref}"
+
+              digest="$(docker buildx imagetools inspect "${IMAGE}:edge" --format "{{.Manifest.Digest}}")"
+              {
+                  echo "### Container image promoted"
+                  echo ""
+                  echo "- \`${IMAGE}:edge\`"
+                  echo "- \`${IMAGE}:sha-${short}\`"
+                  echo "- digest \`${digest}\`"
+              } >> "${GITHUB_STEP_SUMMARY}"
+
+        - name: Remove the pull-request tag
+          if: steps.pr.outputs.number != '' && steps.promote.outputs.skipped != 'true'
+          uses: ./.github/actions/dockerhub-delete-tag
+          with:
+              repository: ${{ inputs.repository }}
+              tag: pr-${{ steps.pr.outputs.number }}
+              username: ${{ inputs.username }}
+              token: ${{ inputs.token }}
+              if-missing: error

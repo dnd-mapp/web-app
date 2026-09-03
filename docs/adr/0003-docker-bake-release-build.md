@@ -37,3 +37,12 @@ The release tag scheme is owned by #5, where `docker/metadata-action` produces t
 - `provenance` and `sbom` attestations produce an OCI image index, which cannot be loaded into the classic Docker image store. This is why `local` turns them off. A bare `docker buildx bake default` without `--push` builds to cache and warns.
 - The `docker-metadata-action` stub target must stay in the bake file. Removing it breaks the `inherits` on `default` whenever the CI-generated bake file is absent (every local run, and `bake --print` in CI).
 - The interim `bake --print` / `docker build --check` steps run on every push and pull request but do not exercise the actual image build or the `FROM`-line digests. That gap closes with #5.
+
+## Update: the publishing pipeline (#5)
+
+Issue #5 landed with two departures from what this ADR assumed:
+
+- **The registry is Docker Hub (`dndmapp/web-app`), not GHCR.** `IMAGE` still defaults to `dndmapp/web-app`. CI sets it explicitly rather than rewriting it to a `ghcr.io/...` path.
+- **CI never rebuilds on merge.** A pull request that touches build-relevant files builds the `default` target once and pushes it as `pr-<N>`. Merging retags that exact image to `edge` and an immutable `sha-<short>` tag with `docker buildx imagetools create`. The `pr-<N>` tag is then deleted. `latest` and the semver tags stay deferred to the release process.
+
+The interim `bake --print` and `docker build --check` steps moved out of the `.github/actions/ci` composite into the image build job. They run there as a pre-flight, before the real `bake --push`. The tag scheme this ADR sketched (`sha`-always, `latest` on `main`) is superseded by the promotion chain. See `0004-promotion-chain-docker-hub.md`.
