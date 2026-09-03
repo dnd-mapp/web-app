@@ -2,6 +2,15 @@
 
 Thanks for contributing. This guide covers the workflow and conventions for the `web-app` repository.
 
+## Tracking work
+
+Work across the `dnd-mapp` repositories is tracked on one org-level board, the [D&D Mapp project](https://github.com/orgs/dnd-mapp/projects/8). Every issue is added to it automatically when it is filed.
+
+`Status` and `Priority` are **fields on the board**, not labels. Do not add `status: *` or `priority: *` labels. They were retired when the board was adopted (see [ADR 0005](docs/adr/0005-org-project-work-tracking.md)).
+
+- `Status` moves through `Triage` → `Ready` → `In progress` → `In review` → `Done`, with `Blocked` and `Needs info` as holding states. A new issue lands at `Triage`. Closing an issue sets `Done`. Opening a pull request that references an issue sets `In review`. Every other move is made by hand.
+- `Priority` (`Critical` / `High` / `Medium` / `Low`) is assigned during triage and is otherwise left unset.
+
 ## Development setup
 
 Follow [Getting started](README.md#getting-started) in the README to install dependencies, create the dev-server certificate, and run the app. `pnpm install` also installs the Git hooks through Husky.

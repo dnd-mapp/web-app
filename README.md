@@ -118,7 +118,7 @@ One-off setup: create the `dndmapp/web-app` repository on Docker Hub, set it pub
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the workflow, commit conventions, and dependency policy. Notable changes are recorded in [CHANGELOG.md](CHANGELOG.md).
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the workflow, commit conventions, and dependency policy. Notable changes are recorded in [CHANGELOG.md](CHANGELOG.md). Work is tracked on the org-level [D&D Mapp project](https://github.com/orgs/dnd-mapp/projects/8).
 
 ## License
 
