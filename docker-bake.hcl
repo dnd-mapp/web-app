@@ -3,7 +3,8 @@
 #
 #   default - the release build. Multi-arch (linux/amd64 + linux/arm64), provenance + SBOM attestations, no output
 #             set here (CI adds `--push`). Image tags are "${IMAGE}:<t>" for each <t> in the comma-separated TAGS
-#             variable; OCI labels come from the docker-metadata-action target that CI merges in (#5), not from here.
+#             variable; OCI labels and annotations come from the docker-metadata-action target that CI merges in
+#             (docs/adr/0004-promotion-chain-docker-hub.md), not from here.
 #   local   - a one-arch, loadable build for poking at the image by hand: host platform only, no attestations, loaded
 #             into the local image store as ${IMAGE}:local.
 #
@@ -12,14 +13,25 @@
 # again. PNPM_VERSION likewise stays on its Dockerfile ARG default.
 
 variable "IMAGE" {
-  # Repository without a registry. CI overrides this with the GHCR path (#5).
+  # Docker Hub repository, no registry prefix. CI sets it explicitly. See docs/adr/0004-promotion-chain-docker-hub.md.
   default = "dndmapp/web-app"
+
+  validation {
+    condition     = IMAGE != "" && length(regexall("[:@[:space:]]", IMAGE)) == 0 && IMAGE == lower(IMAGE)
+    error_message = "IMAGE must be a lowercase repository reference with no tag, digest, or whitespace (e.g. \"dndmapp/web-app\" or \"ghcr.io/dnd-mapp/web-app\")."
+  }
 }
 
 variable "TAGS" {
-  # Comma-separated tag names, e.g. "edge,1.2.3". CI passes the docker/metadata-action output; the `edge`
-  # default is the moving "tip of main" tag (see docs/adr/0003-docker-bake-release-build.md).
+  # Comma-separated tag names. CI sets this to "pr-<N>" for pull-request builds. The move to `edge` and
+  # `sha-<short>` on merge is a retag, not a rebuild (docs/adr/0004-promotion-chain-docker-hub.md). The
+  # `edge` default keeps a bare `docker buildx bake default` honest about what it would produce.
   default = "edge"
+
+  validation {
+    condition     = can(regex("^[[:alnum:]_][[:alnum:]_.-]{0,127}(,[[:alnum:]_][[:alnum:]_.-]{0,127})*$", TAGS))
+    error_message = "TAGS must be a comma-separated list of valid image tags with no empty entries or whitespace (e.g. \"edge\" or \"pr-12,edge\")."
+  }
 }
 
 # Placeholder. In CI, docker/metadata-action generates a bake file that fills this target with the OCI labels and
