@@ -97,6 +97,19 @@ Coverage is enforced at 80% for branches, functions, lines, and statements. Repo
 
 Every push to `main` and every pull request runs the shared [`.github/actions/ci`](.github/actions/ci/action.yml) composite action: formatting check, TypeScript, Markdown and style linting, a production build, and the test suite. Pull requests also validate that each commit message follows Conventional Commits.
 
+## Container image
+
+The app ships as an nginx image built from the repo-root [`Dockerfile`](Dockerfile). [`docker buildx bake`](docker-bake.hcl) is the single build entrypoint; the `docker-bake.hcl` file owns the multi-arch, attestation, and OCI-label concerns.
+
+Build a local, single-arch image and run it:
+
+```bash
+docker buildx bake local
+docker run --rm -p 4200:4200 dndmapp/web-app:local
+```
+
+The app is then served at <http://localhost:4200>. The `default` bake target is the multi-arch release build used by CI; see [ADR 0003](docs/adr/0003-docker-bake-release-build.md).
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the workflow, commit conventions, and dependency policy. Notable changes are recorded in [CHANGELOG.md](CHANGELOG.md).
