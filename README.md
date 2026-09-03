@@ -99,7 +99,7 @@ Every push to `main` and every pull request runs the shared [`.github/actions/ci
 
 ## Container image
 
-The app ships as an nginx image built from the repo-root [`Dockerfile`](Dockerfile). [`docker buildx bake`](docker-bake.hcl) is the single build entrypoint; the `docker-bake.hcl` file owns the multi-arch, attestation, and OCI-label concerns.
+The app ships as an nginx image built from the repo-root [`Dockerfile`](Dockerfile). [`docker buildx bake`](docker-bake.hcl) is the single build entrypoint. The `docker-bake.hcl` file owns the multi-arch, attestation, and OCI-label concerns.
 
 Build a local, single-arch image and run it:
 
@@ -108,7 +108,7 @@ docker buildx bake local
 docker run --rm -p 4200:4200 dndmapp/web-app:local
 ```
 
-The app is then served at <http://localhost:4200>. The `default` bake target is the multi-arch release build used by CI; see [ADR 0003](docs/adr/0003-docker-bake-release-build.md).
+The app is then served at <http://localhost:4200>. The `default` bake target is the multi-arch release build used by CI. See [ADR 0003](docs/adr/0003-docker-bake-release-build.md).
 
 ## Contributing
 
