@@ -1,31 +1,22 @@
-name: Push to main
+name: Pull request closed
 
 on:
-    push:
-        branches:
-            - main
+    pull_request:
+        types:
+            - closed
 
 concurrency:
-    group: ${{ github.workflow }}-${{ github.ref }}
+    group: image-cleanup-${{ github.event.pull_request.number }}
     cancel-in-progress: false
 
 permissions:
     contents: read
+    pull-requests: read
 
 jobs:
-    ci:
-        name: CI
-        runs-on: ubuntu-24.04
-        timeout-minutes: 5
-        steps:
-            - name: Checkout repo
-              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-            - name: Run CI checks
-              uses: ./.github/actions/ci
-
     changes:
         name: Detect image changes
+        if: github.event.pull_request.merged == false
         runs-on: ubuntu-24.04
         timeout-minutes: 5
         outputs:
@@ -33,31 +24,26 @@ jobs:
         steps:
             - name: Checkout repo
               uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-              with:
-                  fetch-depth: 0
 
             - name: Detect image changes
               id: detect
               uses: ./.github/actions/detect-image-changes
 
-    promote:
-        name: Promote
-        needs:
-            - ci
-            - changes
+    cleanup:
+        name: Remove the pull-request image
+        needs: changes
         if: needs.changes.outputs.image == 'true'
         runs-on: ubuntu-24.04
         timeout-minutes: 5
-        permissions:
-            contents: read
-            pull-requests: read
         steps:
             - name: Checkout repo
               uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-            - name: Promote the pull-request image
-              uses: ./.github/actions/promote-image
+            - name: Delete the pr-<N> tag
+              uses: ./.github/actions/dockerhub-delete-tag
               with:
+                  repository: dndmapp/web-app
+                  tag: pr-${{ github.event.pull_request.number }}
                   username: ${{ secrets.DH_USERNAME }}
                   token: ${{ secrets.DH_READ_WRITE_DELETE }}
-                  github-token: ${{ github.token }}
+                  if-missing: skip
