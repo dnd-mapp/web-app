@@ -1,0 +1,66 @@
+name: Delete a Docker Hub tag
+description: Remove a single tag from a Docker Hub repository through the Hub API.
+
+inputs:
+    repository:
+        description: Docker Hub repository in "namespace/name" form.
+        required: true
+    tag:
+        description: Tag to delete.
+        required: true
+    username:
+        description: Docker Hub username.
+        required: true
+    token:
+        description: Docker Hub access token with delete scope.
+        required: true
+    if-missing:
+        description: 'What to do when the tag does not exist: "error" or "skip".'
+        required: false
+        default: error
+
+runs:
+    using: composite
+    steps:
+        - name: Delete tag
+          shell: bash
+          env:
+              DH_REPOSITORY: ${{ inputs.repository }}
+              DH_TAG: ${{ inputs.tag }}
+              DH_USERNAME: ${{ inputs.username }}
+              DH_TOKEN: ${{ inputs.token }}
+              DH_IF_MISSING: ${{ inputs.if-missing }}
+          run: |
+              set -euo pipefail
+
+              api="https://hub.docker.com/v2"
+              jwt="$(
+                  curl -fsS -H "Content-Type: application/json" \
+                      -d "{\"username\": \"${DH_USERNAME}\", \"password\": \"${DH_TOKEN}\"}" \
+                      "${api}/users/login/" | jq -r ".token"
+              )"
+
+              tag_url="${api}/repositories/${DH_REPOSITORY}/tags/${DH_TAG}/"
+
+              status="$(curl -sS -o /dev/null -w "%{http_code}" -H "Authorization: JWT ${jwt}" "${tag_url}")"
+
+              if [ "${status}" = "404" ]; then
+                  if [ "${DH_IF_MISSING}" = "skip" ]; then
+                      echo "Tag ${DH_REPOSITORY}:${DH_TAG} is already gone. Nothing to delete."
+                      exit 0
+                  fi
+                  echo "::error::Expected tag ${DH_REPOSITORY}:${DH_TAG} to exist, but it does not."
+                  exit 1
+              fi
+              if [ "${status}" != "200" ]; then
+                  echo "::error::Unexpected HTTP ${status} while looking up ${DH_REPOSITORY}:${DH_TAG}."
+                  exit 1
+              fi
+
+              status="$(curl -sS -o /dev/null -w "%{http_code}" -X DELETE -H "Authorization: JWT ${jwt}" "${tag_url}")"
+
+              if [ "${status}" != "204" ]; then
+                  echo "::error::Deleting ${DH_REPOSITORY}:${DH_TAG} failed with HTTP ${status}."
+                  exit 1
+              fi
+              echo "Deleted ${DH_REPOSITORY}:${DH_TAG}."

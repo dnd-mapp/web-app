@@ -1,0 +1,37 @@
+name: Detect image changes
+description: Report whether the changes in the checked-out ref can affect the built container image.
+
+outputs:
+    image:
+        description: Whether a build-relevant path changed (true or false).
+        value: ${{ steps.filter.outputs.image }}
+
+runs:
+    using: composite
+    steps:
+        - name: Filter paths
+          id: filter
+          uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
+          with:
+              # Paths that can change the built image. Keep this list and the composites it names in sync.
+              # See docs/adr/0004-promotion-chain-docker-hub.md.
+              filters: |
+                  image:
+                      - "Dockerfile"
+                      - ".dockerignore"
+                      - "docker-bake.hcl"
+                      - ".docker/**"
+                      - "projects/**"
+                      - "angular.json"
+                      - "tsconfig.json"
+                      - "package.json"
+                      - "pnpm-lock.yaml"
+                      - "pnpm-workspace.yaml"
+                      - ".github/workflows/pull-request.yml"
+                      - ".github/workflows/push-main.yml"
+                      - ".github/workflows/pull-request-closed.yml"
+                      - ".github/actions/detect-image-changes/**"
+                      - ".github/actions/build-image/**"
+                      - ".github/actions/promote-image/**"
+                      - ".github/actions/dockerhub-setup/**"
+                      - ".github/actions/dockerhub-delete-tag/**"

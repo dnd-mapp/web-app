@@ -1,0 +1,57 @@
+name: Build the container image
+description: Build the multi-arch web-app image with docker buildx bake and push it under a pull-request tag.
+
+inputs:
+    repository:
+        description: Docker Hub repository in "namespace/name" form.
+        required: false
+        default: dndmapp/web-app
+    pr-number:
+        description: Pull-request number, used for the pr-<N> tag.
+        required: true
+    username:
+        description: Docker Hub username.
+        required: true
+    token:
+        description: Docker Hub access token with write scope.
+        required: true
+
+runs:
+    using: composite
+    steps:
+        - name: Docker Hub setup
+          uses: ./.github/actions/dockerhub-setup
+          with:
+              username: ${{ inputs.username }}
+              token: ${{ inputs.token }}
+
+        - name: Collect image metadata
+          id: meta
+          uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
+          with:
+              images: ${{ inputs.repository }}
+
+        - name: Validate the bake file and Dockerfile
+          shell: bash
+          run: |
+              set -euo pipefail
+
+              docker buildx bake --print default local
+              docker build --check .
+
+        - name: Build and push
+          shell: bash
+          env:
+              IMAGE: ${{ inputs.repository }}
+              TAGS: pr-${{ inputs.pr-number }}
+          run: |
+              set -euo pipefail
+
+              docker buildx bake \
+                  --file docker-bake.hcl \
+                  --file "${{ steps.meta.outputs.bake-file }}" \
+                  --file "${{ steps.meta.outputs.bake-file-annotations }}" \
+                  --set "*.cache-from=type=gha" \
+                  --set "*.cache-to=type=gha,mode=max" \
+                  --push \
+                  default
