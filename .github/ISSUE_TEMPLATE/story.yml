@@ -1,8 +1,7 @@
 name: Story
-description: A user-facing slice of work — role, goal, and how we'll know it's done
+description: A user-facing slice of work (role, goal, and how we'll know it's done)
 title: "<role> can <outcome>"
 type: Story
-labels: ["status: triage"]
 body:
     - type: textarea
       id: user-story
@@ -31,6 +30,6 @@ body:
       id: out-of-scope
       attributes:
           label: Out of scope
-          description: What this Story explicitly will NOT do — cheap insurance against scope creep.
+          description: What this Story explicitly will NOT do. Cheap insurance against scope creep.
       validations:
           required: false
