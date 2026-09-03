@@ -15,7 +15,7 @@ Issue types are already the right shape. `Story` is an org-level object (`orgs/d
 **Fields.**
 
 - `Status`: `Triage`, `Ready`, `In progress`, `In review`, `Blocked`, `Needs info`, `Done`, listed in that order. The first six are ported from the `status: *` labels one-for-one. `Done` is new, because a Project needs an explicit terminal option where closing the issue used to carry that meaning. A GitHub Projects status option has only a name, a colour, and a description, with no category above it, so the option order is the only structure the board gets.
-- `Priority`: `Critical`, `High`, `Medium`, `Low`, ported from the `priority: *` labels. No default. Priority is set at triage.
+- `Priority`: `Critical`, `High`, `Medium`, `Low`, ported from the `priority: *` labels. `Medium` is the default, so a new issue starts at normal priority and triage only moves it when the issue is unusual.
 - `Type`: the built-in read-only field, shown on the board. It mirrors the issue type. It is not set in the Project and cannot drift.
 - No iteration, estimate, or date fields. They are cheap to add later if a real need appears, unlike removing a field that tools have started keying off.
 
@@ -27,7 +27,7 @@ Issue types are already the right shape. `Story` is an org-level object (`orgs/d
 
 **`story.yml` stops auto-applying `status: triage`.** New issues get their status from the item-added workflow instead. The form keeps `type: Story`.
 
-**Migration is a single pass, no parallel window.** The eight open `web-app` Stories and `agent-skills` #22 are added to the board at `Status: Triage` with `Priority` unset. Then the ten labels are deleted from `web-app`. Only nine issues, all in one state, so a transition window would buy nothing.
+**Migration is a single pass, no parallel window.** The eight open `web-app` Stories and `agent-skills` #22 are added to the board at `Status: Triage`. Then the ten labels are deleted from `web-app`. Only nine issues, all in one state, so a transition window would buy nothing.
 
 ## Considered options
 
