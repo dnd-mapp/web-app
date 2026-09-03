@@ -38,3 +38,14 @@ runs:
         - name: Run tests
           shell: bash
           run: pnpm test-ci
+
+        - name: Set up Docker Buildx
+          uses: docker/setup-buildx-action@37fe631027851001ddb9b187196cc803df7f5f0e # v4.3.0
+
+        - name: Validate bake file
+          shell: bash
+          run: docker buildx bake --print default local
+
+        - name: Lint Dockerfile
+          shell: bash
+          run: docker build --check .
