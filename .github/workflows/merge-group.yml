@@ -1,0 +1,29 @@
+name: Merge group
+
+on:
+    merge_group:
+
+# Deny everything at the workflow level; each job opts back in to exactly what it needs.
+permissions: {}
+
+# Never cancel a merge queue run: the queue treats a canceled check as a failure and
+# would eject the pull request, so in-flight runs are allowed to finish.
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: false
+
+jobs:
+    ci:
+        name: CI
+        runs-on: ubuntu-24.04
+        timeout-minutes: 5
+        permissions:
+            contents: read
+        steps:
+            - name: Check out the repository
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  persist-credentials: false
+
+            - name: Run CI
+              uses: ./.github/actions/ci

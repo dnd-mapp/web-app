@@ -1,0 +1,36 @@
+name: CI
+description: Sets up the toolchain and runs the full CI suite (formatting, linting, build and tests).
+
+runs:
+    using: composite
+    steps:
+        - name: Set up toolchain and install dependencies
+          uses: ./.github/actions/setup
+
+        - name: Install Playwright browsers
+          shell: bash
+          run: pnpm run playwright-install
+
+        - name: Check formatting
+          shell: bash
+          run: pnpm run format-check
+
+        - name: Lint TypeScript and templates
+          shell: bash
+          run: pnpm run lint-ts-check
+
+        - name: Lint Markdown
+          shell: bash
+          run: pnpm run lint-md-check
+
+        - name: Lint styles
+          shell: bash
+          run: pnpm run lint-styles-check
+
+        - name: Build the application
+          shell: bash
+          run: pnpm run build
+
+        - name: Run tests
+          shell: bash
+          run: pnpm run test-ci

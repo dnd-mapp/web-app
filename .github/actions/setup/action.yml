@@ -1,0 +1,17 @@
+name: Setup
+description:
+    Installs pnpm and the Node.js runtime declared under `devEngines` in package.json, then installs dependencies from
+    the lockfile.
+
+runs:
+    using: composite
+    steps:
+        # `pnpm/setup` reads both the pnpm version (`devEngines.packageManager`) and the runtime (`devEngines.runtime`)
+        # from package.json, so the toolchain is pinned in exactly one place. It also replaces `actions/setup-node` and
+        # runs `pnpm install`.
+        - name: Install pnpm, the Node.js runtime and dependencies
+          uses: pnpm/setup@703c52620218391530e48b9e8870d5c0082e1b9b # v2.1.0
+          with:
+              cache: true
+              require-lockfile: true
+              runtime: node
