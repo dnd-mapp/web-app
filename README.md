@@ -10,7 +10,28 @@ The D&D Mapp web client: an [Angular](https://angular.dev) single-page applicati
 | [pnpm](https://pnpm.io)                         | `12.4.0`  | Pinned through `devEngines.packageManager`; other managers are unused. |
 | [mkcert](https://github.com/FiloSottile/mkcert) | any       | Issues the locally trusted certificate the dev server needs.           |
 
-`engineStrict` is enabled, so pnpm refuses to run on an unsupported Node.js version rather than warning. Use a version manager such as [fnm](https://github.com/Schniz/fnm) or [nvm](https://github.com/nvm-sh/nvm) to match the pinned runtime, and enable pnpm through [Corepack](https://nodejs.org/api/corepack.html) (`corepack enable pnpm`) so the pinned package manager version is picked up automatically.
+`engineStrict` is enabled, so pnpm refuses to run on an unsupported Node.js version rather than warning. Both pins live in `package.json`, which leaves two ways to satisfy them.
+
+The first is to install both tools by hand: Node.js from its [downloads page](https://nodejs.org/en/download), and pnpm through its [standalone installer](https://pnpm.io/installation), which needs neither Node.js nor Corepack:
+
+```bash
+curl -fsSL https://get.pnpm.io/install.sh | sh -
+```
+
+```powershell
+Invoke-WebRequest https://get.pnpm.io/install.ps1 -UseBasicParsing | Invoke-Expression
+```
+
+The version the installer lands on hardly matters, since pnpm manages its own version by default: it reads `devEngines.packageManager` and switches to the pinned release before running a command.
+
+The second is to hand both tools to [mise](https://mise.jdx.dev), which reads the pins straight out of `package.json` rather than a `mise.toml` of its own. Those idiomatic version files are disabled by default, so enable them once per tool:
+
+```bash
+mise settings add idiomatic_version_file_enable_tools node
+mise settings add idiomatic_version_file_enable_tools pnpm
+```
+
+Both commands write to the global `~/.config/mise/config.toml`, leaving the repository free of mise configuration. `mise install` in the repository root then provisions Node.js from `devEngines.runtime` and pnpm from `devEngines.packageManager`, and follows both as the manifest changes.
 
 ## Getting started
 
