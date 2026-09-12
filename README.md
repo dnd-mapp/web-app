@@ -134,7 +134,7 @@ Coverage is collected on every run, with thresholds enforced at 80% for branches
 
 Versions are declared once, in the catalogs in `pnpm-workspace.yaml`, and referenced from `package.json` as `catalog:<name>`. `catalogMode` is `strict`, so a dependency that is not in a catalog is rejected; add the version to the appropriate catalog instead of writing a range into `package.json`.
 
-Two guards apply to updates: `minimumReleaseAge` holds new releases back for three days, and `trustPolicy` set to `no-downgrade` rejects a resolution that would move a package backwards.
+Two guards apply to updates: `minimumReleaseAge` holds new releases back for three days, and `trustPolicy` set to `no-downgrade` rejects a resolution that would move a package backward.
 
 ## Committing
 
