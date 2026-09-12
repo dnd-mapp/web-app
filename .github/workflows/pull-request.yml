@@ -22,23 +22,6 @@ jobs:
             - name: Check out the repository
               uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
               with:
-                  persist-credentials: false
-
-            - name: Run CI
-              uses: ./.github/actions/ci
-
-    commit-messages:
-        name: Commit messages
-        runs-on: ubuntu-24.04
-        timeout-minutes: 2
-        permissions:
-            contents: read
-        steps:
-            # commitlint walks the range base..head, so the full history is required; the default shallow fetch would
-            # leave those commits unavailable.
-            - name: Check out the repository
-              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-              with:
                   fetch-depth: 0
                   persist-credentials: false
 
@@ -53,3 +36,6 @@ jobs:
                   BASE_SHA: ${{ github.event.pull_request.base.sha }}
                   HEAD_SHA: ${{ github.event.pull_request.head.sha }}
               run: pnpm exec commitlint --from "$BASE_SHA" --to "$HEAD_SHA" --verbose
+
+            - name: Run CI
+              uses: ./.github/actions/ci
