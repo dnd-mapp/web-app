@@ -1,0 +1,13 @@
+{
+    "$schema": "https://www.schemastore.org/claude-code-launch.json",
+    "version": "0.0.1",
+    "configurations": [
+        {
+            "name": "web-app",
+            "runtimeExecutable": "pnpm",
+            "runtimeArgs": ["run", "start"],
+            "port": 4200,
+            "url": "https://127.0.0.1:4200"
+        }
+    ]
+}
