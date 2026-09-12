@@ -1,0 +1,20 @@
+{
+    "overrides": [
+        {
+            "files": "*.html",
+            "options": {
+                "parser": "angular"
+            }
+        },
+        {
+            "files": ["*.yaml", "*.yml"],
+            "options": {
+                "singleQuote": false
+            }
+        }
+    ],
+    "plugins": ["prettier-plugin-organize-imports"],
+    "printWidth": 120,
+    "quoteProps": "consistent",
+    "singleQuote": true
+}

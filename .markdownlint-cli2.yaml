@@ -1,0 +1,6 @@
+# Respect .gitignore so dependencies and build output are never linted.
+gitignore: true
+
+config:
+    # Markdown line length is deliberately unbounded; see `max_line_length` in .editorconfig.
+    MD013: false

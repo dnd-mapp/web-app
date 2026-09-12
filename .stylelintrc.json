@@ -1,0 +1,6 @@
+{
+    "extends": ["stylelint-config-standard-scss", "stylelint-config-clean-order"],
+    "rules": {
+        "selector-pseudo-element-no-unknown": [true, { "ignorePseudoElements": ["ng-deep"] }]
+    }
+}
