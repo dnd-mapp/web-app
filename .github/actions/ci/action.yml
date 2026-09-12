@@ -1,12 +1,9 @@
 name: CI
-description: Sets up the toolchain and runs the full CI suite (formatting, linting, build and tests).
+description: Runs the full CI suite (formatting, linting, build and tests) against an already installed toolchain.
 
 runs:
     using: composite
     steps:
-        - name: Set up toolchain and install dependencies
-          uses: ./.github/actions/setup
-
         - name: Install Playwright browsers
           shell: bash
           run: pnpm run playwright-install
