@@ -25,5 +25,8 @@ jobs:
               with:
                   persist-credentials: false
 
+            - name: Set up toolchain and install dependencies
+              uses: ./.github/actions/setup
+
             - name: Run CI
               uses: ./.github/actions/ci
