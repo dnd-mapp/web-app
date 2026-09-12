@@ -1,0 +1,39 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/evilmartians/lefthook/master/schema.json
+
+pre-commit:
+    parallel: true
+    jobs:
+        # Prettier ignores Markdown (see `.prettierignore`), so markdownlint-cli2 owns
+        # these files outright and is safe to run alongside the `code` group.
+        - name: markdownlint
+          glob: "*.md"
+          run: pnpm exec markdownlint-cli2 --fix {staged_files}
+          stage_fixed: true
+
+        # Prettier overlaps stylelint on `.scss` and eslint on `.ts`/`.html`, so these
+        # must not run in parallel; two processes writing one file loses fixes.
+        # Formatters run first; eslint then validates the final, formatted content.
+        - name: code
+          group:
+              piped: true
+              jobs:
+                  - name: stylelint
+                    glob: "*.scss"
+                    run: pnpm exec stylelint --formatter unix --fix {staged_files}
+                    stage_fixed: true
+
+                  - name: prettier
+                    run: pnpm exec prettier --write --ignore-unknown {staged_files}
+                    stage_fixed: true
+
+                  # Check-only: eslint's fixes carry semantic weight, so they belong in a
+                  # reviewed edit rather than silently in a commit. `--no-warn-ignored`
+                  # keeps eslint quiet about staged files its own config excludes.
+                  - name: eslint
+                    glob: ["*.ts", "*.mts", "*.html"]
+                    run: pnpm exec eslint --no-warn-ignored {staged_files}
+
+commit-msg:
+    jobs:
+        - name: commitlint
+          run: pnpm exec commitlint --edit {1}
