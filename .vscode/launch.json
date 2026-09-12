@@ -1,0 +1,13 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug web-app in Chrome",
+            "type": "chrome",
+            "request": "launch",
+            "url": "https://127.0.0.1:4200",
+            "webRoot": "${workspaceFolder}/projects/web-app",
+            "preLaunchTask": "start"
+        }
+    ]
+}

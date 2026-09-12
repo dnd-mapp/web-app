@@ -1,0 +1,199 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "start",
+            "detail": "Serve the application at https://127.0.0.1:4200 and rebuild on change.",
+            "type": "shell",
+            "command": "pnpm",
+            "args": ["run", "start"],
+            "isBackground": true,
+            "presentation": {
+                "panel": "dedicated",
+                "reveal": "always"
+            },
+            "problemMatcher": {
+                "owner": "angular",
+                "fileLocation": ["relative", "${workspaceFolder}"],
+                "pattern": [
+                    {
+                        "regexp": "^X \\[(ERROR|WARNING)\\] (.*)$",
+                        "severity": 1,
+                        "message": 2
+                    },
+                    {
+                        "regexp": "^\\s*$"
+                    },
+                    {
+                        "regexp": "^\\s+(.+?):(\\d+):(\\d+):$",
+                        "file": 1,
+                        "line": 2,
+                        "column": 3
+                    }
+                ],
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "(Building\\.\\.\\.|Changes detected)",
+                    "endsPattern": "(Watch mode enabled|Application bundle generation (complete|failed))"
+                }
+            }
+        },
+        {
+            "label": "build",
+            "detail": "Build the production bundle into dist/.",
+            "type": "shell",
+            "command": "pnpm",
+            "args": ["run", "build"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "format",
+            "detail": "Formatting and Linting: rewrite every file with Prettier.",
+            "type": "shell",
+            "command": "pnpm",
+            "args": ["run", "format"],
+            "problemMatcher": []
+        },
+        {
+            "label": "format-check",
+            "detail": "Formatting and Linting: verify every file matches Prettier.",
+            "type": "shell",
+            "command": "pnpm",
+            "args": ["run", "format-check"],
+            "problemMatcher": []
+        },
+        {
+            "label": "lint-md",
+            "detail": "Formatting and Linting: fix the Markdown issues markdownlint can repair.",
+            "type": "shell",
+            "command": "pnpm",
+            "args": ["run", "lint-md"],
+            "problemMatcher": {
+                "owner": "markdownlint",
+                "fileLocation": ["relative", "${workspaceFolder}"],
+                "pattern": {
+                    "regexp": "^(.+?):(\\d+)(?::(\\d+))?\\s+(error|warning)\\s+(\\S+)\\s+(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "code": 5,
+                    "message": 6
+                }
+            }
+        },
+        {
+            "label": "lint-md-check",
+            "detail": "Formatting and Linting: report Markdown issues found by markdownlint.",
+            "type": "shell",
+            "command": "pnpm",
+            "args": ["run", "lint-md-check"],
+            "problemMatcher": {
+                "owner": "markdownlint",
+                "fileLocation": ["relative", "${workspaceFolder}"],
+                "pattern": {
+                    "regexp": "^(.+?):(\\d+)(?::(\\d+))?\\s+(error|warning)\\s+(\\S+)\\s+(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "code": 5,
+                    "message": 6
+                }
+            }
+        },
+        {
+            "label": "lint-styles",
+            "detail": "Formatting and Linting: fix the SCSS issues stylelint can repair.",
+            "type": "shell",
+            "command": "pnpm",
+            "args": ["run", "lint-styles"],
+            "problemMatcher": {
+                "owner": "stylelint",
+                "fileLocation": "absolute",
+                "pattern": {
+                    "regexp": "^(.+?):(\\d+):(\\d+): (.*?) \\((\\S+)\\) \\[(error|warning)\\]$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "message": 4,
+                    "code": 5,
+                    "severity": 6
+                }
+            }
+        },
+        {
+            "label": "lint-styles-check",
+            "detail": "Formatting and Linting: report SCSS issues found by stylelint.",
+            "type": "shell",
+            "command": "pnpm",
+            "args": ["run", "lint-styles-check"],
+            "problemMatcher": {
+                "owner": "stylelint",
+                "fileLocation": "absolute",
+                "pattern": {
+                    "regexp": "^(.+?):(\\d+):(\\d+): (.*?) \\((\\S+)\\) \\[(error|warning)\\]$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "message": 4,
+                    "code": 5,
+                    "severity": 6
+                }
+            }
+        },
+        {
+            "label": "lint-ts",
+            "detail": "Formatting and Linting: fix the TypeScript and template issues eslint can repair.",
+            "type": "shell",
+            "command": "pnpm",
+            "args": ["run", "lint-ts"],
+            "problemMatcher": "$eslint-stylish"
+        },
+        {
+            "label": "lint-ts-check",
+            "detail": "Formatting and Linting: report TypeScript and template issues found by eslint.",
+            "type": "shell",
+            "command": "pnpm",
+            "args": ["run", "lint-ts-check"],
+            "problemMatcher": "$eslint-stylish"
+        },
+        {
+            "label": "playwright-install",
+            "detail": "Testing: install the Chromium build that the unit tests run in.",
+            "type": "shell",
+            "command": "pnpm",
+            "args": ["run", "playwright-install"],
+            "problemMatcher": []
+        },
+        {
+            "label": "test",
+            "detail": "Testing: run the unit tests in watch mode with the Vitest UI.",
+            "type": "shell",
+            "command": "pnpm",
+            "args": ["run", "test"],
+            "isBackground": true,
+            "presentation": {
+                "panel": "dedicated"
+            },
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "test-ci",
+            "detail": "Testing: run the unit tests once, the way CI does.",
+            "type": "shell",
+            "command": "pnpm",
+            "args": ["run", "test-ci"],
+            "group": "test",
+            "problemMatcher": []
+        }
+    ]
+}
