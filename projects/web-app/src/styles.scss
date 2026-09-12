@@ -1,0 +1,33 @@
+/* You can add global styles to this file, and also import other style files */
+
+:root {
+    --dmm-color-background: #1c1f26;
+    --dmm-color-surface: #242832;
+    --dmm-color-border: #363c4a;
+    --dmm-color-text: #e3e5ea;
+    --dmm-color-text-muted: #a2a9b8;
+    --dmm-color-accent: #7aa2f7;
+
+    color-scheme: dark;
+}
+
+html,
+body {
+    min-height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family:
+        system-ui,
+        -apple-system,
+        'Segoe UI',
+        roboto,
+        sans-serif;
+    color: var(--dmm-color-text);
+    background-color: var(--dmm-color-background);
+}
+
+a {
+    color: var(--dmm-color-accent);
+}

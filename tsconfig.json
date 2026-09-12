@@ -1,0 +1,39 @@
+{
+    "references": [
+        { "path": "./projects/web-app/tsconfig.app.json" },
+        { "path": "./projects/web-app/tsconfig.spec.json" }
+    ],
+    "files": [],
+    "compileOnSave": false,
+    "compilerOptions": {
+        "allowUnreachableCode": false,
+        "allowUnusedLabels": false,
+        "exactOptionalPropertyTypes": true,
+        "experimentalDecorators": true,
+        "importHelpers": true,
+        "isolatedModules": true,
+        "module": "preserve",
+        "noErrorTruncation": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitOverride": true,
+        "noImplicitReturns": true,
+        "noPropertyAccessFromIndexSignature": true,
+        "noUncheckedIndexedAccess": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "paths": {
+            "@/core": ["./projects/web-app/src/core/index.ts"],
+            "@/core/testing": ["./projects/web-app/src/core/testing/index.ts"]
+        },
+        "skipLibCheck": true,
+        "strict": true,
+        "target": "es2025",
+        "verbatimModuleSyntax": true
+    },
+    "angularCompilerOptions": {
+        "enableI18nLegacyMessageIdFormat": false,
+        "strictInjectionParameters": true,
+        "strictInputAccessModifiers": true,
+        "strictStandalone": true
+    }
+}
