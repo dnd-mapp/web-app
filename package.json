@@ -1,0 +1,80 @@
+{
+  "$schema": "https://www.schemastore.org/package.json",
+  "name": "web-app",
+  "description": "The D&D Mapp web client.",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": "24.21.0",
+      "onFail": "error"
+    },
+    "packageManager": {
+      "name": "pnpm",
+      "version": "12.4.0",
+      "onFail": "error"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dnd-mapp/web-app.git"
+  },
+  "scripts": {
+    "ng": "ng",
+    "playwright-install": "playwright install chromium --with-deps",
+    "start": "ng serve",
+    "build": "ng build",
+    "test": "ng test",
+    "test-ci": "ng test -c ci",
+    "lint-ts": "ng lint --fix",
+    "lint-ts-check": "ng lint",
+    "lint-md": "markdownlint-cli2 --fix \"**/*.md\"",
+    "lint-md-check": "markdownlint-cli2 \"**/*.md\"",
+    "lint-styles": "stylelint --fix --formatter unix \"projects/**/*.scss\"",
+    "lint-styles-check": "stylelint --formatter unix \"projects/**/*.scss\"",
+    "format": "prettier -w .",
+    "format-check": "prettier -c ."
+  },
+  "dependencies": {
+    "@angular/common": "catalog:angular",
+    "@angular/compiler": "catalog:angular",
+    "@angular/core": "catalog:angular",
+    "@angular/forms": "catalog:angular",
+    "@angular/platform-browser": "catalog:angular",
+    "@angular/router": "catalog:angular",
+    "rxjs": "catalog:angular",
+    "tslib": "catalog:angular"
+  },
+  "devDependencies": {
+    "@angular/build": "catalog:angular",
+    "@angular/cdk": "catalog:angular",
+    "@angular/cli": "catalog:angular",
+    "@angular/compiler-cli": "catalog:angular",
+    "@commitlint/cli": "catalog:linting",
+    "@commitlint/config-conventional": "catalog:linting",
+    "@eslint/js": "catalog:linting",
+    "@vitest/browser-playwright": "catalog:testing",
+    "@vitest/coverage-v8": "catalog:testing",
+    "@vitest/ui": "catalog:testing",
+    "angular-eslint": "catalog:linting",
+    "eslint": "catalog:linting",
+    "lefthook": "catalog:hooks",
+    "markdownlint-cli2": "catalog:linting",
+    "playwright": "catalog:testing",
+    "prettier": "catalog:formatting",
+    "prettier-plugin-organize-imports": "catalog:formatting",
+    "stylelint": "catalog:linting",
+    "stylelint-config-clean-order": "catalog:linting",
+    "stylelint-config-standard-scss": "catalog:linting",
+    "stylelint-order": "catalog:linting",
+    "typescript": "catalog:angular",
+    "typescript-eslint": "catalog:linting",
+    "vitest": "catalog:testing"
+  }
+}

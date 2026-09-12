@@ -1,0 +1,63 @@
+# yaml-language-server: https://www.schemastore.org/pnpm-workspace.json
+
+# Dependency Resolution Settings
+minimumReleaseAge: 4320 # 3 days
+minimumReleaseAgeExclude:
+  - "@dnd-mapp/*"
+trustPolicy: no-downgrade
+trustPolicyIgnoreAfter: 4320 # 3 days
+
+# CLI Settings
+engineStrict: true
+
+# Build Settings
+allowBuilds:
+  "@parcel/watcher": true
+  esbuild: true
+  lefthook: true
+  lmdb: true
+  msgpackr-extract: true
+
+# Other Settings
+catalogMode: strict
+savePrefix: "~"
+
+# Catalogs
+catalogs:
+  angular:
+    "@angular/build": "~22.1.7"
+    "@angular/cdk": "~22.1.6"
+    "@angular/cli": "~22.1.7"
+    "@angular/common": "~22.1.5"
+    "@angular/compiler": "~22.1.5"
+    "@angular/compiler-cli": "~22.1.5"
+    "@angular/core": "~22.1.5"
+    "@angular/forms": "~22.1.5"
+    "@angular/platform-browser": "~22.1.5"
+    "@angular/router": "~22.1.5"
+    "rxjs": "~7.8.2"
+    "tslib": "~2.8.1"
+    "typescript": "~6.0.3"
+  formatting:
+    "prettier": "~3.9.6"
+    "prettier-plugin-organize-imports": "~4.3.0"
+  hooks:
+    "lefthook": "~2.1.12"
+  linting:
+    "@commitlint/cli": "~21.2.2"
+    "@commitlint/config-conventional": "~21.2.2"
+    "@eslint/js": "~10.0.1"
+    "angular-eslint": "~22.5.0"
+    "eslint": "~10.10.0"
+    "markdownlint-cli2": "~0.23.2"
+    "stylelint": "~17.15.0"
+    "stylelint-config-clean-order": "~10.0.0"
+    "stylelint-config-standard-scss": "~17.0.0"
+    "stylelint-order": "~8.1.1"
+    "typescript-eslint": "~8.70.0"
+  testing:
+    "@vitest/browser-playwright": "~4.1.11"
+    "@vitest/coverage-v8": "~4.1.11"
+    "@vitest/ui": "~4.1.11"
+    "playwright": "~1.63.0"
+    "vitest": "~4.1.11"

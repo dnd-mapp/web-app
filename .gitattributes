@@ -1,0 +1,12 @@
+*   text=auto eol=lf
+
+# Generated files
+pnpm-lock.yaml  linguist-generated=true
+
+# Binary assets
+*.ico   binary
+*.png   binary
+*.jpg   binary
+*.webp  binary
+*.woff  binary
+*.woff2 binary
