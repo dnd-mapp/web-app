@@ -16,11 +16,17 @@
   "type": "module",
   "scripts": {
     "ng": "ng",
+    "playwright-install": "playwright install chromium --with-deps",
+    "start": "ng serve",
+    "build": "ng build",
+    "test": "ng test",
+    "test-ci": "ng test -c ci",
+    "lint-md": "markdownlint-cli2",
     "format": "prettier -w .",
-    "format-check": "prettier -c .",
-    "lint-md": "markdownlint-cli2"
+    "format-check": "prettier -c ."
   },
   "dependencies": {
+    "@angular/cdk": "catalog:angular",
     "@angular/common": "catalog:angular",
     "@angular/compiler": "catalog:angular",
     "@angular/core": "catalog:angular",
@@ -31,12 +37,18 @@
     "tslib": "catalog:angular"
   },
   "devDependencies": {
+    "@angular/build": "catalog:angular",
     "@angular/cli": "catalog:angular",
     "@angular/compiler-cli": "catalog:angular",
+    "@vitest/browser-playwright": "catalog:vitest",
+    "@vitest/coverage-v8": "catalog:vitest",
+    "@vitest/ui": "catalog:vitest",
     "markdownlint-cli2": "catalog:markdownlint",
+    "playwright": "catalog:vitest",
     "prettier": "catalog:prettier",
     "prettier-plugin-organize-imports": "catalog:prettier",
-    "typescript": "catalog:angular"
+    "typescript": "catalog:angular",
+    "vitest": "catalog:vitest"
   },
   "engines": {
     "node": "^24"

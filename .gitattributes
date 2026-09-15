@@ -1,2 +1,18 @@
 # Normalize everything Git detects as text to LF in the repository, and check it out as LF on every platform.
 * text=auto eol=lf
+
+# Store images and fonts untouched, without relying on content sniffing to spot them.
+*.ico binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.avif binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.otf binary
+
+# Fold the lockfile in GitHub pull request diffs and keep it out of local diffs; pnpm owns its contents.
+pnpm-lock.yaml linguist-generated=true -diff

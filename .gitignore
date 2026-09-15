@@ -14,6 +14,8 @@ $RECYCLE.BIN/
 .env
 .env.*
 !.env.example
+.ssl/*
+!.ssl/.gitkeep
 
 # JetBrains IDEs: ignore per-user state, share project conventions.
 .idea/*

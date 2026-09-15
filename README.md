@@ -27,7 +27,48 @@ Dependency versions live in named catalogs in [pnpm-workspace.yaml](pnpm-workspa
 pnpm ng version
 ```
 
-The repository is an [Angular CLI](https://angular.dev/tools/cli) workspace, configured in [angular.json](angular.json). It holds no projects yet: applications and libraries are added with `pnpm ng g app <name>` and `pnpm ng g lib <name>`, and land under `projects/`. [tsconfig.json](tsconfig.json) carries the compiler options every project extends, with every strictness flag TypeScript offers turned on. Angular, its CLI and TypeScript share the `angular` catalog in [pnpm-workspace.yaml](pnpm-workspace.yaml), so they move together on upgrades. The CLI is configured to use pnpm for the packages it installs, and its usage analytics are turned off.
+The repository is an [Angular CLI](https://angular.dev/tools/cli) workspace, configured in [angular.json](angular.json). It holds a single project, the `web-app` application under [projects/web-app](projects/web-app), and that is by design: this repository is the web frontend and nothing else. [tsconfig.json](tsconfig.json) carries the compiler options the project extends, with every strictness flag TypeScript offers turned on, plus the `@/<area>` path aliases that map onto the barrel files under `projects/web-app/src`. Angular, its CLI and TypeScript share the `angular` catalog in [pnpm-workspace.yaml](pnpm-workspace.yaml), so they move together on upgrades. The CLI is configured to use pnpm for the packages it installs, and its usage analytics are turned off.
+
+## Running the app
+
+```bash
+pnpm start
+```
+
+The dev server listens on `https://localhost.www.dndmapp.dev:4200`, serving over TLS with a certificate and key read from `.ssl/cert.pem` and `.ssl/key.pem`. Both are ignored by Git, so generate them once with [mkcert](https://github.com/FiloSottile/mkcert):
+
+```bash
+mkcert -install
+```
+
+```bash
+mkcert -cert-file .ssl/cert.pem -key-file .ssl/key.pem localhost.www.dndmapp.dev localhost 127.0.0.1 ::1
+```
+
+The first command adds the mkcert root certificate to the system trust store, so browsers accept the certificates it issues. The second issues a certificate that covers the `localhost.www.dndmapp.dev` hostname alongside the plain localhost names and addresses. The hostname is not a real DNS record, so point it at the loopback address in your hosts file (`/etc/hosts` on macOS and Linux, `C:\Windows\System32\drivers\etc\hosts` on Windows):
+
+```text
+127.0.0.1 localhost.www.dndmapp.dev
+::1       localhost.www.dndmapp.dev
+```
+
+The dev server accepts requests for `localhost` and the loopback addresses out of the box; `allowedHosts` in [angular.json](angular.json) adds the custom hostname to that list. Until the hosts file is in place, `https://localhost:4200` works as a fallback.
+
+## Building
+
+```bash
+pnpm run build
+```
+
+The production build lands in `dist/web-app`, with hashed file names, subresource integrity hashes on the emitted scripts and styles, and size budgets that warn at 500 kB and fail at 1 MB for the initial bundle. Run `pnpm run build -c development` for an unoptimized build with source maps.
+
+## Testing
+
+```bash
+pnpm run test
+```
+
+[Vitest](https://vitest.dev) runs the `*.spec.ts` files in a headless Chromium driven by [Playwright](https://playwright.dev), through Angular's `unit-test` builder configured in [angular.json](angular.json) and [vitest.config.ts](projects/web-app/vitest.config.ts). The default configuration watches for changes and serves the Vitest UI at `http://localhost:51204/__vitest__/`. Components are tested through [Angular CDK component harnesses](https://material.angular.dev/cdk/testing/overview), which live in a `testing/` folder next to the code they exercise. Coverage is collected on every run and reported to `coverage/web-app`; the run fails below 80% on statements, branches, functions and lines. Run `pnpm run test-ci` for a single, non-interactive run with GitHub Actions annotations, and `pnpm run playwright-install` once to download the Chromium build Playwright drives.
 
 ## Formatting
 
@@ -49,7 +90,7 @@ pnpm run lint-md
 
 GitHub Actions runs the checks on every pull request and again in the merge queue, through [pull-request.yml](.github/workflows/pull-request.yml) and [merge-group.yml](.github/workflows/merge-group.yml). Both hand their setup to the [setup-workspace](.github/actions/setup-workspace/action.yml) composite action, which installs Node.js, pnpm and the dependencies in one step with [pnpm/setup](https://github.com/pnpm/setup). That action reads `devEngines` from [package.json](package.json), so CI uses the versions listed under [Prerequisites](#prerequisites), and it installs from the lockfile with `--frozen-lockfile`.
 
-The checks themselves live in the [run-checks](.github/actions/run-checks/action.yml) composite action, one step per check: `pnpm run format-check` and `pnpm run lint-md` today. Adding a check means adding a step there, so a pull request and its merge queue entry always run the same set.
+The checks themselves live in the [run-checks](.github/actions/run-checks/action.yml) composite action, one step per check: `pnpm run format-check`, `pnpm run lint-md`, `pnpm run build` and `pnpm run test-ci`, with a `pnpm run playwright-install` step ahead of the tests to download the Chromium build they run in. The browser install sits there rather than in the setup, so a workflow that only needs the workspace set up does not pay for a browser it never starts. Adding a check means adding a step there, so a pull request and its merge queue entry always run the same set.
 
 ## License
 

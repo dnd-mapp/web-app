@@ -11,3 +11,15 @@ runs:
         - name: Lint Markdown
           shell: bash
           run: pnpm run lint-md
+
+        - name: Compile app
+          shell: bash
+          run: pnpm run build
+
+        - name: Install Playwright browsers
+          shell: bash
+          run: pnpm run playwright-install
+
+        - name: Run tests
+          shell: bash
+          run: pnpm run test-ci
