@@ -29,6 +29,12 @@ pnpm run format
 
 Prettier formats the file types allowed in [.prettierignore](.prettierignore), with [prettier-plugin-organize-imports](https://github.com/simonhaenisch/prettier-plugin-organize-imports) sorting imports and dropping unused ones as part of the same pass. Prettier reads [.editorconfig](.editorconfig) for indentation, line width and line endings, so [.prettierrc.json](.prettierrc.json) only carries what EditorConfig cannot express. Run `pnpm run format-check` to report violations without rewriting anything.
 
+## Continuous integration
+
+GitHub Actions runs the checks on every pull request and again in the merge queue, through [pull-request.yml](.github/workflows/pull-request.yml) and [merge-group.yml](.github/workflows/merge-group.yml). Both hand their setup to the [setup-workspace](.github/actions/setup-workspace/action.yml) composite action, which installs Node.js, pnpm and the dependencies in one step with [pnpm/setup](https://github.com/pnpm/setup). That action reads `devEngines` from [package.json](package.json), so CI uses the versions listed under [Prerequisites](#prerequisites), and it installs from the lockfile with `--frozen-lockfile`.
+
+The only check today is `pnpm run format-check`. Later checks become extra steps in both workflows, so a pull request and its merge queue entry always run the same set.
+
 ## License
 
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.

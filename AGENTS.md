@@ -44,3 +44,15 @@ Resolution settings live in `pnpm-workspace.yaml`. Four of them shape everyday w
 - **Release age.** Versions published less than three days ago do not resolve. Packages matching `@dnd-mapp/*` are exempt.
 - **Peer dependencies.** Peers are never installed automatically, and an unmet peer fails the install, so add them as explicit dependencies.
 - **Build scripts.** A dependency's install scripts stay blocked until it is listed under `allowBuilds`, and the install ends with `ERR_PNPM_IGNORED_BUILDS`. Run `pnpm approve-builds` to record the decision.
+
+## Continuous integration
+
+Workflows live in `.github/workflows` and run on `pull_request` and `merge_group`. Steps shared between them belong in a composite action under `.github/actions`, referenced as `./.github/actions/<name>`. Checking out the repository is the exception: a local action only resolves once a checkout has put it on disk, so that step stays in each workflow.
+
+Every workflow follows four conventions:
+
+- **Pinned actions.** Use an action's latest release, referenced by the commit SHA that release points at, with the tag in a trailing comment: `uses: owner/action@<sha> # v1.2.3`.
+- **Pinned runners.** Name a specific runner image such as `ubuntu-24.04` rather than `ubuntu-latest`.
+- **Named steps.** Every workflow, job and step carries a `name`.
+- **Explicit shells.** Every step that uses `run` declares a `shell`, which composite actions require anyway and which gives workflow steps `pipefail` on top of the default `-e`.
+- **Job settings.** Every job declares `timeout-minutes`, a `permissions` block narrowing the workflow-level `permissions: {}`, and a `concurrency` group. Pull request runs cancel in progress; merge queue runs do not, because cancelling one drops a merge already underway.
