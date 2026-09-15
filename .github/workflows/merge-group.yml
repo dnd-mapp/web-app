@@ -1,0 +1,31 @@
+name: Merge group
+
+on:
+    merge_group:
+        branches:
+            - main
+
+permissions: {}
+
+jobs:
+    ci:
+        name: CI
+        runs-on: ubuntu-24.04
+        timeout-minutes: 5
+        permissions:
+            contents: read
+        concurrency:
+            group: merge-group-ci-${{ github.ref }}
+            cancel-in-progress: false
+        steps:
+            - name: Check out the repository
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  persist-credentials: false
+
+            - name: Set up the workspace
+              uses: ./.github/actions/setup-workspace
+
+            - name: Check formatting
+              shell: bash
+              run: pnpm run format-check

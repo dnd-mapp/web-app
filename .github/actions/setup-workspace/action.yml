@@ -1,0 +1,12 @@
+name: Setup workspace
+description: Install the Node.js runtime, pnpm and the project dependencies from the lockfile.
+
+runs:
+    using: composite
+    steps:
+        - name: Install the runtime, pnpm and dependencies
+          uses: pnpm/setup@703c52620218391530e48b9e8870d5c0082e1b9b # v2.1.0
+          with:
+              cache: true
+              require-lockfile: true
+              runtime: node
