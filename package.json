@@ -22,6 +22,7 @@
     "test": "ng test",
     "test-ci": "ng test -c ci",
     "lint-md": "markdownlint-cli2",
+    "lint-styles": "stylelint \"projects/**/*.scss\"",
     "format": "prettier -w .",
     "format-check": "prettier -c ."
   },
@@ -45,8 +46,13 @@
     "@vitest/ui": "catalog:vitest",
     "markdownlint-cli2": "catalog:markdownlint",
     "playwright": "catalog:vitest",
+    "postcss": "catalog:stylelint",
     "prettier": "catalog:prettier",
     "prettier-plugin-organize-imports": "catalog:prettier",
+    "stylelint": "catalog:stylelint",
+    "stylelint-config-clean-order": "catalog:stylelint",
+    "stylelint-config-standard-scss": "catalog:stylelint",
+    "stylelint-order": "catalog:stylelint",
     "typescript": "catalog:angular",
     "vitest": "catalog:vitest"
   },
