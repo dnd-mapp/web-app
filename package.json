@@ -1,0 +1,31 @@
+{
+  "name": "web-app",
+  "version": "0.0.0",
+  "description": "The web frontend for D&D Mapp.",
+  "homepage": "https://github.com/dnd-mapp/web-app#readme",
+  "bugs": {
+    "url": "https://github.com/dnd-mapp/web-app/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dnd-mapp/web-app.git"
+  },
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "^24"
+  },
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": "24.21.0",
+      "onFail": "error"
+    },
+    "packageManager": {
+      "name": "pnpm",
+      "version": "12.4.1",
+      "onFail": "error"
+    }
+  }
+}

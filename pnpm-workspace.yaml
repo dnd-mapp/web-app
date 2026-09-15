@@ -1,0 +1,25 @@
+# Dependency Resolution Settings
+minimumReleaseAge: 4320 # 3 days
+minimumReleaseAgeExclude:
+  - "@dnd-mapp/*"
+trustPolicy: no-downgrade
+trustPolicyIgnoreAfter: 4320 # 3 days
+
+# Peer Dependency Settings
+autoInstallPeers: false
+dedupePeers: true
+peerDependencyRules:
+  ignoreMissing: [ ]
+strictPeerDependencies: true
+
+# CLI Settings
+engineStrict: true
+
+# Build Settings
+allowBuilds: { }
+
+# Other Settings
+catalogMode: strict
+savePrefix: "~"
+
+# Catalogs
