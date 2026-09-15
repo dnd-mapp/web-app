@@ -163,6 +163,62 @@ settings:
   dedupePeers: true
   excludeLinksFromLockfile: false
 
+catalogs:
+  angular:
+    typescript:
+      specifier: ~6.0.3
+      version: 6.0.3
+  prettier:
+    prettier:
+      specifier: ~3.9.6
+      version: 3.9.6
+    prettier-plugin-organize-imports:
+      specifier: ~4.3.0
+      version: 4.3.0
+
 importers:
 
-  .: {}
+  .:
+    devDependencies:
+      prettier:
+        specifier: catalog:prettier
+        version: 3.9.6
+      prettier-plugin-organize-imports:
+        specifier: catalog:prettier
+        version: 4.3.0(prettier@3.9.6)(typescript@6.0.3)
+      typescript:
+        specifier: catalog:angular
+        version: 6.0.3
+
+packages:
+
+  prettier-plugin-organize-imports@4.3.0:
+    resolution: {integrity: sha512-FxFz0qFhyBsGdIsb697f/EkvHzi5SZOhWAjxcx2dLt+Q532bAlhswcXGYB1yzjZ69kW8UoadFBw7TyNwlq96Iw==}
+    peerDependencies:
+      prettier: '>=2.0'
+      typescript: '>=2.9'
+      vue-tsc: ^2.1.0 || 3
+    peerDependenciesMeta:
+      vue-tsc:
+        optional: true
+
+  prettier@3.9.6:
+    resolution: {integrity: sha512-OpN0zzVdiaiAhxpuuj5efpIS4sY9j7bY6uR5mnj5yPzGkdkjNKSJeUThPb60Jw29QuAZgA4o+/iB49kFiaBX6g==}
+    engines: {node: '>=14'}
+    hasBin: true
+
+  typescript@6.0.3:
+    resolution: {integrity: sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+
+snapshots:
+
+  prettier-plugin-organize-imports@4.3.0(prettier@3.9.6)(typescript@6.0.3):
+    dependencies:
+      prettier: 3.9.6
+      typescript: 6.0.3
+
+  prettier@3.9.6: {}
+
+  typescript@6.0.3: {}

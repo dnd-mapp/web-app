@@ -1,3 +1,5 @@
+# yaml-language-server: $schema=https://www.schemastore.org/pnpm-workspace.json
+
 # Dependency Resolution Settings
 minimumReleaseAge: 4320 # 3 days
 minimumReleaseAgeExclude:
@@ -9,17 +11,23 @@ trustPolicyIgnoreAfter: 4320 # 3 days
 autoInstallPeers: false
 dedupePeers: true
 peerDependencyRules:
-  ignoreMissing: [ ]
+  ignoreMissing: []
 strictPeerDependencies: true
 
 # CLI Settings
 engineStrict: true
 
 # Build Settings
-allowBuilds: { }
+allowBuilds: {}
 
 # Other Settings
 catalogMode: strict
 savePrefix: "~"
 
 # Catalogs
+catalogs:
+  angular:
+    typescript: ~6.0.3
+  prettier:
+    prettier: ~3.9.6
+    prettier-plugin-organize-imports: ~4.3.0

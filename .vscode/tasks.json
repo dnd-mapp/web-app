@@ -1,0 +1,20 @@
+{
+    "$schema": "https://www.schemastore.org/task.json",
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "npm",
+            "script": "format",
+            "label": "format",
+            "detail": "Rewrite every formattable file in place.",
+            "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "format-check",
+            "label": "format-check",
+            "detail": "Report formatting violations without rewriting anything.",
+            "problemMatcher": []
+        }
+    ]
+}
