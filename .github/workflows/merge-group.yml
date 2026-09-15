@@ -8,8 +8,8 @@ on:
 permissions: {}
 
 jobs:
-    CI:
-        name: ci
+    ci:
+        name: CI
         runs-on: ubuntu-24.04
         timeout-minutes: 5
         permissions:
