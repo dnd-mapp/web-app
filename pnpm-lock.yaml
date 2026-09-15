@@ -214,6 +214,9 @@ catalogs:
     eslint:
       specifier: ~10.10.0
       version: 10.10.0
+    globals:
+      specifier: ~17.12.0
+      version: 17.12.0
     typescript-eslint:
       specifier: ~8.70.0
       version: 8.70.0
@@ -324,6 +327,9 @@ importers:
       eslint:
         specifier: catalog:eslint
         version: 10.10.0(supports-color@7.2.0)
+      globals:
+        specifier: catalog:eslint
+        version: 17.12.0
       lefthook:
         specifier: catalog:lefthook
         version: 2.1.12
@@ -2632,6 +2638,10 @@ packages:
   global-prefix@3.0.0:
     resolution: {integrity: sha512-awConJSVCHVGND6x3tmMaKcQvwXLhjdkmomy2W+Goaui8YPgYgXJZewhg3fWC+DlfqqQuWg8AwqjGTD2nAPVWg==}
     engines: {node: '>=6'}
+
+  globals@17.12.0:
+    resolution: {integrity: sha512-cezEd/DTyyht9cvSSURyygXPfy04GtWO/5e6ZPvH7fCtjKz9PYOmuawphw1Ctd1f6C+5JypXfGD7ahNMXvevBA==}
+    engines: {node: '>=18'}
 
   globby@16.2.2:
     resolution: {integrity: sha512-NLvV9ubZ6NDsJaOpKPy3cQeJpKi9DcWiyCiFUpJPA0YihRqiE6RWaLUmgNNPr8MgPpLZjnBjSmou7uZBRJv9wA==}
@@ -6144,6 +6154,8 @@ snapshots:
       ini: 1.3.8
       kind-of: 6.0.3
       which: 1.3.1
+
+  globals@17.12.0: {}
 
   globby@16.2.2:
     dependencies:
