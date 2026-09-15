@@ -16,9 +16,11 @@
   "type": "module",
   "scripts": {
     "format": "prettier -w .",
-    "format-check": "prettier -c ."
+    "format-check": "prettier -c .",
+    "lint-md": "markdownlint-cli2"
   },
   "devDependencies": {
+    "markdownlint-cli2": "catalog:markdownlint",
     "prettier": "catalog:prettier",
     "prettier-plugin-organize-imports": "catalog:prettier",
     "typescript": "catalog:angular"

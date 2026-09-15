@@ -15,6 +15,13 @@
             "label": "format-check",
             "detail": "Report formatting violations without rewriting anything.",
             "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "lint-md",
+            "label": "lint-md",
+            "detail": "Report Markdown lint violations without rewriting anything.",
+            "problemMatcher": []
         }
     ]
 }

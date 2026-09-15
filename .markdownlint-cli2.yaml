@@ -1,0 +1,21 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/DavidAnson/markdownlint-cli2/main/schema/markdownlint-cli2-config-schema.json
+
+# Lint every Markdown file in the repository, skipping whatever .gitignore excludes.
+globs:
+    - "**/*.md"
+gitignore: true
+
+# Rule settings: https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
+config:
+    default: true
+    MD003:
+        style: atx
+    MD004:
+        style: dash
+    # Paragraphs are written as one line, with wrapping left to the renderer.
+    MD013: false
+    # Tables carry leading and trailing pipes, with the pipes lined up across rows.
+    MD055:
+        style: leading_and_trailing
+    MD060:
+        style: aligned

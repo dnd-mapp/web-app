@@ -28,6 +28,8 @@ savePrefix: "~"
 catalogs:
   angular:
     typescript: ~6.0.3
+  markdownlint:
+    markdownlint-cli2: ~0.23.2
   prettier:
     prettier: ~3.9.6
     prettier-plugin-organize-imports: ~4.3.0
