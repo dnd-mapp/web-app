@@ -23,6 +23,7 @@
     "test-ci": "ng test -c ci",
     "lint-md": "markdownlint-cli2",
     "lint-styles": "stylelint \"projects/**/*.scss\"",
+    "lint-ts": "ng lint",
     "format": "prettier -w .",
     "format-check": "prettier -c ."
   },
@@ -41,9 +42,12 @@
     "@angular/build": "catalog:angular",
     "@angular/cli": "catalog:angular",
     "@angular/compiler-cli": "catalog:angular",
+    "@eslint/js": "catalog:eslint",
     "@vitest/browser-playwright": "catalog:vitest",
     "@vitest/coverage-v8": "catalog:vitest",
     "@vitest/ui": "catalog:vitest",
+    "angular-eslint": "catalog:eslint",
+    "eslint": "catalog:eslint",
     "markdownlint-cli2": "catalog:markdownlint",
     "playwright": "catalog:vitest",
     "postcss": "catalog:stylelint",
@@ -54,6 +58,7 @@
     "stylelint-config-standard-scss": "catalog:stylelint",
     "stylelint-order": "catalog:stylelint",
     "typescript": "catalog:angular",
+    "typescript-eslint": "catalog:eslint",
     "vitest": "catalog:vitest"
   },
   "engines": {

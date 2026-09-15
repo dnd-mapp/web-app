@@ -44,6 +44,11 @@ catalogs:
     rxjs: ~7.8.2
     tslib: ~2.8.1
     typescript: ~6.0.3
+  eslint:
+    "@eslint/js": ~10.0.1
+    angular-eslint: ~22.5.0
+    eslint: ~10.10.0
+    typescript-eslint: ~8.70.0
   markdownlint:
     markdownlint-cli2: ~0.23.2
   prettier:
