@@ -62,6 +62,26 @@ pnpm run build
 
 The production build lands in `dist/web-app`, with hashed file names, subresource integrity hashes on the emitted scripts and styles, and size budgets that warn at 500 kB and fail at 1 MB for the initial bundle. Run `pnpm run build -c development` for an unoptimized build with source maps.
 
+## Docker image
+
+```bash
+docker build -t dnd-mapp/web-app .
+```
+
+[Dockerfile](Dockerfile) builds the production image in two stages. The first starts from the `node:24.21.0` image, installs pnpm 12.4.1 through [pnpm's standalone installer](https://pnpm.io/installation#using-a-standalone-script), installs the dependencies from the lockfile and runs `pnpm run build`. The installer downloads the pnpm executable from the npm registry and checks it against the published checksum and npm signature before installing it. The second stage copies `dist/web-app/browser` into an [nginx-unprivileged](https://hub.docker.com/r/nginxinc/nginx-unprivileged) image, which runs nginx as an unprivileged user. [.docker/nginx.conf](.docker/nginx.conf) listens on port 4200, the same port as the dev server, hands unknown routes to `index.html` for the Angular router, tells browsers to revalidate `index.html` on every load and to cache the hashed scripts and styles for a year. Both base images are pinned to a digest, with the tag kept in front of it for reference, so a build always starts from the same layers. [.dockerignore](.dockerignore) limits the build context to the files the build stage copies in.
+
+```bash
+docker run --rm -p 4200:4200 dnd-mapp/web-app
+```
+
+The app is then served at `http://localhost:4200`.
+
+```bash
+docker buildx build --platform linux/amd64,linux/arm64 -t dnd-mapp/web-app --push .
+```
+
+The image builds for several platforms at once. Both base image digests point at multi-architecture indexes, so each target resolves its own layers, and the lockfile carries the native modules for both architectures. The build stage is declared with `--platform=$BUILDPLATFORM`: the compiled output is static files, so it runs once on the builder's own platform and every target's nginx stage copies from that single result, instead of repeating the compile under emulation. Producing a multi-platform image needs a `docker-container` builder or Docker Desktop with the containerd image store; a plain `docker build` keeps producing a single-platform image for the current machine.
+
 ## Testing
 
 ```bash
@@ -90,7 +110,7 @@ pnpm run lint-md
 
 GitHub Actions runs the checks on every pull request and again in the merge queue, through [pull-request.yml](.github/workflows/pull-request.yml) and [merge-group.yml](.github/workflows/merge-group.yml). Both hand their setup to the [setup-workspace](.github/actions/setup-workspace/action.yml) composite action, which installs Node.js, pnpm and the dependencies in one step with [pnpm/setup](https://github.com/pnpm/setup). That action reads `devEngines` from [package.json](package.json), so CI uses the versions listed under [Prerequisites](#prerequisites), and it installs from the lockfile with `--frozen-lockfile`.
 
-The checks themselves live in the [run-checks](.github/actions/run-checks/action.yml) composite action, one step per check: `pnpm run format-check`, `pnpm run lint-md`, `pnpm run build` and `pnpm run test-ci`, with a `pnpm run playwright-install` step ahead of the tests to download the Chromium build they run in. The browser install sits there rather than in the setup, so a workflow that only needs the workspace set up does not pay for a browser it never starts. Adding a check means adding a step there, so a pull request and its merge queue entry always run the same set.
+The checks themselves live in the [run-checks](.github/actions/run-checks/action.yml) composite action, one step per check: `pnpm run format-check`, `pnpm run lint-md`, `pnpm run build`, `docker build --check .` and `pnpm run test-ci`, with a `pnpm run playwright-install` step ahead of the tests to download the Chromium build they run in. The Docker step evaluates the [Dockerfile](Dockerfile) against [BuildKit's build checks](https://docs.docker.com/reference/build-checks/), which resolve the base images and lint every instruction without building the image. The `check=error=true` directive at the top of the Dockerfile makes a regular `docker build` fail on the same findings, so a local build catches them as well. The browser install sits there rather than in the setup, so a workflow that only needs the workspace set up does not pay for a browser it never starts. Adding a check means adding a step there, so a pull request and its merge queue entry always run the same set.
 
 ## License
 
