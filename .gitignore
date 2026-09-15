@@ -29,3 +29,12 @@ $RECYCLE.BIN/
 !.vscode/extensions.json
 !.vscode/launch.json
 !.vscode/tasks.json
+
+# Angular
+.angular/
+dist/
+out-tsc/
+
+# Test output
+.vitest/
+coverage/
