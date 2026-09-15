@@ -140,6 +140,13 @@
         },
         {
             "type": "npm",
+            "script": "lint-ts",
+            "label": "lint-ts",
+            "detail": "Report TypeScript and template lint violations without rewriting anything.",
+            "problemMatcher": "$eslint-stylish"
+        },
+        {
+            "type": "npm",
             "script": "format",
             "label": "format",
             "detail": "Rewrite every formattable file in place.",

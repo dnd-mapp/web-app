@@ -21,6 +21,7 @@ $RECYCLE.BIN/
 .idea/*
 !.idea/codeStyles/
 !.idea/inspectionProfiles/
+!.idea/jsLinters/
 !.idea/runConfigurations/
 !.idea/stylesheetLinters/
 !.idea/fileTemplates/
