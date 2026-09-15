@@ -4,6 +4,117 @@
     "tasks": [
         {
             "type": "npm",
+            "script": "start",
+            "label": "start",
+            "detail": "Serve the app over TLS at https://localhost.www.dndmapp.dev:4200 and rebuild on changes.",
+            "group": "build",
+            "isBackground": true,
+            "problemMatcher": {
+                "owner": "angular",
+                "source": "ng serve",
+                "fileLocation": ["relative", "${workspaceFolder}"],
+                "pattern": [
+                    {
+                        "regexp": "^\\S+ \\[(ERROR|WARNING)\\] (.+?)(?: \\[plugin .+\\])?$",
+                        "severity": 1,
+                        "message": 2
+                    },
+                    {
+                        "regexp": "^\\s*$"
+                    },
+                    {
+                        "regexp": "^\\s+(.+):(\\d+):(\\d+):$",
+                        "file": 1,
+                        "line": 2,
+                        "column": 3
+                    }
+                ],
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "Building\\.\\.\\.",
+                    "endsPattern": "Local:\\s+https?://|Application bundle generation (complete|failed)"
+                }
+            }
+        },
+        {
+            "type": "npm",
+            "script": "build",
+            "label": "build",
+            "detail": "Produce the production bundle in dist/web-app.",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": {
+                "owner": "angular",
+                "source": "ng build",
+                "fileLocation": ["relative", "${workspaceFolder}"],
+                "pattern": [
+                    {
+                        "regexp": "^\\S+ \\[(ERROR|WARNING)\\] (.+?)(?: \\[plugin .+\\])?$",
+                        "severity": 1,
+                        "message": 2
+                    },
+                    {
+                        "regexp": "^\\s*$"
+                    },
+                    {
+                        "regexp": "^\\s+(.+):(\\d+):(\\d+):$",
+                        "file": 1,
+                        "line": 2,
+                        "column": 3
+                    }
+                ]
+            }
+        },
+        {
+            "type": "npm",
+            "script": "test",
+            "label": "test",
+            "detail": "Run the specs in Chromium, rerun on changes and serve the Vitest UI at http://localhost:51204/__vitest__/.",
+            "group": "test",
+            "isBackground": true,
+            "problemMatcher": {
+                "owner": "vitest",
+                "source": "ng test",
+                "pattern": {
+                    "regexp": "^\\s+(FAIL|×)\\s+(.+)$",
+                    "message": 2
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "Building\\.\\.\\.|RERUN",
+                    "endsPattern": "UI started at|Waiting for file changes"
+                }
+            }
+        },
+        {
+            "type": "npm",
+            "script": "test-ci",
+            "label": "test-ci",
+            "detail": "Run the specs once in Chromium, with coverage and without watching.",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "playwright-install",
+            "label": "playwright-install",
+            "detail": "Download the Chromium build Playwright drives the tests in.",
+            "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "lint-md",
+            "label": "lint-md",
+            "detail": "Report Markdown lint violations without rewriting anything.",
+            "problemMatcher": []
+        },
+        {
+            "type": "npm",
             "script": "format",
             "label": "format",
             "detail": "Rewrite every formattable file in place.",
@@ -14,13 +125,6 @@
             "script": "format-check",
             "label": "format-check",
             "detail": "Report formatting violations without rewriting anything.",
-            "problemMatcher": []
-        },
-        {
-            "type": "npm",
-            "script": "lint-md",
-            "label": "lint-md",
-            "detail": "Report Markdown lint violations without rewriting anything.",
             "problemMatcher": []
         }
     ]

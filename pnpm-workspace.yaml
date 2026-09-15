@@ -18,7 +18,11 @@ strictPeerDependencies: true
 engineStrict: true
 
 # Build Settings
-allowBuilds: {}
+allowBuilds:
+  "@parcel/watcher": false
+  esbuild: false
+  lmdb: false
+  msgpackr-extract: false
 
 # Other Settings
 catalogMode: strict
@@ -27,6 +31,8 @@ savePrefix: "~"
 # Catalogs
 catalogs:
   angular:
+    "@angular/build": ~22.1.8
+    "@angular/cdk": ~22.1.6
     "@angular/cli": ~22.1.8
     "@angular/common": ~22.1.6
     "@angular/compiler": ~22.1.6
@@ -43,3 +49,9 @@ catalogs:
   prettier:
     prettier: ~3.9.6
     prettier-plugin-organize-imports: ~4.3.0
+  vitest:
+    "@vitest/browser-playwright": ~4.1.11
+    "@vitest/coverage-v8": ~4.1.11
+    "@vitest/ui": ~4.1.11
+    playwright: ~1.63.0
+    vitest: ~4.1.11

@@ -1,4 +1,8 @@
 {
+    "references": [
+        { "path": "./projects/web-app/tsconfig.app.json" },
+        { "path": "./projects/web-app/tsconfig.spec.json" }
+    ],
     "files": [],
     "compilerOptions": {
         "allowUnreachableCode": false,
@@ -18,6 +22,10 @@
         "noUncheckedSideEffectImports": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
+        "paths": {
+            "@/core": ["./projects/web-app/src/core/index.ts"],
+            "@/core/testing": ["./projects/web-app/src/core/testing/index.ts"]
+        },
         "skipLibCheck": true,
         "strict": true,
         "target": "es2024",

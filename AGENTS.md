@@ -58,3 +58,13 @@ Every workflow follows four conventions:
 - **Named steps.** Every workflow, job and step carries a `name`.
 - **Explicit shells.** Every step that uses `run` declares a `shell`, which composite actions require anyway and which gives workflow steps `pipefail` on top of the default `-e`.
 - **Job settings.** Every job declares `timeout-minutes`, a `permissions` block narrowing the workflow-level `permissions: {}`, and a `concurrency` group. Pull request runs cancel in progress; merge queue runs do not, because cancelling one drops a merge already underway.
+
+## Application layout
+
+The `web-app` application lives under `projects/web-app/src`, divided into areas such as `core`. Each area exposes its public symbols through an `index.ts` barrel, and `paths` in `tsconfig.json` maps `@/<area>` onto that barrel, so code outside the area imports from `@/core` rather than through a relative path. A new area is complete once it has a barrel and an alias for it, plus a `@/<area>/testing` alias when it ships harnesses. File and class naming follows the `schematics` defaults in `angular.json`: `root.component.ts` holds `RootComponent`, styles are SCSS, and guards, interceptors, pipes and resolvers use a `.` type separator.
+
+## Testing
+
+Specs run in a real Chromium through Vitest's browser mode, with `describe`, `it`, `expect` and `vi` available as globals. Every component is exercised through an [Angular CDK component harness](https://material.angular.dev/cdk/testing/overview) that lives in the area's `testing/harnesses` folder and is exported from `testing/index.ts`. A spec renders the component inside a throwaway host component, loads the harness with `TestbedHarnessEnvironment`, and asserts through the harness's methods; [root.component.spec.ts](projects/web-app/src/core/root/root.component.spec.ts) and [root.harness.ts](projects/web-app/src/core/testing/harnesses/root.harness.ts) are the pair to copy. The `testing/` folders stay out of the application build and out of coverage, as do `main.ts`, the barrels and the `config/` folders. Coverage fails below 80% on every metric, so a component without a spec fails CI.
+
+A change is ready to hand over once `pnpm run format-check`, `pnpm run lint-md`, `pnpm run build` and `pnpm run test-ci` all pass; CI runs exactly these four. Running the dev server needs TLS certificates and a hosts entry, described under "Running the app" in [README.md](README.md).

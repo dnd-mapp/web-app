@@ -6,5 +6,130 @@
         "analytics": false,
         "packageManager": "pnpm"
     },
-    "projects": {}
+    "schematics": {
+        "@schematics/angular:component": {
+            "style": "scss",
+            "type": "component"
+        },
+        "@schematics/angular:directive": {
+            "type": "directive"
+        },
+        "@schematics/angular:service": {
+            "type": "service"
+        },
+        "@schematics/angular:guard": {
+            "typeSeparator": "."
+        },
+        "@schematics/angular:interceptor": {
+            "typeSeparator": "."
+        },
+        "@schematics/angular:module": {
+            "typeSeparator": "."
+        },
+        "@schematics/angular:pipe": {
+            "typeSeparator": "."
+        },
+        "@schematics/angular:resolver": {
+            "typeSeparator": "."
+        }
+    },
+    "projects": {
+        "web-app": {
+            "projectType": "application",
+            "root": "projects/web-app",
+            "sourceRoot": "projects/web-app/src",
+            "prefix": "app",
+            "architect": {
+                "build": {
+                    "builder": "@angular/build:application",
+                    "options": {
+                        "assets": [
+                            {
+                                "glob": "**/*",
+                                "input": "projects/web-app/public"
+                            }
+                        ],
+                        "browser": "projects/web-app/src/main.ts",
+                        "inlineStyleLanguage": "scss",
+                        "styles": ["projects/web-app/src/styles.scss"],
+                        "tsConfig": "projects/web-app/tsconfig.app.json"
+                    },
+                    "defaultConfiguration": "production",
+                    "configurations": {
+                        "production": {
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "500kB",
+                                    "maximumError": "1MB"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "4kB",
+                                    "maximumError": "8kB"
+                                }
+                            ],
+                            "outputHashing": "all",
+                            "subresourceIntegrity": true
+                        },
+                        "development": {
+                            "namedChunks": true,
+                            "optimization": false,
+                            "extractLicenses": false,
+                            "sourceMap": true
+                        }
+                    }
+                },
+                "serve": {
+                    "builder": "@angular/build:dev-server",
+                    "options": {
+                        "allowedHosts": ["localhost.www.dndmapp.dev"],
+                        "buildTarget": "web-app:build:development",
+                        "host": "127.0.0.1",
+                        "port": 4200,
+                        "ssl": true,
+                        "sslCert": ".ssl/cert.pem",
+                        "sslKey": ".ssl/key.pem"
+                    }
+                },
+                "test": {
+                    "builder": "@angular/build:unit-test",
+                    "options": {
+                        "browsers": ["chromium"],
+                        "coverage": true,
+                        "coverageExclude": [
+                            "projects/web-app/src/main.ts",
+                            "projects/web-app/**/index.ts",
+                            "projects/web-app/**/config/**/*.ts",
+                            "projects/web-app/**/testing/**/*.ts"
+                        ],
+                        "coverageInclude": ["projects/web-app/src/**/*.ts"],
+                        "coverageReporters": ["text-summary", "html"],
+                        "coverageThresholds": {
+                            "branches": 80,
+                            "functions": 80,
+                            "lines": 80,
+                            "statements": 80
+                        },
+                        "headless": true,
+                        "include": ["projects/web-app/src/**/*.spec.ts"],
+                        "isolate": true,
+                        "runnerConfig": "projects/web-app/vitest.config.ts"
+                    },
+                    "defaultConfiguration": "development",
+                    "configurations": {
+                        "development": {
+                            "reporters": ["dot", ["html", { "outputFile": ".vitest/index.html" }]],
+                            "ui": true,
+                            "watch": true
+                        },
+                        "ci": {
+                            "reporters": ["github-actions", "dot", ["html", { "outputFile": ".vitest/index.html" }]],
+                            "watch": false
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
