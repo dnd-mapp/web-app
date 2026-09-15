@@ -45,7 +45,11 @@ Resolution settings live in `pnpm-workspace.yaml`. Four of them shape everyday w
 - **Strict catalogs.** Versions live in named catalogs rather than the default one, so `pnpm add <package>` needs `--save-catalog-name <name>` to say which catalog the version belongs in. It records the version there and writes `catalog:<name>` as the specifier in `package.json`. `pnpm remove` leaves the catalog entry behind, so delete that line yourself.
 - **Release age.** Versions published less than three days ago do not resolve. Packages matching `@dnd-mapp/*` are exempt.
 - **Peer dependencies.** Peers are never installed automatically, and an unmet peer fails the install, so add them as explicit dependencies.
-- **Build scripts.** A dependency's install scripts stay blocked until it is listed under `allowBuilds`, and the install ends with `ERR_PNPM_IGNORED_BUILDS`. Run `pnpm approve-builds` to record the decision.
+- **Build scripts.** A dependency's install scripts stay blocked until it is listed under `allowBuilds`, and the install ends with `ERR_PNPM_IGNORED_BUILDS`. Run `pnpm approve-builds` to record the decision. `lefthook` is the one entry set to `true`: its `postinstall` script installs the Git hooks.
+
+## Commit hooks
+
+[lefthook.yml](lefthook.yml) defines the `pre-commit` hook: Prettier rewrites the staged files and stages the result, then ESLint, Stylelint and markdownlint-cli2 run in parallel over the staged files of the types they cover. A commit the hook rejects gets fixed, not bypassed with `--no-verify`. A new check goes in as a job with a `glob` limited to the file types it covers and `{staged_files}` as its input, so it only sees the staged files; a check that rewrites files also sets `stage_fixed: true`. CI runs the same tools over the whole repository, so the hook never replaces the checks listed under "Testing".
 
 ## Continuous integration
 

@@ -1,0 +1,32 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/evilmartians/lefthook/master/schema.json
+
+# Runs the formatter and linters over the staged files before a commit is created. CI runs the same tools over the
+# whole repository, so this only shortens the feedback loop; it is not the gate.
+pre-commit:
+    skip:
+        - merge
+        - rebase
+    jobs:
+        # Prettier writes first and re-stages what it changed, so the linters below see formatted files.
+        - name: format
+          glob: "*.{ts,html,scss,css,js,cjs,mjs,mts,cts,json,yaml,yml}"
+          run: pnpm exec prettier -w {staged_files}
+          stage_fixed: true
+
+        - name: lint
+          group:
+              parallel: true
+              jobs:
+                  # Staged files under ESLint's ignore patterns would otherwise produce a warning.
+                  - name: typescript
+                    glob: "*.{ts,html}"
+                    run: pnpm exec eslint --no-warn-ignored {staged_files}
+
+                  - name: styles
+                    glob: "*.scss"
+                    run: pnpm exec stylelint {staged_files}
+
+                  # Without --no-globs, markdownlint-cli2 appends the globs from its config and lints every file.
+                  - name: markdown
+                    glob: "*.md"
+                    run: pnpm exec markdownlint-cli2 --no-globs {staged_files}
