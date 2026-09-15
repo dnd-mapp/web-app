@@ -4,7 +4,8 @@
     "newProjectRoot": "projects",
     "cli": {
         "analytics": false,
-        "packageManager": "pnpm"
+        "packageManager": "pnpm",
+        "schematicCollections": ["angular-eslint"]
     },
     "schematics": {
         "@schematics/angular:component": {
@@ -127,6 +128,12 @@
                             "reporters": ["github-actions", "dot", ["html", { "outputFile": ".vitest/index.html" }]],
                             "watch": false
                         }
+                    }
+                },
+                "lint": {
+                    "builder": "@angular-eslint/builder:lint",
+                    "options": {
+                        "lintFilePatterns": ["projects/web-app/**/*.ts", "projects/web-app/**/*.html"]
                     }
                 }
             }

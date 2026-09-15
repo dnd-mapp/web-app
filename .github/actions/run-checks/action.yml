@@ -16,6 +16,10 @@ runs:
           shell: bash
           run: pnpm run lint-styles
 
+        - name: Lint TypeScript and JavaScript
+          shell: bash
+          run: pnpm run lint-ts
+
         - name: Compile app
           shell: bash
           run: pnpm run build
