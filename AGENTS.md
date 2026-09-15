@@ -34,6 +34,8 @@ Give every table an alignment indicator in its separator row:
 |:--------|:------:|--------:|
 | `theme` | global |    dark |
 
+[markdownlint-cli2](.markdownlint-cli2.yaml) enforces these Markdown conventions in CI. Run `pnpm run lint-md` over any Markdown you edit and clear every finding before handing over.
+
 ## Dependencies
 
 pnpm 12 is the only supported package manager, enforced through `devEngines` in `package.json`. Running `npm` in this repository fails with `EBADDEVENGINES`.

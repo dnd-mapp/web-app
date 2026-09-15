@@ -26,6 +26,5 @@ jobs:
             - name: Set up the workspace
               uses: ./.github/actions/setup-workspace
 
-            - name: Check formatting
-              shell: bash
-              run: pnpm run format-check
+            - name: Run CI checks
+              uses: ./.github/actions/run-checks
