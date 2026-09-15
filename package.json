@@ -1,4 +1,5 @@
 {
+  "$schema": "https://www.schemastore.org/package.json",
   "name": "web-app",
   "version": "0.0.0",
   "description": "The web frontend for D&D Mapp.",
@@ -27,5 +28,14 @@
       "version": "12.4.1",
       "onFail": "error"
     }
+  },
+  "scripts": {
+    "format": "prettier -w .",
+    "format-check": "prettier -c ."
+  },
+  "devDependencies": {
+    "prettier": "catalog:prettier",
+    "prettier-plugin-organize-imports": "catalog:prettier",
+    "typescript": "catalog:angular"
   }
 }
