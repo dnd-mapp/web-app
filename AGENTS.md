@@ -33,3 +33,14 @@ Give every table an alignment indicator in its separator row:
 | Setting | Scope  | Default |
 |:--------|:------:|--------:|
 | `theme` | global |    dark |
+
+## Dependencies
+
+pnpm 12 is the only supported package manager, enforced through `devEngines` in `package.json`. Running `npm` in this repository fails with `EBADDEVENGINES`.
+
+Resolution settings live in `pnpm-workspace.yaml`. Four of them shape everyday work:
+
+- **Strict catalogs.** `pnpm add <package>` records the version in the `catalog:` block of `pnpm-workspace.yaml` and writes `catalog:` as the specifier in `package.json`. `pnpm remove` leaves the catalog entry behind, so delete that line yourself.
+- **Release age.** Versions published less than three days ago do not resolve. Packages matching `@dnd-mapp/*` are exempt.
+- **Peer dependencies.** Peers are never installed automatically, and an unmet peer fails the install, so add them as explicit dependencies.
+- **Build scripts.** A dependency's install scripts stay blocked until it is listed under `allowBuilds`, and the install ends with `ERR_PNPM_IGNORED_BUILDS`. Run `pnpm approve-builds` to record the decision.
