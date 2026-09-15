@@ -7,5 +7,6 @@
     },
     "typescript.tsdk": "node_modules/typescript/lib",
     "typescript.enablePromptUseWorkspaceTsdk": true,
-    "npm.packageManager": "pnpm"
+    "npm.packageManager": "pnpm",
+    "stylelint.validate": ["scss"]
 }
