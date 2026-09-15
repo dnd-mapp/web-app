@@ -23,6 +23,7 @@
     "test-ci": "ng test -c ci",
     "lint-md": "markdownlint-cli2",
     "lint-styles": "stylelint \"projects/**/*.scss\"",
+    "lint-ts": "ng lint",
     "format": "prettier -w .",
     "format-check": "prettier -c ."
   },
