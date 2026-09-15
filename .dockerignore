@@ -1,0 +1,16 @@
+# Only the files the build stage copies matter to the image. Everything else stays out of the build context, so a
+# change to it does not invalidate the Docker cache and the context stays small.
+*
+
+!angular.json
+!.docker/nginx.conf
+!package.json
+!pnpm-*.yaml
+!projects/
+!tsconfig.json
+
+# Test output, harnesses and specs are not part of the application build.
+projects/**/testing/
+projects/**/*.spec.ts
+projects/**/tsconfig.spec.json
+projects/**/vitest.config.ts

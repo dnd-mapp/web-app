@@ -16,6 +16,10 @@ runs:
           shell: bash
           run: pnpm run build
 
+        - name: Check Dockerfile
+          shell: bash
+          run: docker build --check .
+
         - name: Install Playwright browsers
           shell: bash
           run: pnpm run playwright-install
