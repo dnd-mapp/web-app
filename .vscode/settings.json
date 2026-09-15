@@ -1,0 +1,11 @@
+{
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "prettier.prettierPath": "node_modules/prettier",
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "never"
+    },
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "typescript.enablePromptUseWorkspaceTsdk": true,
+    "npm.packageManager": "pnpm"
+}

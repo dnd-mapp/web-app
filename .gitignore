@@ -21,6 +21,7 @@ $RECYCLE.BIN/
 !.idea/inspectionProfiles/
 !.idea/runConfigurations/
 !.idea/fileTemplates/
+!.idea/prettier.xml
 
 # VS Code: ignore per-user state, share project conventions.
 .vscode/*
