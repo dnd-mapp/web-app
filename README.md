@@ -21,6 +21,14 @@ pnpm install
 
 Dependency versions live in named catalogs in [pnpm-workspace.yaml](pnpm-workspace.yaml) rather than in `package.json`, because the workspace runs pnpm in strict catalog mode. A `package.json` entry points at its catalog by name, as in `catalog:prettier`. Catalogs are grouped by the tool they belong to, so adding a package means choosing its catalog: `pnpm add --save-catalog-name <catalog> <package>`.
 
+## Angular workspace
+
+```bash
+pnpm ng version
+```
+
+The repository is an [Angular CLI](https://angular.dev/tools/cli) workspace, configured in [angular.json](angular.json). It holds no projects yet: applications and libraries are added with `pnpm ng g app <name>` and `pnpm ng g lib <name>`, and land under `projects/`. [tsconfig.json](tsconfig.json) carries the compiler options every project extends, with every strictness flag TypeScript offers turned on. Angular, its CLI and TypeScript share the `angular` catalog in [pnpm-workspace.yaml](pnpm-workspace.yaml), so they move together on upgrades. The CLI is configured to use pnpm for the packages it installs, and its usage analytics are turned off.
+
 ## Formatting
 
 ```bash

@@ -1,5 +1,6 @@
 {
     "recommendations": [
+        "angular.ng-template",
         "DavidAnson.vscode-markdownlint",
         "editorconfig.editorconfig",
         "esbenp.prettier-vscode",
