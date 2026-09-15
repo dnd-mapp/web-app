@@ -1,0 +1,13 @@
+name: Run CI checks
+description: Run every CI check against the checked-out, set-up workspace.
+
+runs:
+    using: composite
+    steps:
+        - name: Check formatting
+          shell: bash
+          run: pnpm run format-check
+
+        - name: Lint Markdown
+          shell: bash
+          run: pnpm run lint-md
