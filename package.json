@@ -48,6 +48,7 @@
     "@vitest/ui": "catalog:vitest",
     "angular-eslint": "catalog:eslint",
     "eslint": "catalog:eslint",
+    "lefthook": "catalog:lefthook",
     "markdownlint-cli2": "catalog:markdownlint",
     "playwright": "catalog:vitest",
     "postcss": "catalog:stylelint",

@@ -21,6 +21,7 @@ engineStrict: true
 allowBuilds:
   "@parcel/watcher": false
   esbuild: false
+  lefthook: true
   lmdb: false
   msgpackr-extract: false
 
@@ -49,6 +50,8 @@ catalogs:
     angular-eslint: ~22.5.0
     eslint: ~10.10.0
     typescript-eslint: ~8.70.0
+  lefthook:
+    lefthook: ~2.1.12
   markdownlint:
     markdownlint-cli2: ~0.23.2
   prettier:
