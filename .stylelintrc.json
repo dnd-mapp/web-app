@@ -1,0 +1,4 @@
+{
+    "$schema": "https://www.schemastore.org/stylelintrc.json",
+    "extends": ["stylelint-config-standard-scss", "stylelint-config-clean-order/error"]
+}

@@ -115,6 +115,31 @@
         },
         {
             "type": "npm",
+            "script": "lint-styles",
+            "label": "lint-styles",
+            "detail": "Report SCSS lint violations without rewriting anything.",
+            "problemMatcher": {
+                "owner": "stylelint",
+                "source": "stylelint",
+                "fileLocation": ["relative", "${workspaceFolder}"],
+                "pattern": [
+                    {
+                        "regexp": "^(\\S.*\\.s?css)$",
+                        "file": 1
+                    },
+                    {
+                        "regexp": "^\\s+(\\d+):(\\d+)\\s+\\S+\\s+(.+?)\\s{2,}(\\S+)$",
+                        "line": 1,
+                        "column": 2,
+                        "message": 3,
+                        "code": 4,
+                        "loop": true
+                    }
+                ]
+            }
+        },
+        {
+            "type": "npm",
             "script": "format",
             "label": "format",
             "detail": "Rewrite every formattable file in place.",

@@ -22,6 +22,7 @@ $RECYCLE.BIN/
 !.idea/codeStyles/
 !.idea/inspectionProfiles/
 !.idea/runConfigurations/
+!.idea/stylesheetLinters/
 !.idea/fileTemplates/
 !.idea/prettier.xml
 

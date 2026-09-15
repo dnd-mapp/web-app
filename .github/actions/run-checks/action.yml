@@ -12,6 +12,10 @@ runs:
           shell: bash
           run: pnpm run lint-md
 
+        - name: Lint styles
+          shell: bash
+          run: pnpm run lint-styles
+
         - name: Compile app
           shell: bash
           run: pnpm run build
