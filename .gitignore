@@ -40,5 +40,6 @@ dist/
 out-tsc/
 
 # Test output
+.playwright/
 .vitest/
 coverage/

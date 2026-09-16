@@ -8,7 +8,7 @@ import tseslint from 'typescript-eslint';
 // apply everywhere and covers every file without a closer config. projects/web-app/eslint.config.js spreads it
 // and adds the Angular rules.
 export default defineConfig([
-    globalIgnores(['.angular/', '.vitest/', 'coverage/', 'dist/']),
+    globalIgnores(['.angular/', '.playwright/', '.vitest/', 'coverage/', 'dist/']),
     {
         files: ['**/*.{ts,mts,cts}'],
         extends: [

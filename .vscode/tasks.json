@@ -101,6 +101,23 @@
         },
         {
             "type": "npm",
+            "script": "e2e",
+            "label": "e2e",
+            "detail": "Run the end-to-end tests once in Chromium against the dev server, starting it when nothing listens on port 4200.",
+            "group": "test",
+            "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "e2e-ui",
+            "label": "e2e-ui",
+            "detail": "Open Playwright's UI mode to run, watch and inspect the end-to-end tests.",
+            "group": "test",
+            "isBackground": true,
+            "problemMatcher": []
+        },
+        {
+            "type": "npm",
             "script": "playwright-install",
             "label": "playwright-install",
             "detail": "Download the Chromium build Playwright drives the tests in.",

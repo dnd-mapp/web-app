@@ -44,3 +44,6 @@ runs:
                       - "!projects/**/*.spec.ts"
                       - "!projects/**/tsconfig.spec.json"
                       - "!projects/**/vitest.config.ts"
+                      - "!projects/**/e2e/**"
+                      - "!projects/**/playwright.config.ts"
+                      - "!projects/**/tsconfig.e2e.json"

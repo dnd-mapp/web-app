@@ -21,5 +21,6 @@ pnpm-lock.yaml
 .angular/
 dist/
 
+.playwright/
 .vitest/
 coverage/
