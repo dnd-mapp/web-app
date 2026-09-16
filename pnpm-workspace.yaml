@@ -70,3 +70,5 @@ catalogs:
     "@vitest/ui": ~4.1.11
     playwright: ~1.63.0
     vitest: ~4.1.11
+catalog:
+  "@types/node": ~24.13.4
