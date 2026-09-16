@@ -43,9 +43,9 @@ jobs:
               uses: ./.github/actions/run-checks
 
     # Decides whether the pull request touches anything the image is built from, so the build below only runs when it
-    # would produce a different image. The filter lives in a composite action, so other workflows can share it. It
-    # reads the changed files through the GitHub API; the checkout is only there because a local action has to be on
-    # disk before it resolves.
+    # would produce a different image. The filter lives in a composite action, shared with pull-request-closed.yml,
+    # which removes the image again. It reads the changed files through the GitHub API; the checkout is only there
+    # because a local action has to be on disk before it resolves.
     image-changes:
         name: Detect image changes
         runs-on: ubuntu-24.04

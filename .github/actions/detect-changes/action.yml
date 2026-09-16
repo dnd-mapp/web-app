@@ -11,8 +11,9 @@ outputs:
 runs:
     using: composite
     steps:
-        # On a pull_request event the action lists the changed files through the GitHub API, so it needs no checkout
-        # of its own.
+        # On a pull_request event the action lists the changed files through the GitHub API, whatever the activity
+        # type, so a filter answers both "does this pull request get an image" when it is opened and "did it get one"
+        # when it is closed.
         #
         # image: mirrors .dockerignore, the files the build stage copies in minus the test files it excludes, plus the
         # files that decide whether and how the image is built. A change to either list belongs in the other as well.
