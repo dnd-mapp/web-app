@@ -1,0 +1,35 @@
+# The stack the end-to-end tests run against in CI: a published dndmapp/web-app image behind Caddy, which terminates
+# TLS the way the dev server does, so the tests reach the app at https://localhost:4200 in both setups. WEB_APP_TAG
+# picks the image tag and defaults to dev, the tag a local `docker buildx bake --load` produces.
+#
+#     WEB_APP_TAG=pr-12 docker compose --file .docker/compose.yaml up --wait
+#     docker compose --file .docker/compose.yaml down
+
+name: web-app
+
+services:
+    # nginx serves the compiled app on port 4200 inside the compose network only; Caddy is the one published port.
+    web-app:
+        image: dndmapp/web-app:${WEB_APP_TAG:-dev}
+
+    # The tag and digest are pinned together, like the base images in the Dockerfile. Caddy reads the mounted
+    # Caddyfile, issues a certificate for localhost from its local CA and forwards requests to web-app. The health
+    # check requests the app through that whole chain, so `up --wait` returns once Caddy has its certificate and nginx
+    # answers behind it. It probes every second while the stack starts, when a failure does not count, and settles into
+    # a slower rhythm once healthy.
+    caddy:
+        image: caddy:2.11.4-alpine@sha256:5f5c8640aae01df9654968d946d8f1a56c497f1dd5c5cda4cf95ab7c14d58648
+        depends_on:
+            - web-app
+        ports:
+            - "4200:443"
+        volumes:
+            - ./Caddyfile:/etc/caddy/Caddyfile:ro
+        healthcheck:
+            test:
+                ["CMD", "wget", "--quiet", "--no-check-certificate", "--output-document=/dev/null", "https://localhost"]
+            start_period: 30s
+            start_interval: 1s
+            interval: 10s
+            timeout: 5s
+            retries: 3

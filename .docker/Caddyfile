@@ -1,0 +1,19 @@
+# Caddy terminates TLS in front of the web-app container for the end-to-end tests, standing in for the TLS the dev
+# server provides. compose.yaml mounts this file at /etc/caddy/Caddyfile, the path the image reads by default.
+{
+	# Nothing reconfigures Caddy while the stack runs, so the admin API stays off.
+	admin off
+
+	# Without this Caddy also listens on port 80 to redirect HTTP to HTTPS, and the stack publishes no such port.
+	auto_https disable_redirects
+
+	# Caddy would otherwise add the local CA below to the container's trust store at startup, which nothing reads.
+	skip_install_trust
+}
+
+# The certificate comes from Caddy's own local CA, the way mkcert issues the dev server's. Nothing has to trust it: the
+# tests ignore certificate errors. Requests go on to nginx in the web-app container over the compose network.
+localhost {
+	tls internal
+	reverse_proxy web-app:4200
+}

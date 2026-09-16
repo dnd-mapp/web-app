@@ -4,8 +4,9 @@ import { resolve } from 'node:path';
 const workspaceRoot = resolve(import.meta.dirname, '../..');
 const outputRoot = resolve(workspaceRoot, '.playwright');
 
-// The dev server from `pnpm start`, reached by hostname rather than through the hosts entry README.md describes, so
-// the tests run before that entry is in place.
+// Both servers the tests can run against listen here: the dev server from `pnpm start`, reached by hostname rather
+// than through the hosts entry README.md describes, and Caddy in the compose stack under .docker, which terminates TLS
+// in front of the published image.
 const baseURL = 'https://localhost:4200';
 
 const isCI = Boolean(process.env['CI']);
@@ -20,8 +21,9 @@ export default defineConfig({
     reporter: [isCI ? ['github'] : ['list'], ['html', { outputFolder: resolve(outputRoot, 'report'), open: 'never' }]],
     use: {
         baseURL: baseURL,
-        // The dev server presents a certificate issued by mkcert, which the bundled Chromium does not necessarily
-        // trust. The tests exercise the app, not the TLS setup, so certificate errors are ignored.
+        // The dev server presents a certificate issued by mkcert and Caddy one from its own local CA, neither of which
+        // the bundled Chromium necessarily trusts. The tests exercise the app, not the TLS setup, so certificate errors
+        // are ignored.
         ignoreHTTPSErrors: true,
         trace: 'retain-on-failure',
     },
@@ -31,13 +33,19 @@ export default defineConfig({
             use: { ...devices['Desktop Chrome'] },
         },
     ],
-    webServer: {
-        command: 'pnpm start',
-        cwd: workspaceRoot,
-        url: baseURL,
-        ignoreHTTPSErrors: true,
-        // A dev server already listening on the port is used as is, so `pnpm start` and `pnpm run e2e` coexist.
-        reuseExistingServer: !isCI,
-        timeout: 120_000,
-    },
+    // In CI the run-e2e action starts the compose stack before the tests, so no server is started here. Locally the dev
+    // server stands in, unless something already listens on the port: a `pnpm start` from another terminal or the
+    // compose stack started by hand is used as is.
+    ...(isCI
+        ? {}
+        : {
+              webServer: {
+                  command: 'pnpm start',
+                  cwd: workspaceRoot,
+                  url: baseURL,
+                  ignoreHTTPSErrors: true,
+                  reuseExistingServer: true,
+                  timeout: 120_000,
+              },
+          }),
 });

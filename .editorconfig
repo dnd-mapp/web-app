@@ -13,5 +13,9 @@ max_line_length = 120
 [*.md]
 max_line_length = off
 
+# caddy fmt indents with tabs and warns at startup about a file that does not.
+[Caddyfile]
+indent_style = tab
+
 [{package.json,pnpm-*.yaml}]
 indent_size = 2

@@ -19,6 +19,8 @@ runs:
         #
         # image: mirrors .dockerignore, the files the build stage copies in minus the test files it excludes, plus the
         # files that decide whether and how the image is built. A change to either list belongs in the other as well.
+        # .docker also holds the compose stack the end-to-end tests run against, which the image is not built from, so
+        # the filter names nginx.conf rather than the folder.
         - name: Compare the changed files with the filters
           id: filter
           uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
@@ -26,7 +28,7 @@ runs:
               predicate-quantifier: some-with-excludes
               filters: |
                   image:
-                      - .docker/**
+                      - .docker/nginx.conf
                       - .dockerignore
                       - .github/actions/build-image/action.yml
                       - .github/actions/detect-changes/action.yml
