@@ -1,0 +1,129 @@
+name: Release
+
+# The glob lets v1.2.3 through and nothing with a pre-release or build suffix. It cannot reject a leading zero, so the
+# first job checks the tag against the strict pattern before anything else runs.
+on:
+    push:
+        tags:
+            - "v[0-9]+.[0-9]+.[0-9]+"
+
+permissions: {}
+
+jobs:
+    # Checks that the tagged commit is ready to be released as the version the tag names, and cuts the release notes
+    # out of the changelog. Each check is a script under scripts/release and a step of its own, so the run shows which
+    # one stopped the release, and each script can be run by hand before a tag is pushed. The scripts report a failure
+    # as an annotation and set their outputs themselves. Nothing is built or published until all of them pass. The
+    # workspace is set up first, so the scripts run on the pinned Node.js rather than the runner's.
+    verify:
+        name: Verify the release
+        runs-on: ubuntu-24.04
+        timeout-minutes: 5
+        permissions:
+            contents: read
+        concurrency:
+            group: release-verify
+            cancel-in-progress: false
+        outputs:
+            version: ${{ steps.tag.outputs.version }}
+            notes: ${{ steps.changelog.outputs.notes }}
+        steps:
+            - name: Check out the repository
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  persist-credentials: false
+
+            - name: Set up the workspace
+              uses: ./.github/actions/setup-workspace
+
+            # Strict semver: three numbers, none with a leading zero. The version is the tag without the v, which is
+            # what the manifest, the bake file and the changelog carry, and the script sets it as the version output.
+            - name: Parse the tag
+              id: tag
+              shell: bash
+              env:
+                  TAG: ${{ github.ref_name }}
+              run: node scripts/release/parse-tag.js "$TAG"
+
+            - name: Check the version in package.json
+              shell: bash
+              env:
+                  VERSION: ${{ steps.tag.outputs.version }}
+              run: node scripts/release/check-package-version.js "$VERSION"
+
+            # The script reads the label from the configuration bake resolves rather than from the file's text, and
+            # allows the -dev suffix the file keeps for local builds: the release image takes its label from
+            # docker/metadata-action, so only the version in front of it matters.
+            - name: Check the version label in docker-bake.hcl
+              shell: bash
+              env:
+                  VERSION: ${{ steps.tag.outputs.version }}
+              run: node scripts/release/check-bake-version.js "$VERSION"
+
+            # The script prints the section under '## [<version>] - <date>', fails on a missing heading or an empty
+            # section, and sets the section as the notes output.
+            - name: Extract the release notes from CHANGELOG.md
+              id: changelog
+              shell: bash
+              env:
+                  VERSION: ${{ steps.tag.outputs.version }}
+              run: node scripts/release/release-notes.js "$VERSION"
+
+    # Builds the image for both platforms and pushes it to Docker Hub as dndmapp/web-app:1.2.3, :1.2, :1 and :latest.
+    # The semver rules take the numbers from the tag, and docker/metadata-action adds latest on its own for a semver
+    # tag, which is the one case it reserves latest for. A 0.y.z release gets no major tag: semver makes no
+    # compatibility promise within major version zero, so a 0 tag could not mean what 1 means. Releases run one at a
+    # time in push order without cancelling each other, so latest ends up on the newest tag and no tag is left without
+    # its image.
+    build-image:
+        name: Build image
+        needs: verify
+        runs-on: ubuntu-24.04
+        timeout-minutes: 15
+        permissions:
+            contents: read
+        concurrency:
+            group: release-build-image
+            cancel-in-progress: false
+        steps:
+            - name: Check out the repository
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  persist-credentials: false
+
+            # The version pattern comes first, so the action uses it for the version label of the image. The major
+            # rule is switched off for a v0 tag; the expression is evaluated here, before the action sees the rules.
+            - name: Build and push the image
+              uses: ./.github/actions/build-image
+              with:
+                  tags: |
+                      type=semver,pattern={{version}}
+                      type=semver,pattern={{major}}.{{minor}}
+                      type=semver,pattern={{major}},enable=${{ !startsWith(github.ref, 'refs/tags/v0.') }}
+                  username: ${{ vars.DOCKERHUB_USERNAME }}
+                  password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    # Publishes the release on GitHub with the changelog section as its notes, once the image it announces is on
+    # Docker Hub. This is the one job with write access to the repository, and it runs nothing but the release action;
+    # the build runs the Dockerfile and every dependency and stays read-only. The action needs no checkout: the tag
+    # exists already, and the notes arrive through the job output. It uses the workflow token by default, which is
+    # enough because no workflow listens for the release event.
+    release:
+        name: Create the GitHub release
+        needs:
+            - verify
+            - build-image
+        runs-on: ubuntu-24.04
+        timeout-minutes: 2
+        permissions:
+            contents: write
+        concurrency:
+            group: release-create
+            cancel-in-progress: false
+        steps:
+            - name: Create the release
+              uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
+              with:
+                  tag_name: ${{ github.ref_name }}
+                  name: "Release ${{ github.ref_name }}"
+                  body: ${{ needs.verify.outputs.notes }}
