@@ -39,7 +39,7 @@ The app is then served at `http://localhost:4200`. `latest` is the newest releas
 | [Workspace](docs/workspace.md)                   | The Angular workspace, the tsconfig files and how the application is laid out into areas. |
 | [Testing](docs/testing.md)                       | Unit tests with component harnesses, end-to-end tests and the compose stack they run on.  |
 | [Formatting and linting](docs/linting.md)        | Prettier, markdownlint, Stylelint and ESLint, and how their configs fit together.         |
-| [Commits](docs/commits.md)                       | Conventional Commits, commitlint and the Git hooks lefthook installs.                     |
+| [Branches and commits](docs/commits.md)          | Branch names, Conventional Commits, commitlint and the Git hooks lefthook installs.       |
 | [Docker image](docs/docker.md)                   | The Dockerfile, the bake file, attestations and the Docker Hub page texts.                |
 | [Continuous integration](docs/ci.md)             | The workflows, the composite actions they share, secrets, and how pull requests merge.    |
 | [Releasing](docs/releasing.md)                   | The changelog, cutting a release and the release workflow.                                |

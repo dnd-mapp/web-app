@@ -45,7 +45,7 @@ Give every table an alignment indicator in its separator row:
 - **Workspace** ([docs/workspace.md](docs/workspace.md)): the Angular workspace, the tsconfig files, areas, barrels, `@/<area>` aliases and file naming.
 - **Testing** ([docs/testing.md](docs/testing.md)): specs, component harnesses, coverage, end-to-end tests and the compose stack.
 - **Formatting and linting** ([docs/linting.md](docs/linting.md)): a Prettier, markdownlint, Stylelint or ESLint finding, or a change to one of their configs.
-- **Commits** ([docs/commits.md](docs/commits.md)): writing a commit message; a hook that rejects a commit.
+- **Branches and commits** ([docs/commits.md](docs/commits.md)): naming a branch; writing a commit message; a hook that rejects a commit.
 - **Docker image** ([docs/docker.md](docs/docker.md)): the Dockerfile, the bake file, nginx, base image updates and the Docker Hub texts under `.docker/hub`.
 - **Continuous integration** ([docs/ci.md](docs/ci.md)): anything under `.github`, including the conventions every workflow follows.
 - **Releasing** ([docs/releasing.md](docs/releasing.md)): the changelog, cutting a release, `release.yml` and `scripts/release`.
