@@ -1,10 +1,12 @@
 // @ts-check
 import eslint from '@eslint/js';
-import angular from 'angular-eslint';
 import { defineConfig, globalIgnores } from 'eslint/config';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
+// ESLint picks the config for a file by walking up from the file's directory, so this one holds the rules that
+// apply everywhere and covers every file without a closer config. projects/web-app/eslint.config.js spreads it
+// and adds the Angular rules.
 export default defineConfig([
     globalIgnores(['.angular/', '.vitest/', 'coverage/', 'dist/']),
     {
@@ -13,7 +15,6 @@ export default defineConfig([
             eslint.configs.recommended,
             tseslint.configs.recommendedTypeChecked,
             tseslint.configs.stylisticTypeChecked,
-            angular.configs.tsRecommended,
         ],
         // Typed linting resolves each file's types through the tsconfig that includes it.
         languageOptions: {
@@ -21,25 +22,6 @@ export default defineConfig([
                 projectService: true,
                 tsconfigRootDir: import.meta.dirname,
             },
-        },
-        processor: angular.processInlineTemplates,
-        rules: {
-            '@angular-eslint/component-selector': [
-                'error',
-                {
-                    type: 'element',
-                    prefix: 'app',
-                    style: 'kebab-case',
-                },
-            ],
-            '@angular-eslint/directive-selector': [
-                'error',
-                {
-                    type: 'attribute',
-                    prefix: 'app',
-                    style: 'camelCase',
-                },
-            ],
         },
     },
     {
@@ -60,9 +42,5 @@ export default defineConfig([
         languageOptions: {
             globals: globals.node,
         },
-    },
-    {
-        files: ['**/*.html'],
-        extends: [angular.configs.templateRecommended, angular.configs.templateAccessibility],
     },
 ]);
