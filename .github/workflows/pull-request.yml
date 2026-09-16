@@ -84,7 +84,6 @@ jobs:
 
     # Builds the image for both platforms and pushes it to Docker Hub as dndmapp/web-app:pr-<N>. Only a branch of this
     # repository gets a build: a fork cannot read the registry credentials, and its Dockerfile is not ours to publish.
-    # bake-action builds from the Git context of the pull request, so the job needs no checkout either.
     build-image:
         name: Build image
         needs: image-changes
@@ -97,6 +96,11 @@ jobs:
             group: pull-request-build-image-${{ github.event.pull_request.number }}
             cancel-in-progress: true
         steps:
+            - name: Check out the repository
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  persist-credentials: false
+
             # A multi-platform build with attestations needs the docker-container driver, which is the action's default.
             # No QEMU: the serve stage only copies files, so nothing runs under emulation.
             - name: Set up Buildx
@@ -119,8 +123,8 @@ jobs:
               env:
                   DOCKER_METADATA_ANNOTATIONS_LEVELS: index,manifest
 
-            # The metadata action writes its bake file into the runner's temporary directory, and bake-action reads
-            # files from the Git context by default, hence the cwd:// prefix. The bake file leaves the platforms to the
+            # Bake runs from the checkout, so it reads docker-bake.hcl from there and the metadata action's file from
+            # the absolute path in the runner's temporary directory. The bake file leaves the platforms to the
             # PLATFORMS variable and the tags and labels to the metadata target; provenance and SBOM settings are in
             # the file, and bake-action leaves them alone because the target declares them.
             - name: Build and push the image
@@ -129,7 +133,7 @@ jobs:
                   source: .
                   files: |
                       ./docker-bake.hcl
-                      cwd://${{ steps.metadata.outputs.bake-file }}
+                      ${{ steps.metadata.outputs.bake-file }}
                   push: true
               env:
                   PLATFORMS: linux/amd64,linux/arm64
