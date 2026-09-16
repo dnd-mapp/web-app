@@ -5,8 +5,8 @@ const workspaceRoot = resolve(import.meta.dirname, '../..');
 const outputRoot = resolve(workspaceRoot, '.playwright');
 
 // Both servers the tests can run against listen here: the dev server from `pnpm start`, reached by hostname rather
-// than through the hosts entry README.md describes, and Caddy in the compose stack under .docker, which terminates TLS
-// in front of the published image.
+// than through the hosts entry docs/getting-started.md describes, and Caddy in the compose stack under .docker, which
+// terminates TLS in front of the published image.
 const baseURL = 'https://localhost:4200';
 
 const isCI = Boolean(process.env['CI']);
