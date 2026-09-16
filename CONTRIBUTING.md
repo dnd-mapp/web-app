@@ -8,7 +8,7 @@ Install the Node.js and pnpm versions listed under [Prerequisites](docs/getting-
 
 ## Making a change
 
-Work on a branch off `main` and keep a pull request to one change, so it reads and reviews as one thing. Along the way:
+Work on a branch off `main`, named as [Branch names](docs/commits.md#branch-names) describes, and keep a pull request to one change, so it reads and reviews as one thing. Along the way:
 
 - **Tests.** Every component gets a spec that drives it through a component harness, and a flow that needs the served application gets an end-to-end test; [Testing](docs/testing.md) says which is which. Coverage below 80% fails CI.
 - **Changelog.** A change a user of the application notices gets one line under `## [Unreleased]` in [CHANGELOG.md](CHANGELOG.md), written for that user; [Changelog](docs/releasing.md#changelog) lists the categories. Tooling, tests, CI, the Docker image and documentation add no line.

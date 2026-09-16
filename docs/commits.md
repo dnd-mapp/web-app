@@ -1,4 +1,14 @@
-# Commits
+# Branches and commits
+
+## Branch names
+
+```bash
+git switch -c docs/branch-conventions main
+```
+
+A branch is named `<type>/<summary>`. The type is the [Conventional Commits](#commit-messages) type of the change the branch carries, so it matches the commits on it. A pull request that mixes types takes the type of the commit that gives it its purpose, so a `feat` branch may carry `test` and `docs` commits. The summary names the change in a few lower-case words joined by hyphens: `ci/auto-merge`, `docs/restructure-documentation`, `fix/dice-roller-modifier`. GitHub repeats the name in the merge commit, `Merge pull request #22 from dnd-mapp/ci/auto-merge`, so the history says what each merge brought in.
+
+Every branch starts from `main` and carries one change, the one its pull request describes; see [Making a change](../CONTRIBUTING.md#making-a-change). The pull request that [cuts a release](releasing.md#cutting-a-release) is `chore/release-<version>`. A branch a tool created under another name gets renamed before the pull request opens: `git branch -m <type>/<summary>`. GitHub deletes the branch once its pull request has merged, so a follow-up gets a branch of its own.
 
 ## Commit messages
 
