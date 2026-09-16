@@ -44,6 +44,15 @@ runs:
         # absolute path in the runner's temporary directory. The bake file leaves the platforms to the PLATFORMS
         # variable and the tags and labels to the metadata target; provenance and SBOM settings are in the file, and
         # bake-action leaves them alone because the target declares them.
+        #
+        # The layer cache lives in the GitHub Actions cache under the web-app scope. GitHub hands a run the cache
+        # entries of its own branch and of main, so a pull request reuses what main and its own earlier runs exported,
+        # and main reuses its own. mode=max exports every stage's layers, not only the final image's, so the build
+        # stage with its installed dependencies is a hit until the Dockerfile or the lockfile changes. The pnpm store
+        # behind the cache mount in the Dockerfile is not a layer and is not exported, so a lockfile change installs
+        # from the registry again. Buildx reaches the cache service through ACTIONS_RUNTIME_TOKEN and
+        # ACTIONS_RESULTS_URL, which the runner gives every JavaScript action and bake-action passes on. ignore-error
+        # keeps a failed cache upload from failing a build whose image is already pushed.
         - name: Build and push the image
           uses: docker/bake-action@018cb6412ab401ebaa809aa5f85966b74628600f # v7.4.0
           with:
@@ -54,3 +63,5 @@ runs:
               push: true
           env:
               PLATFORMS: linux/amd64,linux/arm64
+              CACHE_FROM: type=gha,scope=web-app
+              CACHE_TO: type=gha,scope=web-app,mode=max,ignore-error=true

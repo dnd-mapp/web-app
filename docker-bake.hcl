@@ -1,5 +1,5 @@
 # Bake definition for the dndmapp/web-app image. The image name never changes; what differs between builds is which
-# tags it gets, which platforms it is built for and what the OCI labels say.
+# tags it gets, which platforms it is built for, where its layer cache lives and what the OCI labels say.
 #
 # A local build takes those from this file alone:
 #
@@ -52,6 +52,30 @@ variable "PLATFORMS" {
     }
 }
 
+# Where the build imports its layer cache from and where it exports it to, one cache specification each, such as
+# type=gha,scope=web-app or type=registry,ref=dndmapp/web-app:cache. Empty means the builder's own cache and nothing
+# else, which is what a local build wants; CI passes the GitHub Actions cache. Each is a string rather than a list of
+# strings, because buildx splits a list variable on commas and a cache specification has commas of its own.
+variable "CACHE_FROM" {
+    type    = string
+    default = ""
+
+    validation {
+        condition     = CACHE_FROM == "" || can(regex("^type=[a-z0-9]+(,[a-z0-9_-]+=[^, ]+)*$", CACHE_FROM))
+        error_message = "CACHE_FROM is empty or looks like type=<backend>[,<key>=<value>...]. Got: ${CACHE_FROM}."
+    }
+}
+
+variable "CACHE_TO" {
+    type    = string
+    default = ""
+
+    validation {
+        condition     = CACHE_TO == "" || can(regex("^type=[a-z0-9]+(,[a-z0-9_-]+=[^, ]+)*$", CACHE_TO))
+        error_message = "CACHE_TO is empty or looks like type=<backend>[,<key>=<value>...]. Got: ${CACHE_TO}."
+    }
+}
+
 group "default" {
     targets = ["web-app"]
 }
@@ -85,6 +109,10 @@ target "web-app" {
     dockerfile = "Dockerfile"
     target     = "serve"
     platforms  = PLATFORMS
+
+    # Bake takes a list here, and an empty list means no cache import or export; compact drops the empty default.
+    cache-from = compact([CACHE_FROM])
+    cache-to   = compact([CACHE_TO])
 
     # Provenance at mode=max records the full build definition and source; the SBOM lists the packages in the image.
     # Both are attached to the image index as attestation manifests. The docker exporter only accepts them with the
