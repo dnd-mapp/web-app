@@ -43,13 +43,15 @@ jobs:
               uses: ./.github/actions/run-checks
 
     # Decides whether the pull request touches anything the image is built from, so the build below only runs when it
-    # would produce a different image. On a pull_request event the action lists the changed files through the API, so
-    # it needs no checkout.
+    # would produce a different image. The filter lives in a composite action, shared with pull-request-closed.yml,
+    # which removes the image again. It reads the changed files through the GitHub API; the checkout is only there
+    # because a local action has to be on disk before it resolves.
     image-changes:
         name: Detect image changes
         runs-on: ubuntu-24.04
         timeout-minutes: 2
         permissions:
+            contents: read
             pull-requests: read
         concurrency:
             group: pull-request-image-changes-${{ github.event.pull_request.number }}
@@ -57,30 +59,14 @@ jobs:
         outputs:
             image: ${{ steps.filter.outputs.image }}
         steps:
-            # The patterns mirror .dockerignore: the files the build stage copies in, minus the test files it excludes,
-            # plus the files that decide how the image is built. A change to either list belongs in the other as well.
-            - name: Compare the changed files with the image inputs
-              id: filter
-              uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
+            - name: Check out the repository
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
               with:
-                  predicate-quantifier: some-with-excludes
-                  filters: |
-                      image:
-                          - .docker/**
-                          - .dockerignore
-                          - .github/workflows/pull-request.yml
-                          - Dockerfile
-                          - angular.json
-                          - docker-bake.hcl
-                          - package.json
-                          - pnpm-lock.yaml
-                          - pnpm-workspace.yaml
-                          - projects/**
-                          - tsconfig.json
-                          - "!projects/**/testing/**"
-                          - "!projects/**/*.spec.ts"
-                          - "!projects/**/tsconfig.spec.json"
-                          - "!projects/**/vitest.config.ts"
+                  persist-credentials: false
+
+            - name: Detect changes
+              id: filter
+              uses: ./.github/actions/detect-changes
 
     # Builds the image for both platforms and pushes it to Docker Hub as dndmapp/web-app:pr-<N>. Only a branch of this
     # repository gets a build: a fork cannot read the registry credentials, and its Dockerfile is not ours to publish.
