@@ -18,7 +18,7 @@ Once it has merged, tag the merge commit and push the tag:
 git tag v1.2.3 && git push origin v1.2.3
 ```
 
-The tag has to be `v<major>.<minor>.<patch>` with plain numbers: no pre-release or build suffix and no leading zero. The release workflow does the rest and publishes `dndmapp/web-app:1.2.3`, `:1.2`, `:1` and `:latest`, then a [GitHub release](https://github.com/dnd-mapp/web-app/releases) named `Release v1.2.3` with the changelog section as its notes.
+The tag has to be `v<major>.<minor>.<patch>` with plain numbers: no pre-release or build suffix and no leading zero. The `Stable tags` ruleset lets only the Maintain role push such a tag and requires it to be signed, so the release is cut by a maintainer with [commit signing](commits.md#commit-signing) set up. The ruleset also stops the tag from being deleted or moved once pushed, and a maintainer leaves it alone as well. The image tags and the GitHub release already point at that commit, so a release that turns out wrong gets a new patch version rather than a retag. The release workflow does the rest and publishes `dndmapp/web-app:1.2.3`, `:1.2`, `:1` and `:latest`, then a [GitHub release](https://github.com/dnd-mapp/web-app/releases) named `Release v1.2.3` with the changelog section as its notes.
 
 ## The release workflow
 
