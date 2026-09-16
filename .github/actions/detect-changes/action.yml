@@ -1,11 +1,11 @@
 name: Detect changes
-description: Report which parts of the project the pull request changes, one output per filter.
+description: Report which parts of the project the pull request or push changes, one output per filter.
 
 # One output per filter below, each 'true' or 'false'. A new consumer adds a filter and an output here, so every
-# workflow answers "what does this pull request change" from the same place.
+# workflow answers "what does this change touch" from the same place.
 outputs:
     image:
-        description: "'true' when the pull request changes something the dndmapp/web-app image is built from."
+        description: "'true' when the pull request or push changes something the dndmapp/web-app image is built from."
         value: ${{ steps.filter.outputs.image }}
 
 runs:
@@ -13,7 +13,9 @@ runs:
     steps:
         # On a pull_request event the action lists the changed files through the GitHub API, whatever the activity
         # type, so a filter answers both "does this pull request get an image" when it is opened and "did it get one"
-        # when it is closed.
+        # when it is closed. On a push event it diffs the pushed commit against the one before the push through git,
+        # fetching the history it needs itself, so a merge into main is judged by the same rules as its pull request.
+        # A push with no previous commit, such as the first push to a branch, counts every file as changed.
         #
         # image: mirrors .dockerignore, the files the build stage copies in minus the test files it excludes, plus the
         # files that decide whether and how the image is built. A change to either list belongs in the other as well.
@@ -26,8 +28,10 @@ runs:
                   image:
                       - .docker/**
                       - .dockerignore
+                      - .github/actions/build-image/action.yml
                       - .github/actions/detect-changes/action.yml
                       - .github/workflows/pull-request.yml
+                      - .github/workflows/push-main.yml
                       - Dockerfile
                       - angular.json
                       - docker-bake.hcl
