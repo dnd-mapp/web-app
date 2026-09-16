@@ -21,6 +21,7 @@
     "build": "ng build",
     "test": "ng test",
     "test-ci": "ng test -c ci",
+    "lint-js": "eslint \"**/*.{js,mjs,cjs}\"",
     "lint-md": "markdownlint-cli2",
     "lint-styles": "stylelint \"projects/**/*.scss\"",
     "lint-ts": "ng lint",

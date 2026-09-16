@@ -108,6 +108,13 @@
         },
         {
             "type": "npm",
+            "script": "lint-js",
+            "label": "lint-js",
+            "detail": "Report JavaScript lint violations without rewriting anything.",
+            "problemMatcher": "$eslint-stylish"
+        },
+        {
+            "type": "npm",
             "script": "lint-md",
             "label": "lint-md",
             "detail": "Report Markdown lint violations without rewriting anything.",
