@@ -54,18 +54,21 @@ jobs:
             cancel-in-progress: true
         steps:
             # Docker Hub's documented API only reads tags; the endpoint below is the one docker/hub-tool deletes them
-            # with. The credentials go through the environment and stdin, so they never show up in a command line. A
-            # 404 means the build never pushed the tag, or an earlier run already removed it, so there is nothing left
-            # to do.
+            # with. The token is not the one the build uses: Docker Hub has no delete-only scope and no per-repository
+            # scope for a personal access token, so a token that can delete a tag can delete every tag in the account.
+            # It belongs in this job, which runs no project code, and not in the build, which runs the Dockerfile and
+            # every dependency. The credentials go through the environment and stdin, so they never show up in a
+            # command line. A 404 means the build never pushed the tag, or an earlier run already removed it, so
+            # there is nothing left to do.
             - name: Delete the tag from Docker Hub
               shell: bash
               env:
                   DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
-                  DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+                  DOCKERHUB_ADMIN_TOKEN: ${{ secrets.DOCKERHUB_ADMIN_TOKEN }}
                   TAG: pr-${{ github.event.pull_request.number }}
               run: |
                   access_token="$(
-                      jq --null-input --arg identifier "$DOCKERHUB_USERNAME" --arg secret "$DOCKERHUB_TOKEN" \
+                      jq --null-input --arg identifier "$DOCKERHUB_USERNAME" --arg secret "$DOCKERHUB_ADMIN_TOKEN" \
                           '{ identifier: $identifier, secret: $secret }' |
                           curl --fail --silent --show-error --request POST --header 'Content-Type: application/json' \
                               --data @- https://hub.docker.com/v2/auth/token |
