@@ -9,8 +9,11 @@
 !projects/
 !tsconfig.json
 
-# Test output, harnesses and specs are not part of the application build.
+# Test output, harnesses, specs and end-to-end tests are not part of the application build.
 projects/**/testing/
 projects/**/*.spec.ts
 projects/**/tsconfig.spec.json
 projects/**/vitest.config.ts
+projects/**/e2e/
+projects/**/playwright.config.ts
+projects/**/tsconfig.e2e.json
