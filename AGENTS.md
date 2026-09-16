@@ -42,7 +42,7 @@ pnpm 12 is the only supported package manager, enforced through `devEngines` in 
 
 Resolution settings live in `pnpm-workspace.yaml`. Four of them shape everyday work:
 
-- **Strict catalogs.** Versions live in named catalogs rather than the default one, so `pnpm add <package>` needs `--save-catalog-name <name>` to say which catalog the version belongs in. It records the version there and writes `catalog:<name>` as the specifier in `package.json`. `pnpm remove` leaves the catalog entry behind, so delete that line yourself.
+- **Strict catalogs.** Versions live in catalogs rather than in `package.json`. `pnpm add <package>` needs `--save-catalog-name <name>` to say which named catalog the version belongs in, or `--save-catalog` for the default catalog, which holds packages tied to no tool, such as `@types/node`. It records the version there and writes `catalog:<name>` or `catalog:` as the specifier in `package.json`. `pnpm remove` leaves the catalog entry behind, so delete that line yourself.
 - **Release age.** Versions published less than three days ago do not resolve. Packages matching `@dnd-mapp/*` are exempt.
 - **Peer dependencies.** Peers are never installed automatically, and an unmet peer fails the install, so add them as explicit dependencies.
 - **Build scripts.** A dependency's install scripts stay blocked until it is listed under `allowBuilds`, and the install ends with `ERR_PNPM_IGNORED_BUILDS`. Run `pnpm approve-builds` to record the decision. `lefthook` is the one entry set to `true`: its `postinstall` script installs the Git hooks.
