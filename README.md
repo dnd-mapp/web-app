@@ -94,6 +94,14 @@ pnpm run test
 
 [Vitest](https://vitest.dev) runs the `*.spec.ts` files in a headless Chromium driven by [Playwright](https://playwright.dev), through Angular's `unit-test` builder configured in [angular.json](angular.json) and [vitest.config.ts](projects/web-app/vitest.config.ts). The default configuration watches for changes and serves the Vitest UI at `http://localhost:51204/__vitest__/`. Components are tested through [Angular CDK component harnesses](https://material.angular.dev/cdk/testing/overview), which live in a `testing/` folder next to the code they exercise. Coverage is collected on every run and reported to `coverage/web-app`; the run fails below 80% on statements, branches, functions and lines. Run `pnpm run test-ci` for a single, non-interactive run with GitHub Actions annotations, and `pnpm run playwright-install` once to download the Chromium build Playwright drives.
 
+## End-to-end testing
+
+```bash
+pnpm run e2e
+```
+
+[Playwright Test](https://playwright.dev) runs the `*.spec.ts` files under [projects/web-app/e2e](projects/web-app/e2e) in the same Chromium build the unit tests use, configured in [playwright.config.ts](projects/web-app/playwright.config.ts). The tests drive the dev server at `https://localhost:4200`: when nothing listens on that port the run starts `pnpm start` itself and stops it afterwards, and a server that is already running is reused. Either way the TLS certificates described under "Running the app" have to exist; the hosts entry is not needed, since the tests use the `localhost` fallback and ignore certificate errors. Output lands in `.playwright/`: an HTML report under `report`, which `pnpm exec playwright show-report .playwright/report` opens, and a trace for every failed test under `test-results`. Run `pnpm run e2e-ui` for Playwright's UI mode, which watches the files, runs tests on demand and shows a trace of each step.
+
 ## Formatting
 
 ```bash
