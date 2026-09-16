@@ -7,6 +7,9 @@ outputs:
     image:
         description: "'true' when the pull request or push changes something the dndmapp/web-app image is built from."
         value: ${{ steps.filter.outputs.image }}
+    hub:
+        description: "'true' when the pull request or push changes the texts shown on the image's Docker Hub page."
+        value: ${{ steps.filter.outputs.hub }}
 
 runs:
     using: composite
@@ -21,6 +24,9 @@ runs:
         # files that decide whether and how the image is built. A change to either list belongs in the other as well.
         # .docker also holds the compose stack the end-to-end tests run against, which the image is not built from, so
         # the filter names nginx.conf rather than the folder.
+        #
+        # hub: the texts under .docker/hub that push-main.yml uploads to the image's Docker Hub page, plus the files
+        # that decide whether and how they are uploaded: this action and that workflow.
         - name: Compare the changed files with the filters
           id: filter
           uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
@@ -50,3 +56,7 @@ runs:
                       - "!projects/**/e2e/**"
                       - "!projects/**/playwright.config.ts"
                       - "!projects/**/tsconfig.e2e.json"
+                  hub:
+                      - .docker/hub/**
+                      - .github/actions/detect-changes/action.yml
+                      - .github/workflows/push-main.yml
