@@ -26,6 +26,7 @@ runs:
                   image:
                       - .docker/**
                       - .dockerignore
+                      - .github/actions/build-image/action.yml
                       - .github/actions/detect-changes/action.yml
                       - .github/workflows/pull-request.yml
                       - Dockerfile
