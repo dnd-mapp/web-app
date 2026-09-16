@@ -12,6 +12,10 @@ A blank line separates the subject from the body, which says what changed and wh
 
 The command above lints every commit on the current branch that `origin/main` does not have, which is the set a pull request carries. Run `pnpm exec commitlint --last --verbose` to lint the commit that was written last. CI runs the same check over the commits a pull request adds, see [CI](ci.md#ci), and the `commit-msg` hook below checks a message before the commit exists.
 
+## Commit signing
+
+The `Default branch` ruleset requires every commit on `main` to carry a signature GitHub shows as verified, and so does the `Stable tags` ruleset for release tags; see [Reviews and merging](ci.md#reviews-and-merging). Set up [commit signature verification](https://docs.github.com/en/authentication/managing-commit-signature-verification) once, with an SSH or GPG key added to your GitHub account as a signing key, and turn on `commit.gpgsign` and `tag.gpgsign` so Git signs without being asked. An unsigned commit in a pull request blocks the merge, and rewriting it to add the signature is the fix.
+
 ## Commit hooks
 
 ```bash
