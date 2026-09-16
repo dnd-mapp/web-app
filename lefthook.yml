@@ -17,9 +17,11 @@ pre-commit:
           group:
               parallel: true
               jobs:
-                  # Staged files under ESLint's ignore patterns would otherwise produce a warning.
-                  - name: typescript
-                    glob: "*.{ts,html}"
+                  # The extensions mirror the files patterns in eslint.config.js, which is the source of truth; ESLint
+                  # skips a file outside them silently, so widen both together. Staged files under ESLint's ignore
+                  # patterns would otherwise produce a warning.
+                  - name: code
+                    glob: "*.{ts,mts,cts,js,mjs,cjs,html}"
                     run: pnpm exec eslint --no-warn-ignored {staged_files}
 
                   - name: styles
