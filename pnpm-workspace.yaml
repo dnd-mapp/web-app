@@ -58,6 +58,9 @@ catalogs:
     lefthook: ~2.1.12
   markdownlint:
     markdownlint-cli2: ~0.23.2
+  playwright:
+    "@playwright/test": ~1.63.0
+    playwright: ~1.63.0
   prettier:
     prettier: ~3.9.6
     prettier-plugin-organize-imports: ~4.3.0
@@ -71,7 +74,6 @@ catalogs:
     "@vitest/browser-playwright": ~4.1.11
     "@vitest/coverage-v8": ~4.1.11
     "@vitest/ui": ~4.1.11
-    playwright: ~1.63.0
     vitest: ~4.1.11
 catalog:
   "@types/node": ~24.13.4
