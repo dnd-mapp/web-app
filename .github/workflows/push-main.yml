@@ -35,8 +35,10 @@ jobs:
 
     # Decides whether the push touches anything the image is built from, so the build below only runs when it would
     # produce a different image. The filter is the one that decides a pull request's preview image, so main only gets a
-    # new image for a merge whose pull request got a preview. On a push event the filter compares the pushed commit
-    # with the one before the push through git, fetching what it needs itself, so a default checkout is enough.
+    # new image for a merge whose pull request got a preview. The same action reports whether the push changes the
+    # texts on the image's Docker Hub page, which decides the upload at the bottom. On a push event the filter compares
+    # the pushed commit with the one before the push through git, fetching what it needs itself, so a default checkout
+    # is enough.
     image-changes:
         name: Detect image changes
         runs-on: ubuntu-24.04
@@ -48,6 +50,7 @@ jobs:
             cancel-in-progress: false
         outputs:
             image: ${{ steps.filter.outputs.image }}
+            hub: ${{ steps.filter.outputs.hub }}
         steps:
             - name: Check out the repository
               uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -142,3 +145,57 @@ jobs:
                   tag: ${{ steps.image.outputs.tag }}
                   username: ${{ vars.DOCKERHUB_USERNAME }}
                   password: ${{ secrets.DOCKERHUB_READ_TOKEN }}
+
+    # Uploads the texts under .docker/hub to the page of dndmapp/web-app on Docker Hub: short-description.txt as the
+    # one-line description and overview.md as the repository overview. The job needs the filter alone, not CI or the
+    # build: the texts describe the image rather than being part of it, and the job runs no project code. Uploads run
+    # one at a time in push order without cancelling, so the page always shows the texts of the newest commit that
+    # changed them.
+    hub-description:
+        name: Update Docker Hub description
+        needs: image-changes
+        if: needs.image-changes.outputs.hub == 'true'
+        runs-on: ubuntu-24.04
+        timeout-minutes: 2
+        permissions:
+            contents: read
+        concurrency:
+            group: push-main-hub-description
+            cancel-in-progress: false
+        steps:
+            - name: Check out the repository
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  persist-credentials: false
+
+            # The action takes the short description as an input rather than a file, and it trims one longer than the
+            # 100 characters Docker Hub allows with no more than a warning. This step reads the file into an output and
+            # fails instead, pointing at the file. $(cat) drops the trailing newline, which would otherwise count
+            # towards the limit and show up on the page.
+            - name: Read the short description
+              id: short-description
+              shell: bash
+              run: |
+                  file=.docker/hub/short-description.txt
+                  description="$(cat "$file")"
+
+                  if [ "${#description}" -gt 100 ]; then
+                      message="The short description has ${#description} characters, and Docker Hub allows 100."
+                      echo "::error file=$file::$message"
+                      exit 1
+                  fi
+                  echo "description=$description" >> "$GITHUB_OUTPUT"
+
+            # The token is the one Delete image in pull-request-closed.yml uses: editing a repository's settings takes
+            # a personal access token with the Read, Write & Delete scope, which Docker Hub cannot narrow to one
+            # repository. It belongs in a job like this one, which runs no project code, and not in the build, which
+            # runs the Dockerfile and every dependency. URL completion stays off: the links in the overview are already
+            # absolute, and the action would rewrite the ones inside code as well.
+            - name: Upload the description and overview to Docker Hub
+              uses: peter-evans/dockerhub-description@1b9a80c056b620d92cedb9d9b5a223409c68ddfa # v5.0.0
+              with:
+                  username: ${{ vars.DOCKERHUB_USERNAME }}
+                  password: ${{ secrets.DOCKERHUB_ADMIN_TOKEN }}
+                  repository: dndmapp/web-app
+                  short-description: ${{ steps.short-description.outputs.description }}
+                  readme-filepath: .docker/hub/overview.md
