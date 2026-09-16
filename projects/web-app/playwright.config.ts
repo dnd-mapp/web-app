@@ -33,9 +33,9 @@ export default defineConfig({
             use: { ...devices['Desktop Chrome'] },
         },
     ],
-    // In CI the run-e2e action starts the compose stack before the tests and stops it afterward, so no server is
-    // started here. Locally the dev server stands in, unless something already listens on the port: a `pnpm start`
-    // from another terminal or the compose stack started by hand is used as is.
+    // In CI the run-e2e action starts the compose stack before the tests, so no server is started here. Locally the dev
+    // server stands in, unless something already listens on the port: a `pnpm start` from another terminal or the
+    // compose stack started by hand is used as is.
     ...(isCI
         ? {}
         : {

@@ -4,7 +4,8 @@ description: Serve a published dndmapp/web-app image behind Caddy through the co
 # The steps every end-to-end run shares; what differs between runs is which image tag is served. The calling workflow
 # checks the repository out and runs setup-workspace first: a local action only resolves once a checkout has put it on
 # disk, and the tests need pnpm and the dependencies. A composite action cannot read secrets or variables of its own,
-# so the workflow hands the credentials in.
+# so the workflow hands the credentials in. No step stops the stack: the runner is discarded with the job, containers
+# and all.
 inputs:
     tag:
         description: The dndmapp/web-app tag to serve, such as pr-12 or sha-1a2b3c4.
@@ -61,8 +62,3 @@ runs:
               path: .playwright/
               retention-days: 7
               if-no-files-found: ignore
-
-        - name: Stop the stack
-          if: always()
-          shell: bash
-          run: docker compose --file .docker/compose.yaml down
