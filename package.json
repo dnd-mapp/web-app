@@ -43,6 +43,7 @@
     "@angular/cli": "catalog:angular",
     "@angular/compiler-cli": "catalog:angular",
     "@eslint/js": "catalog:eslint",
+    "@types/node": "catalog:",
     "@vitest/browser-playwright": "catalog:vitest",
     "@vitest/coverage-v8": "catalog:vitest",
     "@vitest/ui": "catalog:vitest",

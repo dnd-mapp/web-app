@@ -25,10 +25,10 @@ export default defineConfig([
         },
     },
     {
-        // JavaScript files are tooling config such as this one, which runs in Node.js and which no tsconfig includes,
-        // so they get the untyped recommended rules. Without this block ESLint matches them with zero rules and
-        // reports nothing. nodeBuiltin holds the Node.js globals shared by ES modules and CommonJS, so an ES module
-        // that uses require or __dirname is still reported.
+        // JavaScript files are tooling config such as this one, which runs in Node.js. tsconfig.tooling.json gives
+        // editors types for them; the lint stays untyped, since the type-aware rules target TypeScript source.
+        // Without this block ESLint matches them with zero rules and reports nothing. nodeBuiltin holds the Node.js
+        // globals shared by ES modules and CommonJS, so an ES module that uses require or __dirname is still reported.
         files: ['**/*.{js,mjs,cjs}'],
         extends: [eslint.configs.recommended],
         languageOptions: {
