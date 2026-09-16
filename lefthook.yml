@@ -32,3 +32,10 @@ pre-commit:
                   - name: markdown
                     glob: "*.md"
                     run: pnpm exec markdownlint-cli2 --no-globs {staged_files}
+
+# Checks the commit message against the Conventional Commits spec before the commit is created. Merge, revert, fixup
+# and squash messages are Git's own wording, and commitlint skips them out of the box.
+commit-msg:
+    jobs:
+        - name: commitlint
+          run: pnpm exec commitlint --edit {1}

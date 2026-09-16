@@ -43,6 +43,8 @@
     "@angular/build": "catalog:angular",
     "@angular/cli": "catalog:angular",
     "@angular/compiler-cli": "catalog:angular",
+    "@commitlint/cli": "catalog:commitlint",
+    "@commitlint/config-conventional": "catalog:commitlint",
     "@eslint/js": "catalog:eslint",
     "@types/node": "catalog:",
     "@vitest/browser-playwright": "catalog:vitest",

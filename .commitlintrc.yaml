@@ -1,0 +1,12 @@
+# yaml-language-server: $schema=https://www.schemastore.org/commitlintrc.json
+
+# Checks a commit message against the Conventional Commits spec: a lower-case type, an optional scope, an optional
+# "!" for a breaking change, then a subject that neither starts with a capital nor ends in a period.
+extends:
+    - "@commitlint/config-conventional"
+
+rules:
+    # config-conventional allows 100 columns here. Body and footer are hard wrapped at 72 instead, the width that
+    # leaves a message readable in an 80 column terminal once git log indents it by four.
+    body-max-line-length: [2, "always", 72]
+    footer-max-line-length: [2, "always", 72]
