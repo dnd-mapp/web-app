@@ -1,0 +1,52 @@
+name: Pull request opened
+
+on:
+    pull_request:
+        types:
+            - opened
+            - reopened
+            - ready_for_review
+        branches:
+            - main
+
+permissions: {}
+
+jobs:
+    # Turns auto-merge on, so GitHub merges the pull request itself once the ruleset is satisfied: an approving review
+    # from a code owner on the last push and a passing CI check. Reopening runs it again because closing a pull request
+    # turns auto-merge off. A draft has to wait for ready_for_review, since GitHub refuses to enable auto-merge on one.
+    # Only a branch of this repository qualifies: a fork cannot read the app credentials below.
+    enable-auto-merge:
+        name: Enable auto-merge
+        if: github.event.pull_request.draft == false && github.event.pull_request.head.repo.full_name == github.repository
+        runs-on: ubuntu-24.04
+        timeout-minutes: 2
+        permissions: {}
+        concurrency:
+            group: pull-request-opened-enable-auto-merge-${{ github.event.pull_request.number }}
+            cancel-in-progress: true
+        steps:
+            # The merge is performed by GitHub on behalf of whoever enabled auto-merge, and a merge on behalf of the
+            # workflow token starts no other workflow runs, so push-main.yml would never build the dev image. The
+            # dnd-mapp GitHub App stands in instead, through an installation token minted for this run alone: it is
+            # scoped to this repository, carries only the two permissions the mutation needs even if the app holds
+            # more, and is revoked when the job ends. That makes dnd-mapp[bot] the merger of record.
+            - name: Mint an app token
+              id: app-token
+              uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+              with:
+                  client-id: ${{ vars.GH_APP_CLIENT_ID }}
+                  private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
+                  permission-contents: write
+                  permission-pull-requests: write
+
+            # --merge matches the one merge method the ruleset allows. gh merges on the spot when nothing is left to
+            # wait for, which is what a reopened pull request with a fresh approval needs. The URL comes through the
+            # environment rather than the command line, so a title or branch name is never read as shell, and gh needs
+            # no checkout when given a URL.
+            - name: Enable auto-merge
+              shell: bash
+              env:
+                  GH_TOKEN: ${{ steps.app-token.outputs.token }}
+                  PR_URL: ${{ github.event.pull_request.html_url }}
+              run: gh pr merge "$PR_URL" --auto --merge
