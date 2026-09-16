@@ -47,15 +47,15 @@ jobs:
     # which removes the image again, and with push-main.yml, which builds the dev image once the pull request merges.
     # On a pull_request event it reads the changed files through the GitHub API; the checkout is only there because a
     # local action has to be on disk before it resolves.
-    image-changes:
-        name: Detect image changes
+    changes:
+        name: Detect changes
         runs-on: ubuntu-24.04
         timeout-minutes: 2
         permissions:
             contents: read
             pull-requests: read
         concurrency:
-            group: pull-request-image-changes-${{ github.event.pull_request.number }}
+            group: pull-request-changes-${{ github.event.pull_request.number }}
             cancel-in-progress: true
         outputs:
             image: ${{ steps.filter.outputs.image }}
@@ -74,8 +74,8 @@ jobs:
     # The same filter decides in push-main.yml whether the merge gets a dev image, so the two never disagree.
     build-image:
         name: Build image
-        needs: image-changes
-        if: needs.image-changes.outputs.image == 'true' && github.event.pull_request.head.repo.full_name == github.repository
+        needs: changes
+        if: needs.changes.outputs.image == 'true' && github.event.pull_request.head.repo.full_name == github.repository
         runs-on: ubuntu-24.04
         timeout-minutes: 10
         permissions:
@@ -107,11 +107,11 @@ jobs:
     e2e:
         name: End-to-end tests
         needs:
-            - image-changes
+            - changes
             - build-image
         if: >-
             ${{ !cancelled() && github.event.pull_request.head.repo.full_name == github.repository &&
-            (needs.build-image.result == 'success' || needs.image-changes.outputs.image == 'false') }}
+            (needs.build-image.result == 'success' || needs.changes.outputs.image == 'false') }}
         runs-on: ubuntu-24.04
         timeout-minutes: 10
         permissions:
