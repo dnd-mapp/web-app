@@ -1,6 +1,7 @@
 # web-app
 
 ![GitHub License](https://img.shields.io/github/license/dnd-mapp/web-app)
+[![Push main](https://github.com/dnd-mapp/web-app/actions/workflows/push-main.yml/badge.svg)](https://github.com/dnd-mapp/web-app/actions/workflows/push-main.yml)
 
 The web frontend for D&D Mapp, a companion for tabletop D&D: manage characters, roll dice, build maps and lore, and play out combat and exploration in a VTT powered by a custom game engine built on the game rules.
 
