@@ -97,3 +97,42 @@ jobs:
                   tags: type=ref,event=pr
                   username: ${{ vars.DOCKERHUB_USERNAME }}
                   password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    # Runs the Playwright tests against the pull request's image, served behind Caddy through the compose stack under
+    # .docker. A pull request that leaves the image inputs alone gets no image of its own, and its app is the one main
+    # already serves, so the tests run against dndmapp/web-app:dev instead. The job needs Build image so it runs after
+    # the push; !cancelled() gets the condition evaluated even though that job was skipped, while a failed build or a
+    # failed filter still skips the tests. The fork check is the one Build image applies: the pull needs the registry
+    # credentials, which a fork cannot read.
+    e2e:
+        name: End-to-end tests
+        needs:
+            - image-changes
+            - build-image
+        if: >-
+            ${{ !cancelled() && github.event.pull_request.head.repo.full_name == github.repository &&
+            (needs.build-image.result == 'success' || needs.image-changes.outputs.image == 'false') }}
+        runs-on: ubuntu-24.04
+        timeout-minutes: 10
+        permissions:
+            contents: read
+        concurrency:
+            group: pull-request-e2e-${{ github.event.pull_request.number }}
+            cancel-in-progress: true
+        steps:
+            - name: Check out the repository
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  persist-credentials: false
+
+            - name: Set up the workspace
+              uses: ./.github/actions/setup-workspace
+
+            # The steps are shared with push-main.yml through the composite action, which is why the checkout above
+            # stays here: a local action only resolves once it is on disk.
+            - name: Run the end-to-end tests
+              uses: ./.github/actions/run-e2e
+              with:
+                  tag: ${{ needs.build-image.result == 'success' && format('pr-{0}', github.event.pull_request.number) || 'dev' }}
+                  username: ${{ vars.DOCKERHUB_USERNAME }}
+                  password: ${{ secrets.DOCKERHUB_READ_TOKEN }}
