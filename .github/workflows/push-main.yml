@@ -1,0 +1,66 @@
+name: Push main
+
+on:
+    push:
+        branches:
+            - main
+
+permissions: {}
+
+jobs:
+    # Decides whether the push touches anything the image is built from, so the build below only runs when it would
+    # produce a different image. The filter is the one that decides a pull request's preview image, so main only gets a
+    # new image for a merge whose pull request got a preview. On a push event the filter compares the pushed commit
+    # with the one before the push through git, fetching what it needs itself, so a default checkout is enough.
+    image-changes:
+        name: Detect image changes
+        runs-on: ubuntu-24.04
+        timeout-minutes: 2
+        permissions:
+            contents: read
+        concurrency:
+            group: push-main-image-changes
+            cancel-in-progress: false
+        outputs:
+            image: ${{ steps.filter.outputs.image }}
+        steps:
+            - name: Check out the repository
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  persist-credentials: false
+
+            - name: Detect changes
+              id: filter
+              uses: ./.github/actions/detect-changes
+
+    # Builds the image for both platforms and pushes it to Docker Hub as dndmapp/web-app:dev and
+    # dndmapp/web-app:sha-<short>. Builds do not cancel each other and run one at a time in push order, so dev always
+    # ends up on the newest commit that changed the image, and every such commit gets its sha tag. No fork check: only
+    # this repository pushes to its main branch.
+    build-image:
+        name: Build image
+        needs: image-changes
+        if: needs.image-changes.outputs.image == 'true'
+        runs-on: ubuntu-24.04
+        timeout-minutes: 15
+        permissions:
+            contents: read
+        concurrency:
+            group: push-main-build-image
+            cancel-in-progress: false
+        steps:
+            - name: Check out the repository
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  persist-credentials: false
+
+            # type=sha yields sha- followed by the first seven characters of the commit. Neither rule adds latest, which
+            # docker/metadata-action reserves for release tags.
+            - name: Build and push the image
+              uses: ./.github/actions/build-image
+              with:
+                  tags: |
+                      type=raw,value=dev
+                      type=sha
+                  username: ${{ vars.DOCKERHUB_USERNAME }}
+                  password: ${{ secrets.DOCKERHUB_TOKEN }}

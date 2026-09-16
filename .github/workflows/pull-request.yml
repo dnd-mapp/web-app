@@ -44,8 +44,9 @@ jobs:
 
     # Decides whether the pull request touches anything the image is built from, so the build below only runs when it
     # would produce a different image. The filter lives in a composite action, shared with pull-request-closed.yml,
-    # which removes the image again. It reads the changed files through the GitHub API; the checkout is only there
-    # because a local action has to be on disk before it resolves.
+    # which removes the image again, and with push-main.yml, which builds the dev image once the pull request merges.
+    # On a pull_request event it reads the changed files through the GitHub API; the checkout is only there because a
+    # local action has to be on disk before it resolves.
     image-changes:
         name: Detect image changes
         runs-on: ubuntu-24.04
@@ -70,6 +71,7 @@ jobs:
 
     # Builds the image for both platforms and pushes it to Docker Hub as dndmapp/web-app:pr-<N>. Only a branch of this
     # repository gets a build: a fork cannot read the registry credentials, and its Dockerfile is not ours to publish.
+    # The same filter decides in push-main.yml whether the merge gets a dev image, so the two never disagree.
     build-image:
         name: Build image
         needs: image-changes
@@ -87,7 +89,7 @@ jobs:
               with:
                   persist-credentials: false
 
-            # The build steps live in a composite action so other workflows can share them, which is why the checkout
+            # The build steps are shared with push-main.yml through the composite action, which is why the checkout
             # above stays here: a local action only resolves once it is on disk.
             - name: Build and push the image
               uses: ./.github/actions/build-image
