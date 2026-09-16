@@ -36,6 +36,12 @@ Give every table an alignment indicator in its separator row:
 
 [markdownlint-cli2](.markdownlint-cli2.yaml) enforces these Markdown conventions in CI. Run `pnpm run lint-md` over any Markdown you edit and clear every finding before handing over.
 
+### Commit messages
+
+[commitlint](.commitlintrc.yaml) checks every commit message against Conventional Commits, so the subject line reads `<type>(<scope>)!: <summary>`, with the scope and the `!` both optional. The types are `build`, `chore`, `ci`, `docs`, `feat`, `fix`, `perf`, `refactor`, `revert`, `style` and `test`, and the whole line stays within 100 characters. Write the summary in the imperative, starting lower-case and ending without a period: `chore: add commitlint with the conventional config`.
+
+A blank line separates the subject from the body, which says what changed and why. The body and any footer are hard wrapped at 72 columns, which is the one place the one-line-paragraph rule under "Markdown" does not apply: a commit message is read through `git log`, which indents it by four, so 72 keeps it inside an 80 column terminal. A blank line separates paragraphs. `BREAKING CHANGE:` in a footer describes an incompatible change.
+
 ## Dependencies
 
 pnpm 12 is the only supported package manager, enforced through `devEngines` in `package.json`. Running `npm` in this repository fails with `EBADDEVENGINES`.
@@ -49,7 +55,9 @@ Resolution settings live in `pnpm-workspace.yaml`. Four of them shape everyday w
 
 ## Commit hooks
 
-[lefthook.yml](lefthook.yml) defines the `pre-commit` hook: Prettier rewrites the staged files and stages the result, then ESLint, Stylelint and markdownlint-cli2 run in parallel over the staged files of the types they cover. A commit the hook rejects gets fixed, not bypassed with `--no-verify`. A new check goes in as a job with a `glob` limited to the file types it covers and `{staged_files}` as its input, so it only sees the staged files; a check that rewrites files also sets `stage_fixed: true`. CI runs the same tools over the whole repository, so the hook never replaces the checks listed under "Testing".
+[lefthook.yml](lefthook.yml) defines two hooks. `pre-commit` has Prettier rewrite the staged files and stage the result, then runs ESLint, Stylelint and markdownlint-cli2 in parallel over the staged files of the types they cover. `commit-msg` then runs commitlint over the message file Git hands it, which is what enforces the format under "Commit messages". A commit either hook rejects gets fixed, not bypassed with `--no-verify`.
+
+A new `pre-commit` check goes in as a job with a `glob` limited to the file types it covers and `{staged_files}` as its input, so it only sees the staged files. A check that rewrites files also sets `stage_fixed: true`. CI runs the same file checks over the whole repository, so `pre-commit` never replaces the checks listed under "Testing".
 
 ## Continuous integration
 
