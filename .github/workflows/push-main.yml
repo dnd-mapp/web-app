@@ -8,6 +8,31 @@ on:
 permissions: {}
 
 jobs:
+    # Runs the same checks the pull request ran, this time against the merge commit on main. There is no merge queue, so
+    # main may have moved on between the pull request's last CI run and its merge, and the merged result is what the
+    # dev image is built from. Commit messages are not linted again: a push event carries no commit range, and the pull
+    # request already checked them.
+    ci:
+        name: CI
+        runs-on: ubuntu-24.04
+        timeout-minutes: 5
+        permissions:
+            contents: read
+        concurrency:
+            group: push-main-ci
+            cancel-in-progress: false
+        steps:
+            - name: Check out the repository
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  persist-credentials: false
+
+            - name: Set up the workspace
+              uses: ./.github/actions/setup-workspace
+
+            - name: Run CI checks
+              uses: ./.github/actions/run-checks
+
     # Decides whether the push touches anything the image is built from, so the build below only runs when it would
     # produce a different image. The filter is the one that decides a pull request's preview image, so main only gets a
     # new image for a merge whose pull request got a preview. On a push event the filter compares the pushed commit
@@ -35,11 +60,15 @@ jobs:
 
     # Builds the image for both platforms and pushes it to Docker Hub as dndmapp/web-app:dev and
     # dndmapp/web-app:sha-<short>. Builds do not cancel each other and run one at a time in push order, so dev always
-    # ends up on the newest commit that changed the image, and every such commit gets its sha tag. No fork check: only
-    # this repository pushes to its main branch.
+    # ends up on the newest commit that changed the image, and every such commit gets its sha tag. The job also needs
+    # CI, so a commit that fails its checks never becomes the dev image; the condition below only reads the filter
+    # output, so a failed or cancelled CI job still skips the build. No fork check: only this repository pushes to its
+    # main branch.
     build-image:
         name: Build image
-        needs: image-changes
+        needs:
+            - ci
+            - image-changes
         if: needs.image-changes.outputs.image == 'true'
         runs-on: ubuntu-24.04
         timeout-minutes: 15
