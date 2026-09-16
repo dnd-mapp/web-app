@@ -42,6 +42,10 @@ Give every table an alignment indicator in its separator row:
 
 A blank line separates the subject from the body, which says what changed and why. The body and any footer are hard wrapped at 72 columns, which is the one place the one-line-paragraph rule under "Markdown" does not apply: a commit message is read through `git log`, which indents it by four, so 72 keeps it inside an 80 column terminal. A blank line separates paragraphs. `BREAKING CHANGE:` in a footer describes an incompatible change.
 
+## Changelog
+
+[CHANGELOG.md](CHANGELOG.md) follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and records what a user of the application notices: a page, a feature, a changed behavior, a fix. Such a change lands as one line under `## [Unreleased]`, in the category it belongs to (`Added`, `Changed`, `Deprecated`, `Removed`, `Fixed` or `Security`), written for that user rather than for a developer. Tooling, tests, CI, the Docker image and documentation leave the file untouched. Cutting a release renames the section to the version and its date and adds the compare link for it at the bottom.
+
 ## Dependencies
 
 pnpm 12 is the only supported package manager, enforced through `devEngines` in `package.json`. Running `npm` in this repository fails with `EBADDEVENGINES`.

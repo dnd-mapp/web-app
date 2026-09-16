@@ -14,6 +14,9 @@ config:
         style: dash
     # Paragraphs are written as one line, with wrapping left to the renderer.
     MD013: false
+    # CHANGELOG.md repeats the Keep a Changelog headings under every version.
+    MD024:
+        siblings_only: true
     # Tables carry leading and trailing pipes, with the pipes lined up across rows.
     MD055:
         style: leading_and_trailing
