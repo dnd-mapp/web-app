@@ -39,7 +39,7 @@ CI runs exactly these checks, described under [run-checks](docs/ci.md#run-checks
 
 ## Pull requests
 
-Open the pull request against `main`. [Continuous integration](docs/ci.md#pull-requests) then runs the checks as a single `CI` check, publishes a preview image as `dndmapp/web-app:pr-<N>` when the change touches what the image is built from, and runs the end-to-end tests against it. GitHub requests a review from the code owners. The pull request merges on its own once one of them has approved the last push and the checks have passed; there is no merge queue and no button to press. Pushing to the branch dismisses the approval, so it takes a fresh one. A draft pull request is left alone until it is marked ready for review.
+Open the pull request against `main`, titled and described as [Pull requests](docs/commits.md#pull-requests) describes; the template GitHub fills in lays out the description. [Continuous integration](docs/ci.md#pull-requests) then runs the checks as a single `CI` check, publishes a preview image as `dndmapp/web-app:pr-<N>` when the change touches what the image is built from, and runs the end-to-end tests against it. GitHub requests a review from the code owners. The pull request merges on its own once one of them has approved the last push and the checks have passed; there is no merge queue and no button to press. Pushing to the branch dismisses the approval, so it takes a fresh one. A draft pull request is left alone until it is marked ready for review.
 
 A pull request from a fork cannot read the repository's credentials, so it gets no preview image, no end-to-end run and no auto-merge; a maintainer runs those and merges it by hand.
 

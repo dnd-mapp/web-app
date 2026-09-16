@@ -1,4 +1,4 @@
-# Branches and commits
+# Branches, commits and pull requests
 
 ## Branch names
 
@@ -43,3 +43,24 @@ The `commit-msg` hook runs next, once the message has been written. It hands the
 A commit either hook rejects gets fixed rather than bypassed with `git commit --no-verify`. Neither hook is the gate, though: [CI](ci.md) runs the file checks over the whole repository regardless, so `pre-commit` only shortens the feedback loop.
 
 A new `pre-commit` check goes in as a job with a `glob` limited to the file types it covers and `{staged_files}` as its input, so it only sees the staged files. A check that rewrites files also sets `stage_fixed: true`.
+
+## Pull requests
+
+```bash
+gh pr create --web
+```
+
+A pull request opens against `main` and carries the one change its [branch](#branch-names) was made for; see [Making a change](../CONTRIBUTING.md#making-a-change). Its title is the subject line of that change, written as [Commit messages](#commit-messages) describes: `<type>(<scope>)!: <summary>`, in the imperative, starting lower-case, ending without a period, within 100 characters, with the type of the branch. A pull request with one commit takes that commit's subject; one with several gets a subject that names the change as a whole, `ci: run the end-to-end tests against the image behind Caddy`. GitHub writes the title into the body of the merge commit, under `Merge pull request #24 from dnd-mapp/ci/e2e-tests`, so the branch name and the title together are what `git log` shows for a merge.
+
+The description follows [.github/pull_request_template.md](../.github/pull_request_template.md), which GitHub fills into every new pull request and `gh pr create --web` opens in the browser. It is written for the reviewer, and for whoever reads the pull request later to learn why the repository looks the way it does. The template has four sections, each introduced by a comment that says what goes there:
+
+- **What** says what changes, area by area, in enough detail that a reviewer knows what to expect before opening the diff. A pull request that resolves an issue ends this section with `Closes #<N>`, so GitHub closes the issue on merge.
+- **Why** gives the reason for the change and names the alternatives that were passed over.
+- **Worth a look** points the reviewer at what deserves attention: a decision that could have gone another way, a rule that is new rather than recorded, a follow-up that is deliberately not part of this pull request.
+- **Verification** says what was checked beyond the checks CI runs: the dev server exercised by hand, a workflow observed on its first run, a link checked to resolve. The CI checks themselves need no mention, since the pull request shows their result.
+
+A section with nothing to say is removed rather than filled with "none". The description describes the last push, the one an approval covers, so a push that changes what the pull request does updates it as well.
+
+The `Default branch` ruleset merges with a merge commit, so every commit on the branch lands on `main` as it is; see [Reviews and merging](ci.md#reviews-and-merging). A fix a review asks for is folded into the commit it corrects, or becomes a commit of its own when it is a change in its own right. A commit that only says it addresses review comments is neither. Pushing dismisses the approval either way, so the rewrite costs no extra round.
+
+A pull request that is not ready for review opens as a draft. A draft gets the same checks and the same preview image, and marking it ready for review is what turns [auto-merge](ci.md#auto-merge) on. Since an approved pull request merges on its own, one that is open and ready is one its author is willing to see merged as it stands.
