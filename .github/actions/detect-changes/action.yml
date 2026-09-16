@@ -34,6 +34,7 @@ runs:
                       - .github/actions/detect-changes/action.yml
                       - .github/workflows/pull-request.yml
                       - .github/workflows/push-main.yml
+                      - .github/workflows/release.yml
                       - Dockerfile
                       - angular.json
                       - docker-bake.hcl

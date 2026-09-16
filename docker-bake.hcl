@@ -88,8 +88,10 @@ group "default" {
 target "docker-metadata-action" {
     tags = [for tag in TAGS : "dndmapp/web-app:${tag}"]
 
-    # The version label is set even though a local build has no version, because the nginx base image carries a
-    # version label of its own that would otherwise show through as the app's version.
+    # The version label names the version under development with a -dev suffix, and is set even for a local build
+    # because the nginx base image carries a version label of its own that would otherwise show through as the app's
+    # version. release.yml checks that the part before the suffix equals the version in package.json and the tag being
+    # released; the release image itself takes its label from docker/metadata-action, so the suffix stays local.
     labels = {
         "org.opencontainers.image.title"       = "D&D Mapp web app"
         "org.opencontainers.image.description" = "The web frontend for D&D Mapp."
