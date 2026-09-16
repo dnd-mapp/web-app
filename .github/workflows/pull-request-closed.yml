@@ -13,15 +13,15 @@ jobs:
     # Decides whether the pull request got a preview image, by running the same filter that decided its build. The
     # filter reads the changed files through the GitHub API; the checkout is only there because a local action has to
     # be on disk before it resolves.
-    image-changes:
-        name: Detect image changes
+    changes:
+        name: Detect changes
         runs-on: ubuntu-24.04
         timeout-minutes: 2
         permissions:
             contents: read
             pull-requests: read
         concurrency:
-            group: pull-request-closed-image-changes-${{ github.event.pull_request.number }}
+            group: pull-request-closed-changes-${{ github.event.pull_request.number }}
             cancel-in-progress: true
         outputs:
             image: ${{ steps.filter.outputs.image }}
@@ -44,8 +44,8 @@ jobs:
     # build before the tag is removed, and a build that starts on reopening waits for the removal to finish.
     delete-image:
         name: Delete image
-        needs: image-changes
-        if: needs.image-changes.outputs.image == 'true' && github.event.pull_request.head.repo.full_name == github.repository
+        needs: changes
+        if: needs.changes.outputs.image == 'true' && github.event.pull_request.head.repo.full_name == github.repository
         runs-on: ubuntu-24.04
         timeout-minutes: 2
         permissions: {}
