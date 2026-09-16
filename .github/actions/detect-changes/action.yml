@@ -1,0 +1,41 @@
+name: Detect changes
+description: Report which parts of the project the pull request changes, one output per filter.
+
+# One output per filter below, each 'true' or 'false'. A new consumer adds a filter and an output here, so every
+# workflow answers "what does this pull request change" from the same place.
+outputs:
+    image:
+        description: "'true' when the pull request changes something the dndmapp/web-app image is built from."
+        value: ${{ steps.filter.outputs.image }}
+
+runs:
+    using: composite
+    steps:
+        # On a pull_request event the action lists the changed files through the GitHub API, so it needs no checkout
+        # of its own.
+        #
+        # image: mirrors .dockerignore, the files the build stage copies in minus the test files it excludes, plus the
+        # files that decide whether and how the image is built. A change to either list belongs in the other as well.
+        - name: Compare the changed files with the filters
+          id: filter
+          uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
+          with:
+              predicate-quantifier: some-with-excludes
+              filters: |
+                  image:
+                      - .docker/**
+                      - .dockerignore
+                      - .github/actions/detect-changes/action.yml
+                      - .github/workflows/pull-request.yml
+                      - Dockerfile
+                      - angular.json
+                      - docker-bake.hcl
+                      - package.json
+                      - pnpm-lock.yaml
+                      - pnpm-workspace.yaml
+                      - projects/**
+                      - tsconfig.json
+                      - "!projects/**/testing/**"
+                      - "!projects/**/*.spec.ts"
+                      - "!projects/**/tsconfig.spec.json"
+                      - "!projects/**/vitest.config.ts"
