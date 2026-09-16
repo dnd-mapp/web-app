@@ -36,6 +36,12 @@ Give every table an alignment indicator in its separator row:
 
 [markdownlint-cli2](.markdownlint-cli2.yaml) enforces these Markdown conventions in CI. Run `pnpm run lint-md` over any Markdown you edit and clear every finding before handing over.
 
+### Commit messages
+
+[commitlint](.commitlintrc.yaml) checks every commit message against Conventional Commits, so the subject line reads `<type>(<scope>)!: <summary>`, with the scope and the `!` both optional. The types are `build`, `chore`, `ci`, `docs`, `feat`, `fix`, `perf`, `refactor`, `revert`, `style` and `test`, and the whole line stays within 100 characters. Write the summary in the imperative, starting lower-case and ending without a period: `chore: add commitlint with the conventional config`.
+
+A blank line separates the subject from the body, which says what changed and why. The body and any footer are hard wrapped at 72 columns, which is the one place the one-line-paragraph rule under "Markdown" does not apply: a commit message is read through `git log`, which indents it by four, so 72 keeps it inside an 80 column terminal. A blank line separates paragraphs. `BREAKING CHANGE:` in a footer describes an incompatible change.
+
 ## Dependencies
 
 pnpm 12 is the only supported package manager, enforced through `devEngines` in `package.json`. Running `npm` in this repository fails with `EBADDEVENGINES`.
@@ -49,13 +55,17 @@ Resolution settings live in `pnpm-workspace.yaml`. Four of them shape everyday w
 
 ## Commit hooks
 
-[lefthook.yml](lefthook.yml) defines the `pre-commit` hook: Prettier rewrites the staged files and stages the result, then ESLint, Stylelint and markdownlint-cli2 run in parallel over the staged files of the types they cover. A commit the hook rejects gets fixed, not bypassed with `--no-verify`. A new check goes in as a job with a `glob` limited to the file types it covers and `{staged_files}` as its input, so it only sees the staged files; a check that rewrites files also sets `stage_fixed: true`. CI runs the same tools over the whole repository, so the hook never replaces the checks listed under "Testing".
+[lefthook.yml](lefthook.yml) defines two hooks. `pre-commit` has Prettier rewrite the staged files and stage the result, then runs ESLint, Stylelint and markdownlint-cli2 in parallel over the staged files of the types they cover. `commit-msg` then runs commitlint over the message file Git hands it, which is what enforces the format under "Commit messages". A commit either hook rejects gets fixed, not bypassed with `--no-verify`.
+
+A new `pre-commit` check goes in as a job with a `glob` limited to the file types it covers and `{staged_files}` as its input, so it only sees the staged files. A check that rewrites files also sets `stage_fixed: true`. CI runs the same file checks over the whole repository, so `pre-commit` never replaces the checks listed under "Testing".
 
 ## Continuous integration
 
 Workflows live in `.github/workflows` and run on `pull_request` and `merge_group`. Steps shared between them belong in a composite action under `.github/actions`, referenced as `./.github/actions/<name>`. Checking out the repository is the exception: a local action only resolves once a checkout has put it on disk, so that step stays in each workflow.
 
-Every workflow follows four conventions:
+A check that only one event can run goes into that event's workflow as a step in the existing job, not into a shared action and not into a job of its own. Commit message linting is the only one so far: it needs a commit range, and `pull_request` is the only payload carrying both ends of one, so a `Lint commit messages` step sits in `pull-request.yml` between the setup and the checks. Keeping it inside the job means both workflows still report a single `CI` check, so the required checks do not have to know about it.
+
+Every workflow follows five conventions:
 
 - **Pinned actions.** Use an action's latest release, referenced by the commit SHA that release points at, with the tag in a trailing comment: `uses: owner/action@<sha> # v1.2.3`.
 - **Pinned runners.** Name a specific runner image such as `ubuntu-24.04` rather than `ubuntu-latest`.
@@ -75,4 +85,4 @@ The `web-app` application lives under `projects/web-app/src`, divided into areas
 
 Specs run in a real Chromium through Vitest's browser mode, with `describe`, `it`, `expect` and `vi` available as globals. Every component is exercised through an [Angular CDK component harness](https://material.angular.dev/cdk/testing/overview) that lives in the area's `testing/harnesses` folder and is exported from `testing/index.ts`. A spec renders the component inside a throwaway host component, loads the harness with `TestbedHarnessEnvironment`, and asserts through the harness's methods; [root.component.spec.ts](projects/web-app/src/core/root/root.component.spec.ts) and [root.harness.ts](projects/web-app/src/core/testing/harnesses/root.harness.ts) are the pair to copy. The `testing/` folders stay out of the application build and out of coverage, as do `main.ts`, the barrels and the `config/` folders; `tsconfig.spec.json` includes them alongside the specs, so the type-checked ESLint rules can resolve them. Coverage fails below 80% on every metric, so a component without a spec fails CI.
 
-A change is ready to hand over once `pnpm run format-check`, `pnpm run lint-md`, `pnpm run lint-styles`, `pnpm run lint-ts`, `pnpm run lint-js`, `pnpm run build` and `pnpm run test-ci` all pass; CI runs exactly these seven, plus `docker build --check .`, which evaluates the Dockerfile against BuildKit's build checks without building an image. Running the dev server needs TLS certificates and a hosts entry, described under "Running the app" in [README.md](README.md).
+A change is ready to hand over once `pnpm run format-check`, `pnpm run lint-md`, `pnpm run lint-styles`, `pnpm run lint-ts`, `pnpm run lint-js`, `pnpm run build` and `pnpm run test-ci` all pass; CI runs exactly these seven, plus `docker build --check .`, which evaluates the Dockerfile against BuildKit's build checks without building an image, and commitlint over the commits a pull request adds. Running the dev server needs TLS certificates and a hosts entry, described under "Running the app" in [README.md](README.md).

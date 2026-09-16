@@ -21,10 +21,23 @@ jobs:
             - name: Check out the repository
               uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
               with:
+                  # commitlint reads the commits between the two ends of the range below, which the default shallow
+                  # fetch leaves out.
+                  fetch-depth: 0
                   persist-credentials: false
 
             - name: Set up the workspace
               uses: ./.github/actions/setup-workspace
+
+            # The range is base..head, so it holds the commits the pull request adds and nothing else, even once the
+            # base branch has moved on. The two ends go through the environment rather than into the script, so a
+            # branch name can never be read as shell.
+            - name: Lint commit messages
+              shell: bash
+              env:
+                  BASE_SHA: ${{ github.event.pull_request.base.sha }}
+                  HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+              run: pnpm exec commitlint --from "$BASE_SHA" --to "$HEAD_SHA" --verbose
 
             - name: Run CI checks
               uses: ./.github/actions/run-checks
