@@ -21,6 +21,8 @@
     "build": "ng build",
     "test": "ng test",
     "test-ci": "ng test -c ci",
+    "e2e": "playwright test -c projects/web-app/playwright.config.ts",
+    "e2e-ui": "playwright test -c projects/web-app/playwright.config.ts --ui",
     "lint-js": "eslint \"**/*.{js,mjs,cjs}\"",
     "lint-md": "markdownlint-cli2",
     "lint-styles": "stylelint \"projects/**/*.scss\"",
