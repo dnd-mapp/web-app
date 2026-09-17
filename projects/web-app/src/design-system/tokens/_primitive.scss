@@ -32,4 +32,16 @@
 
     // Line height: unitless ratios, so a value scales with whichever font size it sits next to.
     --line-height-100: 1.5;
+
+    // Spacing: an eight step scale in rem on a 4px grid at the default text size, for padding, gaps and the
+    // dimensions of controls alike. The steps below 400 (16px) split the unit finely, where a gap of a few pixels
+    // decides whether two things read as one; above it they grow in larger jumps.
+    --space-50: 0.125rem;
+    --space-100: 0.25rem;
+    --space-200: 0.5rem;
+    --space-300: 0.75rem;
+    --space-400: 1rem;
+    --space-500: 1.5rem;
+    --space-600: 2rem;
+    --space-700: 3rem;
 }
