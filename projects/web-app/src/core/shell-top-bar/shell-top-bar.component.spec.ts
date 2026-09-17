@@ -34,4 +34,9 @@ describe('ShellTopBarComponent', () => {
         const { harness } = await setupTest();
         expect(await harness.actionLabels()).toEqual(['Log in', 'Sign up']);
     });
+
+    it('should lead with signing up', async () => {
+        const { harness } = await setupTest();
+        expect(await harness.actionVariants()).toEqual(['default', 'primary']);
+    });
 });

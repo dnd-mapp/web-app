@@ -29,4 +29,9 @@ describe('SignUpButtonComponent', () => {
         const { harness } = await setupTest();
         expect(await harness.label()).toEqual('Sign up');
     });
+
+    it('should render as the primary action', async () => {
+        const { harness } = await setupTest();
+        expect(await harness.variant()).toEqual('primary');
+    });
 });

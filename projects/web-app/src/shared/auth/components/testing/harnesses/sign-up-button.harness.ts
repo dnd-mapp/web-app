@@ -1,3 +1,4 @@
+import { type ButtonVariant } from '@/components';
 import { ButtonHarness } from '@/components/testing';
 import { ComponentHarness } from '@angular/cdk/testing';
 
@@ -17,5 +18,14 @@ export class SignUpButtonHarness extends ComponentHarness {
      */
     public async label(): Promise<string> {
         return await (await this.buttonLocator()).label();
+    }
+
+    /**
+     * Reads the weight the button carries.
+     *
+     * @returns The variant the button renders as.
+     */
+    public async variant(): Promise<ButtonVariant> {
+        return await (await this.buttonLocator()).variant();
     }
 }
