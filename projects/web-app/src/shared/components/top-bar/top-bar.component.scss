@@ -2,6 +2,8 @@
     // Component tokens: every value the bar's styles use, mapped onto a semantic token or, for a measure that has no
     // purpose across the interface, onto a primitive. See docs/design-system.md under Component tokens.
     --top-bar-height: var(--space-700);
+    --top-bar-padding-inline: var(--space-400);
+    --top-bar-actions-gap: var(--space-200);
     --top-bar-background-color: var(--color-surface);
     --top-bar-border-color: var(--color-border);
 
@@ -9,7 +11,18 @@
 }
 
 header {
+    display: flex;
+    align-items: center;
+
     height: var(--top-bar-height);
+    padding-inline: var(--top-bar-padding-inline);
     border-bottom: 1px solid var(--top-bar-border-color);
+
     background-color: var(--top-bar-background-color);
+}
+
+.actions {
+    display: flex;
+    gap: var(--top-bar-actions-gap);
+    margin-inline-start: auto;
 }
