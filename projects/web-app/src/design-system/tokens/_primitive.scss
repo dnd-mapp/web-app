@@ -1,0 +1,35 @@
+// Primitive tokens: raw values named after what they are, never after where they are used.
+// Styles reference these only through the semantic tokens in _semantic.scss.
+
+:root {
+    // Color: an eleven step gray scale with a slight blue cast, numbered from light (50) to dark (950).
+    // The cast deepens toward the dark end, where a neutral gray would read as muddy.
+    --color-gray-50: oklch(97% 0.005 260deg);
+    --color-gray-100: oklch(92% 0.01 260deg);
+    --color-gray-200: oklch(85% 0.01 260deg);
+    --color-gray-300: oklch(76% 0.012 260deg);
+    --color-gray-400: oklch(66% 0.014 260deg);
+    --color-gray-500: oklch(56% 0.016 260deg);
+    --color-gray-600: oklch(47% 0.018 260deg);
+    --color-gray-700: oklch(38% 0.02 260deg);
+    --color-gray-800: oklch(30% 0.02 260deg);
+    --color-gray-900: oklch(22% 0.02 260deg);
+    --color-gray-950: oklch(15% 0.02 260deg);
+
+    // Typography: 100 is the body step of each scale.
+    --font-family-sans: system-ui, -apple-system, 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
+
+    // Font size: an eight step scale in rem, so it follows the browser's text size. The steps grow by
+    // about an eighth around the body size, where small distinctions matter, and by a quarter above it.
+    --font-size-50: 0.75rem;
+    --font-size-75: 0.875rem;
+    --font-size-100: 1rem;
+    --font-size-200: 1.125rem;
+    --font-size-300: 1.25rem;
+    --font-size-400: 1.5rem;
+    --font-size-500: 1.875rem;
+    --font-size-600: 2.25rem;
+
+    // Line height: unitless ratios, so a value scales with whichever font size it sits next to.
+    --line-height-100: 1.5;
+}

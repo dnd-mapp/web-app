@@ -1,0 +1,5 @@
+// The design system: emits the token custom properties on :root.
+// Load it once from the global stylesheet; components read the tokens as CSS custom properties.
+
+@use './tokens/primitive';
+@use './tokens/semantic';
