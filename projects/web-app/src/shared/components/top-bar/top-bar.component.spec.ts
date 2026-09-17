@@ -7,7 +7,7 @@ describe('TopBarComponent', () => {
     /** Hosts the component under test the way a page would, so the spec renders it through a template. */
     @Component({
         selector: 'app-test',
-        template: `<app-top-bar />`,
+        template: `<app-top-bar><span ngProjectAs="[actions]">Account actions</span></app-top-bar>`,
         imports: [TopBarComponent],
     })
     class TestComponent {}
@@ -25,8 +25,8 @@ describe('TopBarComponent', () => {
         };
     }
 
-    it('should render an empty bar', async () => {
+    it('should render the content given to its actions slot', async () => {
         const { harness } = await setupTest();
-        expect(await harness.contents()).toEqual('');
+        expect(await harness.actionContents()).toEqual('Account actions');
     });
 });

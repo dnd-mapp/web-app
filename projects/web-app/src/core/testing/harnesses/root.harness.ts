@@ -1,5 +1,5 @@
-import { TopBarHarness } from '@/components/testing';
 import { ComponentHarness } from '@angular/cdk/testing';
+import { ShellTopBarHarness } from './shell-top-bar.harness';
 
 /**
  * Drives a rendered `RootComponent` from a spec, so the spec asserts on what a user sees rather than on the
@@ -9,7 +9,7 @@ export class RootHarness extends ComponentHarness {
     public static readonly hostSelector = 'app-root';
 
     private readonly titleLocator = this.locatorFor('h1');
-    private readonly topBarLocator = this.locatorForOptional(TopBarHarness);
+    private readonly topBarLocator = this.locatorForOptional(ShellTopBarHarness);
 
     /**
      * Reads the page title.
