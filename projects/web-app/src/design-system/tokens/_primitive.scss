@@ -2,9 +2,19 @@
 // Styles reference these only through the semantic tokens in _semantic.scss.
 
 :root {
-    // Color: a gray scale with a slight blue cast, numbered from light (100) to dark (900).
+    // Color: an eleven step gray scale with a slight blue cast, numbered from light (50) to dark (950).
+    // The cast deepens toward the dark end, where a neutral gray would read as muddy.
+    --color-gray-50: oklch(97% 0.005 260deg);
     --color-gray-100: oklch(92% 0.01 260deg);
+    --color-gray-200: oklch(85% 0.01 260deg);
+    --color-gray-300: oklch(76% 0.012 260deg);
+    --color-gray-400: oklch(66% 0.014 260deg);
+    --color-gray-500: oklch(56% 0.016 260deg);
+    --color-gray-600: oklch(47% 0.018 260deg);
+    --color-gray-700: oklch(38% 0.02 260deg);
+    --color-gray-800: oklch(30% 0.02 260deg);
     --color-gray-900: oklch(22% 0.02 260deg);
+    --color-gray-950: oklch(15% 0.02 260deg);
 
     // Typography: 100 is the base step of each scale.
     --font-family-sans: system-ui, -apple-system, 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
