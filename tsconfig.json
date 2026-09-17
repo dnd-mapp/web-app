@@ -25,8 +25,11 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "paths": {
+            "@/components": ["./projects/web-app/src/shared/components/index.ts"],
+            "@/components/testing": ["./projects/web-app/src/shared/components/testing/index.ts"],
             "@/core": ["./projects/web-app/src/core/index.ts"],
-            "@/core/testing": ["./projects/web-app/src/core/testing/index.ts"]
+            "@/core/testing": ["./projects/web-app/src/core/testing/index.ts"],
+            "@/testing": ["./projects/web-app/src/shared/testing/index.ts"]
         },
         "skipLibCheck": true,
         "strict": true,

@@ -1,14 +1,14 @@
-import { RootComponent } from '@/core';
-import { RootHarness } from '@/core/testing';
+import { TopBarComponent } from '@/components';
+import { TopBarHarness } from '@/components/testing';
 import { setupTestEnvironment } from '@/testing';
 import { Component } from '@angular/core';
 
-describe('RootComponent', () => {
+describe('TopBarComponent', () => {
     /** Hosts the component under test the way a page would, so the spec renders it through a template. */
     @Component({
         selector: 'app-test',
-        template: `<app-root />`,
-        imports: [RootComponent],
+        template: `<app-top-bar />`,
+        imports: [TopBarComponent],
     })
     class TestComponent {}
 
@@ -18,20 +18,15 @@ describe('RootComponent', () => {
      * @returns The loaded harness.
      */
     async function setupTest() {
-        const { harness } = await setupTestEnvironment({ testComponent: TestComponent, harness: RootHarness });
+        const { harness } = await setupTestEnvironment({ testComponent: TestComponent, harness: TopBarHarness });
 
         return {
             harness: harness,
         };
     }
 
-    it('should render title', async () => {
+    it('should render an empty bar', async () => {
         const { harness } = await setupTest();
-        expect(await harness.titleContents()).toEqual('root works!');
-    });
-
-    it('should render the top bar', async () => {
-        const { harness } = await setupTest();
-        expect(await harness.hasTopBar()).toBe(true);
+        expect(await harness.contents()).toEqual('');
     });
 });
