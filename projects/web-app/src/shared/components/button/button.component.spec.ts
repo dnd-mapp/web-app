@@ -18,6 +18,14 @@ describe('ButtonComponent', () => {
         }
     }
 
+    /** Hosts the button a page leads with, the variant that carries the accent color. */
+    @Component({
+        selector: 'app-primary-test',
+        template: `<button appButton variant="primary">Save</button>`,
+        imports: [ButtonComponent],
+    })
+    class PrimaryTestComponent {}
+
     /** Hosts a button that asks to submit its form, the one case the component's default `type` has to yield to. */
     @Component({
         selector: 'app-submit-test',
@@ -48,6 +56,16 @@ describe('ButtonComponent', () => {
     it('should render its content as the label', async () => {
         const { harness } = await setupTest(TestComponent);
         expect(await harness.label()).toEqual('Save');
+    });
+
+    it('should carry no emphasis by default', async () => {
+        const { harness } = await setupTest(TestComponent);
+        expect(await harness.variant()).toEqual('default');
+    });
+
+    it('should render as the primary action when a page asks for it', async () => {
+        const { harness } = await setupTest(PrimaryTestComponent);
+        expect(await harness.variant()).toEqual('primary');
     });
 
     it('should not submit a form it sits in', async () => {
