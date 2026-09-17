@@ -1,5 +1,5 @@
 import { type BaseHarnessFilters, ComponentHarness, HarnessPredicate } from '@angular/cdk/testing';
-import { type ButtonVariant, buttonVariants } from '@dnd-mapp/shared/components';
+import { type ButtonVariant, buttonVariants } from '@dnd-mapp/web-ui/components';
 
 /** Narrows the buttons `ButtonHarness.with` matches, on top of the ancestor and selector filters every harness has. */
 export interface ButtonHarnessFilters extends BaseHarnessFilters {

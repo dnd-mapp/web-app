@@ -2,7 +2,7 @@ import type { ComponentHarness, HarnessQuery } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { Type, type EnvironmentProviders, type Provider } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { provideLocalization } from '@dnd-mapp/shared/localization';
+import { provideLocalization } from '@dnd-mapp/web-ui/localization';
 
 /**
  * What `setupTestEnvironment` needs to render a component and reach it through its harness.

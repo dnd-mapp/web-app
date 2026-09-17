@@ -29,12 +29,12 @@
             "@/core/testing": ["./projects/web-app/src/core/testing/index.ts"],
             "@/pages": ["./projects/web-app/src/pages/index.ts"],
             "@/pages/testing": ["./projects/web-app/src/pages/testing/index.ts"],
-            "@dnd-mapp/auth/components": ["./projects/web-app/src/auth/components/index.ts"],
-            "@dnd-mapp/auth/components/testing": ["./projects/web-app/src/auth/components/testing/index.ts"],
-            "@dnd-mapp/shared/components": ["./projects/web-app/src/shared/components/index.ts"],
-            "@dnd-mapp/shared/components/testing": ["./projects/web-app/src/shared/components/testing/index.ts"],
-            "@dnd-mapp/shared/localization": ["./projects/web-app/src/shared/localization/index.ts"],
-            "@dnd-mapp/shared/testing": ["./projects/web-app/src/shared/testing/index.ts"]
+            "@dnd-mapp/web-auth/components": ["./projects/web-app/src/auth/components/index.ts"],
+            "@dnd-mapp/web-auth/components/testing": ["./projects/web-app/src/auth/components/testing/index.ts"],
+            "@dnd-mapp/web-ui/components": ["./projects/web-app/src/shared/components/index.ts"],
+            "@dnd-mapp/web-ui/components/testing": ["./projects/web-app/src/shared/components/testing/index.ts"],
+            "@dnd-mapp/web-ui/localization": ["./projects/web-app/src/shared/localization/index.ts"],
+            "@dnd-mapp/web-ui/testing": ["./projects/web-app/src/shared/testing/index.ts"]
         },
         "skipLibCheck": true,
         "strict": true,

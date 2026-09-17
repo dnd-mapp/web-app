@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { BrandComponent } from '@dnd-mapp/shared/components';
-import { BrandHarness } from '@dnd-mapp/shared/components/testing';
-import { setupTestEnvironment } from '@dnd-mapp/shared/testing';
+import { BrandComponent } from '@dnd-mapp/web-ui/components';
+import { BrandHarness } from '@dnd-mapp/web-ui/components/testing';
+import { setupTestEnvironment } from '@dnd-mapp/web-ui/testing';
 
 describe('BrandComponent', () => {
     /** Hosts the component under test the way a page would, so the spec renders it through a template. */

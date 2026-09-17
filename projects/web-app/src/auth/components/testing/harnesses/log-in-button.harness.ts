@@ -1,6 +1,6 @@
 import { ComponentHarness } from '@angular/cdk/testing';
-import { type ButtonVariant } from '@dnd-mapp/shared/components';
-import { ButtonHarness } from '@dnd-mapp/shared/components/testing';
+import { type ButtonVariant } from '@dnd-mapp/web-ui/components';
+import { ButtonHarness } from '@dnd-mapp/web-ui/components/testing';
 
 /**
  * Drives a rendered `LogInButtonComponent` from a spec. Specs of components that embed the button reach it through

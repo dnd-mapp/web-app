@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { LogInButtonComponent } from '@dnd-mapp/auth/components';
-import { LogInButtonHarness } from '@dnd-mapp/auth/components/testing';
-import { setupTestEnvironment } from '@dnd-mapp/shared/testing';
+import { LogInButtonComponent } from '@dnd-mapp/web-auth/components';
+import { LogInButtonHarness } from '@dnd-mapp/web-auth/components/testing';
+import { setupTestEnvironment } from '@dnd-mapp/web-ui/testing';
 
 describe('LogInButtonComponent', () => {
     /** Hosts the component under test the way a page would, so the spec renders it through a template. */

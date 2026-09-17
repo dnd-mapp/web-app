@@ -1,7 +1,7 @@
 import { Component, signal, type Type } from '@angular/core';
-import { ButtonComponent } from '@dnd-mapp/shared/components';
-import { ButtonHarness } from '@dnd-mapp/shared/components/testing';
-import { setupTestEnvironment } from '@dnd-mapp/shared/testing';
+import { ButtonComponent } from '@dnd-mapp/web-ui/components';
+import { ButtonHarness } from '@dnd-mapp/web-ui/components/testing';
+import { setupTestEnvironment } from '@dnd-mapp/web-ui/testing';
 
 describe('ButtonComponent', () => {
     /** Hosts the component under test the way a page would, so the spec renders it through a template. */

@@ -2,7 +2,7 @@ import { RootComponent } from '@/core';
 import { RootHarness } from '@/core/testing';
 import { Component } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { setupTestEnvironment } from '@dnd-mapp/shared/testing';
+import { setupTestEnvironment } from '@dnd-mapp/web-ui/testing';
 
 describe('RootComponent', () => {
     /** Hosts the component under test the way a page would, so the spec renders it through a template. */
