@@ -12,4 +12,8 @@ test.describe('Root page', () => {
     test('renders the root component', async ({ page }) => {
         await expect(page.getByRole('heading', { level: 1 })).toHaveText('root works!');
     });
+
+    test('shows the top bar', async ({ page }) => {
+        await expect(page.getByRole('banner')).toBeVisible();
+    });
 });

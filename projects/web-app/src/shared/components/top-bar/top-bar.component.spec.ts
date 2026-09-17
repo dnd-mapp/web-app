@@ -1,14 +1,14 @@
-import { RootComponent } from '@/core';
-import { RootHarness } from '@/core/testing';
+import { TopBarComponent } from '@/components';
+import { TopBarHarness } from '@/components/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
-describe('RootComponent', () => {
+describe('TopBarComponent', () => {
     @Component({
         selector: 'app-test',
-        template: `<app-root />`,
-        imports: [RootComponent],
+        template: `<app-top-bar />`,
+        imports: [TopBarComponent],
     })
     class TestComponent {}
 
@@ -20,17 +20,12 @@ describe('RootComponent', () => {
         const harnessLoader = TestbedHarnessEnvironment.loader(TestBed.createComponent(TestComponent));
 
         return {
-            harness: await harnessLoader.getHarness(RootHarness),
+            harness: await harnessLoader.getHarness(TopBarHarness),
         };
     }
 
-    it('should render title', async () => {
+    it('should render an empty bar', async () => {
         const { harness } = await setupTest();
-        expect(await harness.titleContents()).toEqual('root works!');
-    });
-
-    it('should render the top bar', async () => {
-        const { harness } = await setupTest();
-        expect(await harness.hasTopBar()).toBe(true);
+        expect(await harness.contents()).toEqual('');
     });
 });
