@@ -1,5 +1,5 @@
 import { Component, computed, input } from '@angular/core';
-import { type ButtonVariant, buttonVariants, toButtonVariant } from './button-variant';
+import { type ButtonVariant, buttonVariantAttribute, buttonVariants } from './button-variant';
 
 /**
  * A push button, applied to a native `button` element as an attribute: `<button appButton>Save</button>`. The
@@ -9,9 +9,9 @@ import { type ButtonVariant, buttonVariants, toButtonVariant } from './button-va
  *
  * `variant` picks the button's weight: `<button appButton variant="primary">Sign up</button>` gives it the accent
  * color, which marks it as the action to take among the buttons around it. A group of them holds one at most, so the
- * emphasis stays worth something; every other button is left at the default. The input takes the value a template
- * wrote, whatever its type, and `toButtonVariant` turns it into a variant, so a value that names none renders the
- * default button instead of an unstyled one.
+ * emphasis stays worth something; every other button is left at the default. The input takes the attribute a
+ * template wrote and `buttonVariantAttribute` turns it into a variant, so an attribute left without a value renders
+ * the default button instead of an unstyled one.
  */
 @Component({
     selector: 'button[appButton]',
@@ -24,7 +24,9 @@ import { type ButtonVariant, buttonVariants, toButtonVariant } from './button-va
 })
 export class ButtonComponent {
     /** The weight the button carries, `default` unless a page marks it as the primary action. */
-    public readonly variant = input<ButtonVariant, unknown>(buttonVariants.default, { transform: toButtonVariant });
+    public readonly variant = input<ButtonVariant, ButtonVariant | ''>(buttonVariants.default, {
+        transform: buttonVariantAttribute,
+    });
 
     /** Drives the host class the stylesheet's primary rule matches. A host expression is not type checked, so the
      * comparison lives here, where a variant that no longer exists is a compile error. */

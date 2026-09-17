@@ -26,13 +26,13 @@ describe('ButtonComponent', () => {
     })
     class PrimaryTestComponent {}
 
-    /** Hosts a button handed a value that names no variant, the case the input's transform has to absorb. */
+    /** Hosts a button whose variant attribute carries no value, the case the input's transform has to absorb. */
     @Component({
-        selector: 'app-unknown-variant-test',
-        template: `<button appButton variant="highlighted">Save</button>`,
+        selector: 'app-empty-variant-test',
+        template: `<button appButton variant>Save</button>`,
         imports: [ButtonComponent],
     })
-    class UnknownVariantTestComponent {}
+    class EmptyVariantTestComponent {}
 
     /** Hosts a button that asks to submit its form, the one case the component's default `type` has to yield to. */
     @Component({
@@ -76,8 +76,8 @@ describe('ButtonComponent', () => {
         expect(await harness.variant()).toEqual('primary');
     });
 
-    it('should fall back to the default for a value that names no variant', async () => {
-        const { harness } = await setupTest(UnknownVariantTestComponent);
+    it('should fall back to the default for an attribute that names no variant', async () => {
+        const { harness } = await setupTest(EmptyVariantTestComponent);
         expect(await harness.variant()).toEqual('default');
     });
 
