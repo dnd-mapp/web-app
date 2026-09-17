@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- A home page at the root of the application, saying what it is for and what it does, in place of the placeholder text the root page showed.
 - An empty top bar across the top of the application.
 - Buttons to log in and to sign up at the right end of the top bar, with signing up carrying the accent color that marks it as the action to take. The pages they open are still to come, so they do nothing yet.
 
