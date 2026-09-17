@@ -40,5 +40,38 @@ export default defineConfig([
     {
         files: ['**/*.html'],
         extends: [angular.configs.templateRecommended, angular.configs.templateAccessibility],
+        rules: {
+            // Every text a user reads comes from a message key rather than the template. ngx-translate ships no
+            // lint rule of its own, so this one stands in for it: the checks below turn off everything that is
+            // specific to Angular's own i18n, and what is left reports a template that holds literal text, which
+            // is the one thing that has to be caught. Its message and its autofix still name the `i18n`
+            // attribute, which this repository no longer uses: the fix is a key in the dictionary, never the
+            // attribute the rule offers to insert. See docs/localization.md.
+            '@angular-eslint/template/i18n': [
+                'error',
+                {
+                    checkDuplicateId: false,
+                    checkId: false,
+                    requireDescription: false,
+                },
+            ],
+        },
+    },
+    {
+        // The inline template processor above hands each inline template to the template rules as a virtual .html
+        // file under the path of the file that holds it. For a spec, that is the template of its host component,
+        // whose text is fixture data nobody translates.
+        files: ['**/*.spec.ts/*.html'],
+        rules: {
+            '@angular-eslint/template/i18n': 'off',
+        },
+    },
+    {
+        // index.html is the host document the application bootstraps into, not a template: nothing in it passes
+        // through Angular's i18n, so its text is written for the source locale.
+        files: ['**/src/index.html'],
+        rules: {
+            '@angular-eslint/template/i18n': 'off',
+        },
     },
 ]);

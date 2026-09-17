@@ -9,6 +9,10 @@ test.describe('Root page', () => {
         await expect(page).toHaveTitle('D&D Mapp');
     });
 
+    test('is in US English', async ({ page }) => {
+        await expect(page.locator('html')).toHaveAttribute('lang', 'en-US');
+    });
+
     test('renders the root component', async ({ page }) => {
         await expect(page.getByRole('heading', { level: 1 })).toHaveText('root works!');
     });

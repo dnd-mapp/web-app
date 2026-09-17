@@ -1,3 +1,4 @@
+import { provideLocalization } from '@/localization';
 import type { ComponentHarness, HarnessQuery } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { Type } from '@angular/core';
@@ -30,7 +31,8 @@ interface SetupTestEnvironmentResult<H extends ComponentHarness> {
 /**
  * Configures the TestBed with the host component, renders it and loads the harness for the component under test.
  * Every component spec starts this way, so the steps live here once and a spec's own setup function reduces to
- * the arguments that make it specific.
+ * the arguments that make it specific. The application's texts are provided as well, so a spec reads the same words
+ * a user does rather than the keys behind them.
  *
  * @typeParam T The host component's class.
  * @typeParam H The harness the spec asserts through.
@@ -42,6 +44,7 @@ export async function setupTestEnvironment<T, H extends ComponentHarness>(
 ): Promise<SetupTestEnvironmentResult<H>> {
     TestBed.configureTestingModule({
         imports: [params.testComponent],
+        providers: [provideLocalization()],
     });
 
     const harnessLoader = TestbedHarnessEnvironment.loader(TestBed.createComponent(params.testComponent));

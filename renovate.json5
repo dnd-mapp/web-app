@@ -65,6 +65,11 @@
             groupName: 'markdownlint catalog',
         },
         {
+            description: 'Update the ngx-translate catalog together',
+            matchDepTypes: ['pnpm.catalog.ngx-translate'],
+            groupName: 'ngx-translate catalog',
+        },
+        {
             description: 'Update the playwright catalog together',
             matchDepTypes: ['pnpm.catalog.playwright'],
             groupName: 'playwright catalog',

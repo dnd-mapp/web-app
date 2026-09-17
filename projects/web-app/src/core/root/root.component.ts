@@ -1,5 +1,6 @@
 import { TopBarComponent } from '@/components';
 import { Component } from '@angular/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 /**
  * The application shell that `main.ts` bootstraps: the top bar above a `main` region that fills the rest with the
@@ -9,6 +10,6 @@ import { Component } from '@angular/core';
     selector: 'app-root',
     templateUrl: './root.component.html',
     styleUrl: './root.component.scss',
-    imports: [TopBarComponent],
+    imports: [TopBarComponent, TranslatePipe],
 })
 export class RootComponent {}
