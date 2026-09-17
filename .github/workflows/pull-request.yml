@@ -1,9 +1,10 @@
 name: Pull request
 
+# No branches filter. A pull request in a stack targets the branch of the pull request below it. GitHub runs the
+# workflows for it as if it targeted main, but only once it is linked into the stack, which gh stack submit does after
+# opening it. Without the filter, every pull request gets its checks from the moment it opens, whatever it targets.
 on:
     pull_request:
-        branches:
-            - main
 
 permissions: {}
 
@@ -42,11 +43,14 @@ jobs:
             - name: Run CI checks
               uses: ./.github/actions/run-checks
 
-    # Decides whether the pull request touches anything the image is built from, so the build below only runs when it
-    # would produce a different image. The filter lives in a composite action, shared with pull-request-closed.yml,
-    # which removes the image again, and with push-main.yml, which builds the dev image once the pull request merges.
-    # On a pull_request event it reads the changed files through the GitHub API; the checkout is only there because a
-    # local action has to be on disk before it resolves.
+    # Decides whether the pull request gets a preview image. The filter lives in a composite action, shared with
+    # push-main.yml, which builds the dev image once the pull request merges, and it reports whether the pull request
+    # touches anything the image is built from. A pull request in a stack gets an image regardless. Its app is the
+    # layers below plus its own, and dev serves neither until those layers have merged and push-main.yml has rebuilt
+    # it. Right after the layer below has merged, dev is therefore still the wrong image for its end-to-end tests. The
+    # payload carries a stack object for exactly those pull requests. On a pull_request event the filter reads the
+    # changed files through the GitHub API; the checkout is only there because a local action has to be on disk before
+    # it resolves.
     changes:
         name: Detect changes
         runs-on: ubuntu-24.04
@@ -58,7 +62,7 @@ jobs:
             group: pull-request-changes-${{ github.event.pull_request.number }}
             cancel-in-progress: true
         outputs:
-            image: ${{ steps.filter.outputs.image }}
+            preview: ${{ steps.filter.outputs.image == 'true' || github.event.pull_request.stack != null }}
         steps:
             - name: Check out the repository
               uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -71,11 +75,14 @@ jobs:
 
     # Builds the image for both platforms and pushes it to Docker Hub as dndmapp/web-app:pr-<N>. Only a branch of this
     # repository gets a build: a fork cannot read the registry credentials, and its Dockerfile is not ours to publish.
-    # The same filter decides in push-main.yml whether the merge gets a dev image, so the two never disagree.
+    # The same filter decides in push-main.yml whether the merge gets a dev image, so outside a stack the two never
+    # disagree.
     build-image:
         name: Build image
         needs: changes
-        if: needs.changes.outputs.image == 'true' && github.event.pull_request.head.repo.full_name == github.repository
+        if: >-
+            ${{ needs.changes.outputs.preview == 'true' &&
+            github.event.pull_request.head.repo.full_name == github.repository }}
         runs-on: ubuntu-24.04
         timeout-minutes: 10
         permissions:
@@ -99,19 +106,21 @@ jobs:
                   password: ${{ secrets.DOCKERHUB_TOKEN }}
 
     # Runs the Playwright tests against the pull request's image, served behind Caddy through the compose stack under
-    # .docker. A pull request that leaves the image inputs alone gets no image of its own, and its app is the one main
-    # already serves, so the tests run against dndmapp/web-app:dev instead. The job needs Build image so it runs after
-    # the push; !cancelled() gets the condition evaluated even though that job was skipped, while a failed build or a
-    # failed filter still skips the tests. The fork check is the one Build image applies: the pull needs the registry
-    # credentials, which a fork cannot read.
+    # .docker. A pull request outside a stack that leaves the image inputs alone gets no image of its own, and its app
+    # is the one main already serves, so the tests run against dndmapp/web-app:dev instead. The job needs Build image
+    # so it runs after the push; !cancelled() gets the condition evaluated even though that job was skipped, while a
+    # failed build still skips the tests. So does a failed filter, through the result of Detect changes: its preview
+    # output would read false then, since the filter's own output is empty. The fork check is the one Build image
+    # applies: the pull needs the registry credentials, which a fork cannot read.
     e2e:
         name: End-to-end tests
         needs:
             - changes
             - build-image
         if: >-
-            ${{ !cancelled() && github.event.pull_request.head.repo.full_name == github.repository &&
-            (needs.build-image.result == 'success' || needs.changes.outputs.image == 'false') }}
+            ${{ !cancelled() && needs.changes.result == 'success' &&
+            github.event.pull_request.head.repo.full_name == github.repository &&
+            (needs.build-image.result == 'success' || needs.changes.outputs.preview == 'false') }}
         runs-on: ubuntu-24.04
         timeout-minutes: 10
         permissions:
