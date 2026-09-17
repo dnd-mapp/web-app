@@ -1,0 +1,13 @@
+// Primitive tokens: raw values named after what they are, never after where they are used.
+// Styles reference these only through the semantic tokens in _semantic.scss.
+
+:root {
+    // Color: a gray scale with a slight blue cast, numbered from light (100) to dark (900).
+    --color-gray-100: oklch(92% 0.01 260deg);
+    --color-gray-900: oklch(22% 0.02 260deg);
+
+    // Typography: 100 is the base step of each scale.
+    --font-family-sans: system-ui, -apple-system, 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
+    --font-size-100: 1rem;
+    --line-height-100: 1.5;
+}

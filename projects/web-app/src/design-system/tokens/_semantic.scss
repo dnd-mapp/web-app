@@ -1,0 +1,12 @@
+// Semantic tokens: named after their purpose in the interface, each mapped onto a primitive.
+// Component and global styles reference these, so a theme change touches this file alone.
+
+:root {
+    --color-text: var(--color-gray-100);
+    --color-background: var(--color-gray-900);
+    --text-body-family: var(--font-family-sans);
+    --text-body-size: var(--font-size-100);
+    --text-body-line-height: var(--line-height-100);
+
+    color-scheme: dark;
+}
