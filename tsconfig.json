@@ -29,6 +29,7 @@
             "@/components/testing": ["./projects/web-app/src/shared/components/testing/index.ts"],
             "@/core": ["./projects/web-app/src/core/index.ts"],
             "@/core/testing": ["./projects/web-app/src/core/testing/index.ts"],
+            "@/localization": ["./projects/web-app/src/shared/localization/index.ts"],
             "@/testing": ["./projects/web-app/src/shared/testing/index.ts"]
         },
         "skipLibCheck": true,
@@ -37,7 +38,6 @@
         "verbatimModuleSyntax": true
     },
     "angularCompilerOptions": {
-        "enableI18nLegacyMessageIdFormat": false,
         "extendedDiagnostics": {
             "defaultCategory": "error"
         },
