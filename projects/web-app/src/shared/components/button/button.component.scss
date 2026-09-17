@@ -9,6 +9,10 @@
     --button-background-color: var(--color-control);
     --button-hover-background-color: var(--color-control-hover);
     --button-active-background-color: var(--color-control-active);
+    --button-primary-text-color: var(--color-text-on-control-primary);
+    --button-primary-background-color: var(--color-control-primary);
+    --button-primary-hover-background-color: var(--color-control-primary-hover);
+    --button-primary-active-background-color: var(--color-control-primary-active);
     --button-focus-ring-color: var(--color-focus-ring);
     --button-focus-ring-width: var(--space-50);
 
@@ -42,4 +46,13 @@
         outline: var(--button-focus-ring-width) solid var(--button-focus-ring-color);
         outline-offset: var(--button-focus-ring-width);
     }
+}
+
+// The primary variant is the same button in the accent colors, so it points the four tokens that carry a color at
+// the primary ones and leaves every other value the one above.
+:host(.primary) {
+    --button-text-color: var(--button-primary-text-color);
+    --button-background-color: var(--button-primary-background-color);
+    --button-hover-background-color: var(--button-primary-hover-background-color);
+    --button-active-background-color: var(--button-primary-active-background-color);
 }

@@ -1,4 +1,5 @@
 import { LogInButtonHarness, SignUpButtonHarness } from '@/auth/components/testing';
+import { type ButtonVariant } from '@/components';
 import { TopBarHarness } from '@/components/testing';
 import { ComponentHarness } from '@angular/cdk/testing';
 
@@ -31,5 +32,16 @@ export class ShellTopBarHarness extends ComponentHarness {
         const [logInButton, signUpButton] = await Promise.all([this.logInButtonLocator(), this.signUpButtonLocator()]);
 
         return await Promise.all([logInButton.label(), signUpButton.label()]);
+    }
+
+    /**
+     * Reads the weight each account action carries, so a spec can tell which of them the bar leads with.
+     *
+     * @returns The variants in the order the buttons appear, left to right, lined up with `actionLabels`.
+     */
+    public async actionVariants(): Promise<ButtonVariant[]> {
+        const [logInButton, signUpButton] = await Promise.all([this.logInButtonLocator(), this.signUpButtonLocator()]);
+
+        return await Promise.all([logInButton.variant(), signUpButton.variant()]);
     }
 }

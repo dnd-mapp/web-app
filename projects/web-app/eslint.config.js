@@ -62,6 +62,11 @@ export default defineConfig([
                     checkDuplicateId: false,
                     checkId: false,
                     requireDescription: false,
+                    // The rule reports a static attribute it does not know as text a user reads. This list names
+                    // the ones that are an input of a component instead, so a value picked from a component's API
+                    // is written as a plain attribute rather than bound to get past the rule. It adds to the
+                    // rule's own list of attributes that carry no text, such as `type` and `value`.
+                    ignoreAttributes: ['variant'],
                 },
             ],
         },

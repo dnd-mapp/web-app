@@ -29,4 +29,9 @@ describe('LogInButtonComponent', () => {
         const { harness } = await setupTest();
         expect(await harness.label()).toEqual('Log in');
     });
+
+    it('should leave the emphasis to the primary action', async () => {
+        const { harness } = await setupTest();
+        expect(await harness.variant()).toEqual('default');
+    });
 });

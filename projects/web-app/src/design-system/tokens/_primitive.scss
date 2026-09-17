@@ -16,6 +16,20 @@
     --color-gray-900: oklch(22% 0.02 260deg);
     --color-gray-950: oklch(15% 0.02 260deg);
 
+    // Color: an eleven step blue scale on the same lightness steps as the gray, so the two are interchangeable.
+    // The chroma peaks around the middle, where the hue carries furthest, and falls off toward either end.
+    --color-blue-50: oklch(97% 0.02 265deg);
+    --color-blue-100: oklch(92% 0.04 265deg);
+    --color-blue-200: oklch(85% 0.07 265deg);
+    --color-blue-300: oklch(76% 0.11 265deg);
+    --color-blue-400: oklch(66% 0.15 265deg);
+    --color-blue-500: oklch(56% 0.18 265deg);
+    --color-blue-600: oklch(47% 0.17 265deg);
+    --color-blue-700: oklch(38% 0.14 265deg);
+    --color-blue-800: oklch(30% 0.11 265deg);
+    --color-blue-900: oklch(22% 0.08 265deg);
+    --color-blue-950: oklch(15% 0.055 265deg);
+
     // Typography: 100 is the body step of each scale.
     --font-family-sans: system-ui, -apple-system, 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
 
