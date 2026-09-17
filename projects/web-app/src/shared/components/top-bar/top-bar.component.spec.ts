@@ -1,8 +1,7 @@
 import { TopBarComponent } from '@/components';
 import { TopBarHarness } from '@/components/testing';
-import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
+import { setupTestEnvironment } from '@/testing';
 import { Component } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
 
 describe('TopBarComponent', () => {
     @Component({
@@ -13,14 +12,10 @@ describe('TopBarComponent', () => {
     class TestComponent {}
 
     async function setupTest() {
-        TestBed.configureTestingModule({
-            imports: [TestComponent],
-        });
-
-        const harnessLoader = TestbedHarnessEnvironment.loader(TestBed.createComponent(TestComponent));
+        const { harness } = await setupTestEnvironment({ testComponent: TestComponent, harness: TopBarHarness });
 
         return {
-            harness: await harnessLoader.getHarness(TopBarHarness),
+            harness: harness,
         };
     }
 
