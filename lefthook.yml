@@ -9,7 +9,7 @@ pre-commit:
     jobs:
         # Prettier writes first and re-stages what it changed, so the linters below see formatted files.
         - name: format
-          glob: "*.{ts,html,scss,css,js,cjs,mjs,mts,cts,json,yaml,yml}"
+          glob: "*.{ts,html,scss,css,js,cjs,mjs,mts,cts,json,yaml,yml,webmanifest}"
           run: pnpm exec prettier -w {staged_files}
           stage_fixed: true
 
