@@ -1,14 +1,14 @@
 # Continuous integration
 
-GitHub Actions runs the checks on every pull request and publishes the `dndmapp/web-app` image from `main` and from release tags. The workflows live in [.github/workflows](../.github/workflows):
+GitHub Actions runs the checks on every pull request, publishes the `dndmapp/web-app` image from `main` and from release tags, and has the two environments pull it; see [Environments](#environments). The workflows live in [.github/workflows](../.github/workflows):
 
-| Workflow                                                                | Trigger                                                               | Purpose                                                                                            |
-|:------------------------------------------------------------------------|:----------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------|
-| [pull-request.yml](../.github/workflows/pull-request.yml)               | `pull_request` against `main`                                         | Runs the checks, publishes a preview image and runs the end-to-end tests against it.               |
-| [pull-request-opened.yml](../.github/workflows/pull-request-opened.yml) | `pull_request` limited to `opened`, `reopened` and `ready_for_review` | Turns auto-merge on.                                                                               |
-| [pull-request-closed.yml](../.github/workflows/pull-request-closed.yml) | `pull_request` limited to `closed`                                    | Deletes the preview image.                                                                         |
-| [push-main.yml](../.github/workflows/push-main.yml)                     | `push` to `main`                                                      | Runs the checks against the merged result, publishes the development image and updates Docker Hub. |
-| [release.yml](../.github/workflows/release.yml)                         | `push` of a tag matching `v<major>.<minor>.<patch>`                   | Verifies and publishes a release, see [Releasing](releasing.md#the-release-workflow).              |
+| Workflow                                                                | Trigger                                                               | Purpose                                                                                                                         |
+|:------------------------------------------------------------------------|:----------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------|
+| [pull-request.yml](../.github/workflows/pull-request.yml)               | `pull_request` against `main`                                         | Runs the checks, publishes a preview image and runs the end-to-end tests against it.                                            |
+| [pull-request-opened.yml](../.github/workflows/pull-request-opened.yml) | `pull_request` limited to `opened`, `reopened` and `ready_for_review` | Turns auto-merge on.                                                                                                            |
+| [pull-request-closed.yml](../.github/workflows/pull-request-closed.yml) | `pull_request` limited to `closed`                                    | Deletes the preview image.                                                                                                      |
+| [push-main.yml](../.github/workflows/push-main.yml)                     | `push` to `main`                                                      | Runs the checks against the merged result, publishes the development image, updates the dev environment and updates Docker Hub. |
+| [release.yml](../.github/workflows/release.yml)                         | `push` of a tag matching `v<major>.<minor>.<patch>`                   | Verifies and publishes a release and updates the production environment, see [Releasing](releasing.md#the-release-workflow).    |
 
 There is no merge queue: a pull request merges once its `CI` check has passed on the head commit and a code owner has approved that commit, see [Reviews and merging](#reviews-and-merging).
 
@@ -57,20 +57,34 @@ The action also points `CACHE_FROM` and `CACHE_TO` at the [GitHub Actions cache]
 
 [run-e2e](../.github/actions/run-e2e/action.yml) takes the image tag to serve and the Docker Hub username and read-only token. It logs in to Docker Hub, since GitHub's runners share the addresses Docker Hub counts anonymous pulls against, installs the Playwright browsers, starts the [compose stack](testing.md#compose-stack) with `docker compose up --wait` and the tag in `WEB_APP_TAG`, and runs `pnpm run e2e`. `CI` is set on every run, so the Playwright config starts no dev server. Nothing stops the stack, since the runner is discarded with the job. When a step fails, the action prints the logs of both containers and uploads `.playwright/`, with the HTML report and the traces of the failed tests, as the `playwright-report` artifact, kept for seven days.
 
+### deploy
+
+[deploy](../.github/actions/deploy/action.yml) takes the tag an environment runs, the URL and token of the watchtower HTTP API, and the client ID and secret of a Tailscale OAuth client. It joins the tailnet with [tailscale/github-action](https://github.com/tailscale/github-action) and then sends `POST /v1/update?image=dndmapp/web-app:<tag>` to watchtower with `curl`, the token as the bearer token. Watchtower pulls the newest image behind the tag and recreates the container running it; see [Environments](#environments) for how the two fit together.
+
+The runner joins as an ephemeral node tagged `tag:github-actions`, which the tailnet policy uses to decide what it may reach, and the action logs it out when the job ends. A new node takes a moment to become known across the tailnet, and until it is, the watchtower host refuses its connections. The action therefore pings the host and waits for an answer before the request goes out. A first step cuts the host out of the URL, since the ping takes a machine name or an address. The image filter names both the image and the tag, so watchtower touches the one container running that tag and leaves the other environment alone. A filtered update waits for a running one to finish rather than being refused.
+
+The response arrives once the update is done, with a summary of what happened. The step reads the status code from the response rather than through `--fail`, so a refusal ends up in the log with its body. It fails on any status but 200, when no watched container runs the tag, and when watchtower reports a failed update. A container watchtower scanned but did not update already ran the newest image, which is what a rerun of the job sees, so that is a warning. Watchtower gives an update ten minutes by default and answers 408 after. `curl` waits a little longer than that and the calling job's timeout longer still, which keeps the reason for a failure in the log.
+
 ## Secrets and variables
 
 The workflows read these from the `dnd-mapp` organization:
 
-| Name                    | Kind     | Holds                                                                                                           |
-|:------------------------|:---------|:----------------------------------------------------------------------------------------------------------------|
-| `DOCKERHUB_USERNAME`    | variable | `dndmapp`, the Docker Hub account that owns the image. It is no secret, since it is also the image's namespace. |
-| `DOCKERHUB_TOKEN`       | secret   | The access token `github dnd-mapp organization workflows` on that account, with read and write access.          |
-| `DOCKERHUB_READ_TOKEN`  | secret   | The access token `github dnd-mapp organization workflows (read-only)`, with read access.                        |
-| `DOCKERHUB_ADMIN_TOKEN` | secret   | The access token `github dnd-mapp organization workflows (admin)`, with read, write and delete access.          |
-| `GH_APP_CLIENT_ID`      | variable | The client ID of the `dnd-mapp` GitHub App.                                                                     |
-| `GH_APP_PRIVATE_KEY`    | secret   | The private key of the `dnd-mapp` GitHub App.                                                                   |
+| Name                        | Kind     | Holds                                                                                                                                     |
+|:----------------------------|:---------|:------------------------------------------------------------------------------------------------------------------------------------------|
+| `DOCKERHUB_USERNAME`        | variable | `dndmapp`, the Docker Hub account that owns the image. It is no secret, since it is also the image's namespace.                           |
+| `DOCKERHUB_TOKEN`           | secret   | The access token `github dnd-mapp organization workflows` on that account, with read and write access.                                    |
+| `DOCKERHUB_READ_TOKEN`      | secret   | The access token `github dnd-mapp organization workflows (read-only)`, with read access.                                                  |
+| `DOCKERHUB_ADMIN_TOKEN`     | secret   | The access token `github dnd-mapp organization workflows (admin)`, with read, write and delete access.                                    |
+| `GH_APP_CLIENT_ID`          | variable | The client ID of the `dnd-mapp` GitHub App.                                                                                               |
+| `GH_APP_PRIVATE_KEY`        | secret   | The private key of the `dnd-mapp` GitHub App.                                                                                             |
+| `TAILSCALE_OAUTH_CLIENT_ID` | variable | The client ID of the Tailscale OAuth client the runners join the tailnet with. It names the client and grants nothing without the secret. |
+| `TAILSCALE_OAUTH_SECRET`    | secret   | The secret of that OAuth client.                                                                                                          |
+| `WATCHTOWER_URL`            | variable | The URL the watchtower HTTP API answers on inside the tailnet, `https://watchtower-dma.<tailnet>.ts.net`. It resolves nowhere else.       |
+| `WATCHTOWER_TOKEN`          | secret   | The token watchtower expects as the bearer token, the value of its `WATCHTOWER_HTTP_API_TOKEN`.                                           |
 
 The three Docker Hub tokens exist because a personal access token has no delete-only scope and no per-repository scope: a token that can delete one tag can delete every tag in the account. A build runs the Dockerfile and every dependency, so it gets `DOCKERHUB_TOKEN`, which can push and nothing more. The end-to-end tests pull and never push, and they run the tests and every dependency, so they get `DOCKERHUB_READ_TOKEN`. `DOCKERHUB_ADMIN_TOKEN` stays in the jobs that run no project code: deleting a tag and editing the Docker Hub page. The secrets are shared with the repositories that push and remove images, and replacing a token on expiry is one edit in the organization settings.
+
+The Tailscale and watchtower entries belong to the [deploy](#deploy) action, which also runs no project code. [Environments](#environments) describes what they have to match on the other side.
 
 ## Pull requests
 
@@ -106,7 +120,7 @@ The job authenticates as the `dnd-mapp` GitHub App rather than through the workf
 
 ## Pushes to main
 
-[push-main.yml](../.github/workflows/push-main.yml) runs once a pull request merges, through five jobs.
+[push-main.yml](../.github/workflows/push-main.yml) runs once a pull request merges, through six jobs.
 
 `CI` checks the merge commit out, runs [setup-workspace](#setup-workspace) and then [run-checks](#run-checks), so `main` gets the same checks the pull request got, this time against the merged result. There is no merge queue, so `main` may have moved on between the pull request's last `CI` run and its merge. Commit messages are not linted again, since a `push` event carries no commit range and the pull request already checked them.
 
@@ -116,9 +130,28 @@ The job authenticates as the `dnd-mapp` GitHub App rather than through the workf
 
 `End-to-end tests` needs `Detect changes` and `Build image` and runs under the same condition as in the pull request workflow minus the fork check. It serves `sha-<short>` when `Build image` succeeded and `dev` otherwise; a `Pick the image tag` step cuts the seven characters `type=sha` uses, since the expression syntax has no substring. The job does not need `CI`: the tests need the image, not the lints, so a merge that only fails a lint still gets its end-to-end result.
 
+`Deploy to dev` needs `Build image` alone. It checks the repository out and hands [deploy](#deploy) the tag `dev`, so the dev environment serves the merge as soon as its image is on Docker Hub; see [Environments](#environments). It does not wait for the end-to-end tests: the environment exists to show the newest `main`, and the tests run against the same image on the runner in the meantime. A failing test therefore shows up beside a dev environment that already serves the commit. A skipped build skips the deployment with it, since `dev` then still points at the image the environment already runs.
+
 `Update Docker Hub description` needs `Detect changes` alone and runs when the `hub` filter reports a match. It checks the repository out and runs [peter-evans/dockerhub-description](https://github.com/peter-evans/dockerhub-description), which uploads `overview.md` as the overview and the `short-description` input as the one-line description of `dndmapp/web-app`. A `Read the short description` step reads `short-description.txt` into that input first and fails with an annotation on the file when it exceeds the 100 characters Docker Hub allows; the action would only trim it with a warning. URL completion stays off, since the links in the overview are already absolute. The token is `DOCKERHUB_ADMIN_TOKEN`, since editing a repository's settings takes the delete scope, and like the delete job this one runs no project code. It needs neither `CI` nor `Build image`, since the texts describe the image rather than being part of it.
 
-All five jobs use a fixed concurrency group without cancelling, so builds run one at a time in push order. `dev` always ends up on the newest commit that changed the image, and every such commit gets its `sha-<short>` tag. A push to `main` reads only the cache entries earlier `main` builds exported, and what it exports is what every pull request build starts from.
+All six jobs use a fixed concurrency group without canceling, so builds and deployments run one at a time in push order. `dev` always ends up on the newest commit that changed the image, and every such commit gets its `sha-<short>` tag. A push to `main` reads only the cache entries earlier `main` builds exported, and what it exports is what every pull request build starts from.
+
+## Environments
+
+Two environments serve the image, both on one Docker host that runs a [watchtower](https://watchtower.nickfedor.com) container in HTTP API mode beside them:
+
+| Environment | URL                             | Runs                     | Updated by                                                                 |
+|:------------|:--------------------------------|:-------------------------|:---------------------------------------------------------------------------|
+| production  | <https://www.dndmapp.nl.eu.org> | `dndmapp/web-app:latest` | `Deploy to production` in [release.yml](releasing.md#the-release-workflow) |
+| dev         | <https://dev.dndmapp.nl.eu.org> | `dndmapp/web-app:dev`    | `Deploy to dev` in [push-main.yml](#pushes-to-main)                        |
+
+Watchtower watches both containers, but polls nothing: with the HTTP API on, it updates when asked to. Each deployment job asks it through the [deploy](#deploy) action, right after the workflow has pushed the tag the environment runs. A merge to `main` therefore shows up on dev and a release on production within minutes, and nothing else moves either environment. Watchtower recreates the container with the same settings it had, so the compose file or run command on the host stays the source of truth for how each one is run.
+
+The host is not on the public internet; the runners reach it over Tailscale. The pieces on the other side, none of which live in this repository:
+
+- **Watchtower** runs with `WATCHTOWER_HTTP_API_ENDPOINTS=update` and a `WATCHTOWER_HTTP_API_TOKEN`, which is `WATCHTOWER_TOKEN` in the table above, and answers over HTTPS at the MagicDNS name of a tailnet node, which is `WATCHTOWER_URL`.
+- **The tailnet policy** owns `tag:github-actions` and lets `tag:github-actions` reach the watchtower node on port 443, and nothing else.
+- **The Tailscale OAuth client** behind `TAILSCALE_OAUTH_CLIENT_ID` and `TAILSCALE_OAUTH_SECRET` has the writable `auth_keys` scope and carries `tag:github-actions`, since the action tags the runner with it and an OAuth client may only hand out tags it carries.
 
 ## Reviews and merging
 
