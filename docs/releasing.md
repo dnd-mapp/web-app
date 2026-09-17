@@ -2,7 +2,7 @@
 
 ## Changelog
 
-[CHANGELOG.md](../CHANGELOG.md) follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and records what a user of the application notices: a page, a feature, a changed behavior, a fix. Such a change lands as one line under `## [Unreleased]`, in the category it belongs to (`Added`, `Changed`, `Deprecated`, `Removed`, `Fixed` or `Security`), written for that user rather than for a developer. Tooling, tests, CI, the Docker image and documentation leave the file untouched. Cutting a release renames the section to the version and its date and adds the compare link for it at the bottom. The release workflow refuses a tag whose version has no such section and publishes its contents as the release notes.
+[CHANGELOG.md](../CHANGELOG.md) follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and records what a user of the application notices: a page, a feature, a changed behavior, a fix. Such a change lands as one line under `## [Unreleased]`, in the category it belongs to (`Added`, `Changed`, `Deprecated`, `Removed`, `Fixed` or `Security`), written for that user rather than for a developer. Tooling, tests, CI, the Docker image and documentation leave the file untouched. Cutting a release renames the section to the version and its date, opens a new empty `[Unreleased]` section above it and adds the link for the version at the bottom. The release workflow refuses a tag whose version has no such section and publishes its contents as the release notes.
 
 ## Cutting a release
 
@@ -10,7 +10,7 @@ A release starts with one pull request that:
 
 1. Sets `version` in [package.json](../package.json) to the new version.
 2. Sets the `org.opencontainers.image.version` label in [docker-bake.hcl](../docker-bake.hcl) to that version with the `-dev` suffix the file keeps for local builds.
-3. Renames the `[Unreleased]` section of [CHANGELOG.md](../CHANGELOG.md) to `## [<version>] - <today>` and adds its compare link at the bottom.
+3. Renames the `[Unreleased]` section of [CHANGELOG.md](../CHANGELOG.md) to `## [<version>] - <today>` and opens a new empty `[Unreleased]` section above it for the next change. The links at the bottom follow: `[Unreleased]` compares the new tag with `HEAD`, and the version compares its tag with the previous one (the first release links to its tag instead).
 
 Once it has merged, tag the merge commit and push the tag:
 
