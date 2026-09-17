@@ -44,8 +44,10 @@
     --font-size-500: 1.875rem;
     --font-size-600: 2.25rem;
 
-    // Line height: unitless ratios, so a value scales with whichever font size it sits next to.
+    // Line height: unitless ratios, so a value scales with whichever font size it sits next to. A step is tighter
+    // the larger its font size, since a line of display text needs less room between its lines to stay readable.
     --line-height-100: 1.5;
+    --line-height-600: 1.2;
 
     // Spacing: an eight step scale in rem on a 4px grid at the default text size, for padding, gaps and the
     // dimensions of controls alike. The steps below 400 (16px) split the unit finely, where a gap of a few pixels

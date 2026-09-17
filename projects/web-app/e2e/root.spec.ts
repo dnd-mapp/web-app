@@ -1,20 +1,16 @@
 import { expect, test } from '@playwright/test';
 
-test.describe('Root page', () => {
+test.describe('Application shell', () => {
     test.beforeEach(async ({ page }) => {
         await page.goto('/');
     });
 
-    test('has the application title', async ({ page }) => {
+    test('has the application title in the browser', async ({ page }) => {
         await expect(page).toHaveTitle('D&D Mapp');
     });
 
     test('is in US English', async ({ page }) => {
         await expect(page.locator('html')).toHaveAttribute('lang', 'en-US');
-    });
-
-    test('renders the root component', async ({ page }) => {
-        await expect(page.getByRole('heading', { level: 1 })).toHaveText('root works!');
     });
 
     test('shows the top bar', async ({ page }) => {

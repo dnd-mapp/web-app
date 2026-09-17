@@ -1,0 +1,21 @@
+:host {
+    // Component tokens: every value the page's styles use, mapped onto a semantic token or, for a measure that has
+    // no purpose across the interface, onto a primitive. See docs/design-system.md under Component tokens.
+    --home-page-padding-block: var(--space-600);
+    --home-page-padding-inline: var(--space-400);
+    --home-page-gap: var(--space-300);
+    --home-page-title-size: var(--text-page-title-size);
+    --home-page-title-line-height: var(--text-page-title-line-height);
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--home-page-gap);
+
+    padding-block: var(--home-page-padding-block);
+    padding-inline: var(--home-page-padding-inline);
+}
+
+h1 {
+    font-size: var(--home-page-title-size);
+    line-height: var(--home-page-title-line-height);
+}

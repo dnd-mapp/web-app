@@ -42,7 +42,7 @@ Give every table an alignment indicator in its separator row:
 
 - **Getting started** ([docs/getting-started.md](docs/getting-started.md)): installing, running the dev server (TLS certificates and the hosts entry), building.
 - **Dependencies** ([docs/dependencies.md](docs/dependencies.md)): adding, updating or removing a package; a failing `pnpm install`; Renovate and its pull requests.
-- **Workspace** ([docs/workspace.md](docs/workspace.md)): the Angular workspace, the tsconfig files, areas, barrels, `@/<area>` aliases and file naming.
+- **Workspace** ([docs/workspace.md](docs/workspace.md)): the Angular workspace, the tsconfig files, areas, barrels, `@/<area>` aliases, routing and file naming.
 - **Design system** ([docs/design-system.md](docs/design-system.md)): the primitive and semantic tokens, where they live, and when a token gets added.
 - **Localization** ([docs/localization.md](docs/localization.md)): the texts a user reads, the dictionaries they come from, the source locale and adding a locale.
 - **Testing** ([docs/testing.md](docs/testing.md)): specs, component harnesses, coverage, end-to-end tests and the compose stack.

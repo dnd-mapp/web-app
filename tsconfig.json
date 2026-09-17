@@ -32,6 +32,8 @@
             "@/core": ["./projects/web-app/src/core/index.ts"],
             "@/core/testing": ["./projects/web-app/src/core/testing/index.ts"],
             "@/localization": ["./projects/web-app/src/shared/localization/index.ts"],
+            "@/pages": ["./projects/web-app/src/pages/index.ts"],
+            "@/pages/testing": ["./projects/web-app/src/pages/testing/index.ts"],
             "@/testing": ["./projects/web-app/src/shared/testing/index.ts"]
         },
         "skipLibCheck": true,
