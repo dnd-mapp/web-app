@@ -38,6 +38,7 @@
     "@angular/forms": "catalog:angular",
     "@angular/platform-browser": "catalog:angular",
     "@angular/router": "catalog:angular",
+    "@ngx-translate/core": "catalog:ngx-translate",
     "rxjs": "catalog:angular",
     "tslib": "catalog:angular"
   },
