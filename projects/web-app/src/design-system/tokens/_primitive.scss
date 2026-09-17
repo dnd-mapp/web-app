@@ -16,8 +16,20 @@
     --color-gray-900: oklch(22% 0.02 260deg);
     --color-gray-950: oklch(15% 0.02 260deg);
 
-    // Typography: 100 is the base step of each scale.
+    // Typography: 100 is the body step of each scale.
     --font-family-sans: system-ui, -apple-system, 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
+
+    // Font size: an eight step scale in rem, so it follows the browser's text size. The steps grow by
+    // about an eighth around the body size, where small distinctions matter, and by a quarter above it.
+    --font-size-50: 0.75rem;
+    --font-size-75: 0.875rem;
     --font-size-100: 1rem;
+    --font-size-200: 1.125rem;
+    --font-size-300: 1.25rem;
+    --font-size-400: 1.5rem;
+    --font-size-500: 1.875rem;
+    --font-size-600: 2.25rem;
+
+    // Line height: unitless ratios, so a value scales with whichever font size it sits next to.
     --line-height-100: 1.5;
 }
