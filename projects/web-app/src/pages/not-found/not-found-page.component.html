@@ -1,0 +1,9 @@
+<h1>{{ 'notFoundPage.title' | translate }}</h1>
+
+<p>{{ 'notFoundPage.intro' | translate }}</p>
+
+@if (path(); as path) {
+    <p class="attempted-path">{{ 'notFoundPage.attemptedPath' | translate: { path } }}</p>
+}
+
+<a routerLink="/">{{ 'notFoundPage.homeLinkLabel' | translate }}</a>
