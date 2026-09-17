@@ -8,7 +8,7 @@ git switch -c docs/branch-conventions main
 
 A branch is named `<type>/<summary>`. The type is the [Conventional Commits](#commit-messages) type of the change the branch carries, so it matches the commits on it. A pull request that mixes types takes the type of the commit that gives it its purpose, so a `feat` branch may carry `test` and `docs` commits. The summary names the change in a few lower-case words joined by hyphens: `ci/auto-merge`, `docs/restructure-documentation`, `fix/dice-roller-modifier`. GitHub repeats the name in the merge commit, `Merge pull request #22 from dnd-mapp/ci/auto-merge`, so the history says what each merge brought in.
 
-Every branch starts from `main` and carries one change, the one its pull request describes; see [Making a change](../CONTRIBUTING.md#making-a-change). The pull request that [cuts a release](releasing.md#cutting-a-release) is `chore/release-<version>`. A branch a tool created under another name gets renamed before the pull request opens: `git branch -m <type>/<summary>`. GitHub deletes the branch once its pull request has merged, so a follow-up gets a branch of its own. Renovate's branches are the exception: they are named `renovate/<update>`, and its commits carry the type; see [Automated updates](dependencies.md#automated-updates).
+Every branch starts from `main` and carries one change, the one its pull request describes; see [Making a change](../CONTRIBUTING.md#making-a-change). A branch in a [stack](#stacked-pull-requests) starts from the branch below it instead, and carries the one layer its pull request describes. The pull request that [cuts a release](releasing.md#cutting-a-release) is `chore/release-<version>`. A branch a tool created under another name gets renamed before the pull request opens: `git branch -m <type>/<summary>`. GitHub deletes the branch once its pull request has merged, so a follow-up gets a branch of its own. Renovate's branches are the exception: they are named `renovate/<update>`, and its commits carry the type; see [Automated updates](dependencies.md#automated-updates).
 
 ## Commit messages
 
@@ -50,7 +50,7 @@ A new `pre-commit` check goes in as a job with a `glob` limited to the file type
 gh pr create --web
 ```
 
-A pull request opens against `main` and carries the one change its [branch](#branch-names) was made for; see [Making a change](../CONTRIBUTING.md#making-a-change). Its title is the subject line of that change, written as [Commit messages](#commit-messages) describes: `<type>(<scope>)!: <summary>`, in the imperative, starting lower-case, ending without a period, within 100 characters, with the type of the branch. A pull request with one commit takes that commit's subject; one with several gets a subject that names the change as a whole, `ci: run the end-to-end tests against the image behind Caddy`. GitHub writes the title into the body of the merge commit, under `Merge pull request #24 from dnd-mapp/ci/e2e-tests`, so the branch name and the title together are what `git log` shows for a merge.
+A pull request opens against `main`, or against the branch below it when it is part of a [stack](#stacked-pull-requests), and carries the one change its [branch](#branch-names) was made for; see [Making a change](../CONTRIBUTING.md#making-a-change). Its title is the subject line of that change, written as [Commit messages](#commit-messages) describes: `<type>(<scope>)!: <summary>`, in the imperative, starting lower-case, ending without a period, within 100 characters, with the type of the branch. A pull request with one commit takes that commit's subject; one with several gets a subject that names the change as a whole, `ci: run the end-to-end tests against the image behind Caddy`. GitHub writes the title into the body of the merge commit, under `Merge pull request #24 from dnd-mapp/ci/e2e-tests`, so the branch name and the title together are what `git log` shows for a merge.
 
 The description follows [.github/pull_request_template.md](../.github/pull_request_template.md), which GitHub fills into every new pull request and `gh pr create --web` opens in the browser. It is written for the reviewer, and for whoever reads the pull request later to learn why the repository looks the way it does. The template has four sections, each introduced by a comment that says what goes there:
 
@@ -63,4 +63,18 @@ A section with nothing to say is removed rather than filled with "none". The des
 
 The `Default branch` ruleset merges with a merge commit, so every commit on the branch lands on `main` as it is; see [Reviews and merging](ci.md#reviews-and-merging). A fix a review asks for is folded into the commit it corrects, or becomes a commit of its own when it is a change in its own right. A commit that only says it addresses review comments is neither. Pushing dismisses the approval either way, so the rewrite costs no extra round.
 
-A pull request that is not ready for review opens as a draft. A draft gets the same checks and the same preview image, and marking it ready for review is what turns [auto-merge](ci.md#auto-merge) on. Since an approved pull request merges on its own, one that is open and ready is one its author is willing to see merged as it stands.
+A pull request that is not ready for review opens as a draft. A draft gets the same checks and the same preview image, and marking it ready for review is what turns [auto-merge](ci.md#auto-merge) on. Since an approved pull request merges on its own, one that is open and ready is one its author is willing to see merged as it stands. [Reviews and merging](ci.md#reviews-and-merging) says who merges when auto-merge is not on.
+
+## Stacked pull requests
+
+```bash
+gh stack init && gh stack add feat/top-bar
+```
+
+A change too big to review in one pull request is split into a [stack](https://docs.github.com/en/pull-requests/get-started/about-stacked-prs) with the [gh stack](https://docs.github.com/en/pull-requests/reference/stacked-prs-cli-commands) extension: a chain of branches, each starting from the one below it, with the bottom one starting from `main`. `gh stack init` starts a stack on `main`, `gh stack add <type>/<summary>` creates the next branch on top of the current one, and each branch carries one layer of the change, named and committed like any other [branch](#branch-names). A stack of one is a plain pull request.
+
+```bash
+gh stack submit --auto
+```
+
+`gh stack submit --auto` pushes every branch, opens a pull request for each against the branch below it and links them into a stack on GitHub, as drafts. The drafts matter to the [Enable auto-merge](ci.md#auto-merge) job, which explains why. Each pull request is titled and described as [Pull requests](#pull-requests) describes, for its own layer, before `gh pr ready` marks it ready. After a commit to a lower branch, `gh stack rebase` puts the branches above it back on top of it and `gh stack push` pushes them, so the stack stays linear; a stack that is not linear cannot merge. [Stacked pull requests](ci.md#stacked-pull-requests) in the CI documentation describes what the workflows do with each pull request in the stack and how the stack merges.
