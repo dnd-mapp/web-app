@@ -1,6 +1,3 @@
-# yaml-language-server: $schema=https://www.schemastore.org/pnpm-workspace.json
-
-# Dependency Resolution Settings
 minimumReleaseAge: 4320 # 3 days
 minimumReleaseAgeExclude:
   - "@dnd-mapp/*"
@@ -71,9 +68,9 @@ catalogs:
     stylelint-config-standard-scss: ~17.0.0
     stylelint-order: ~8.1.1
   vitest:
-    "@vitest/browser-playwright": ~4.1.11
-    "@vitest/coverage-v8": ~4.1.11
-    "@vitest/ui": ~4.1.11
-    vitest: ~4.1.11
+    "@vitest/browser-playwright": ~5.0.0
+    "@vitest/coverage-v8": ~5.0.0
+    "@vitest/ui": ~5.0.0
+    vitest: ~5.0.0
 catalog:
   "@types/node": ~24.13.4
