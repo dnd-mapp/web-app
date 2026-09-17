@@ -1,0 +1,27 @@
+:host {
+    // Component tokens: every value the page's styles use, mapped onto a semantic token or, for a measure that has
+    // no purpose across the interface, onto a primitive. See docs/design-system.md under Component tokens.
+    --not-found-page-padding-block: var(--space-600);
+    --not-found-page-padding-inline: var(--space-400);
+    --not-found-page-gap: var(--space-300);
+    --not-found-page-title-size: var(--text-page-title-size);
+    --not-found-page-title-line-height: var(--text-page-title-line-height);
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--not-found-page-gap);
+
+    padding-block: var(--not-found-page-padding-block);
+    padding-inline: var(--not-found-page-padding-inline);
+}
+
+h1 {
+    font-size: var(--not-found-page-title-size);
+    line-height: var(--not-found-page-title-line-height);
+}
+
+a {
+    // An anchor is inline by its nature; without this the flex container's default cross-axis stretch would widen
+    // it to the full row, growing its hover and focus area past its text.
+    align-self: flex-start;
+}
