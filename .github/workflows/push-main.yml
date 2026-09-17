@@ -97,6 +97,38 @@ jobs:
                   username: ${{ vars.DOCKERHUB_USERNAME }}
                   password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+    # Has the watchtower container beside the dev environment, https://dev.dndmapp.nl.eu.org, pull dndmapp/web-app:dev
+    # and recreate the container serving it, so the environment follows main. The job needs the build alone: the
+    # environment exists to show the newest main, and the end-to-end tests run against the same image on the runner in
+    # the meantime. A failing test therefore shows up beside a dev environment that already serves the commit. A skipped
+    # build skips the deployment with it, since dev then still points at the image the environment already runs.
+    # Deployments run one at a time in push order without canceling, like the builds they follow. The timeout outlasts
+    # the ten minutes watchtower gives an update, so a slow update fails with watchtower's answer in the log.
+    deploy-dev:
+        name: Deploy to dev
+        needs: build-image
+        runs-on: ubuntu-24.04
+        timeout-minutes: 15
+        permissions:
+            contents: read
+        concurrency:
+            group: push-main-deploy-dev
+            cancel-in-progress: false
+        steps:
+            - name: Check out the repository
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  persist-credentials: false
+
+            - name: Update the dev environment
+              uses: ./.github/actions/deploy
+              with:
+                  tag: dev
+                  watchtower-url: ${{ vars.WATCHTOWER_URL }}
+                  watchtower-token: ${{ secrets.WATCHTOWER_TOKEN }}
+                  tailscale-oauth-client-id: ${{ vars.TAILSCALE_OAUTH_CLIENT_ID }}
+                  tailscale-oauth-secret: ${{ secrets.TAILSCALE_OAUTH_SECRET }}
+
     # Runs the Playwright tests against the merge's image, dndmapp/web-app:sha-<short>, served behind Caddy through the
     # compose stack under .docker. A merge that leaves the image inputs alone gets no image, and its app is the one dev
     # already serves, so the tests run against dndmapp/web-app:dev instead. The job needs the image, not CI, so a merge

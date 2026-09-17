@@ -103,6 +103,37 @@ jobs:
                   username: ${{ vars.DOCKERHUB_USERNAME }}
                   password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+    # Has the watchtower container beside the production environment, https://www.dndmapp.nl.eu.org, pull
+    # dndmapp/web-app:latest and recreate the container serving it, so the release goes live once its image is on Docker
+    # Hub. The job needs the build alone and runs beside the release below: the image is published either way, so a
+    # deployment that fails should not hold the announcement back. A rerun of this job alone puts the release live.
+    # Deployments run one at a time in push order without canceling, like the builds they follow. The timeout outlasts
+    # the ten minutes watchtower gives an update, so a slow update fails with watchtower's answer in the log.
+    deploy-production:
+        name: Deploy to production
+        needs: build-image
+        runs-on: ubuntu-24.04
+        timeout-minutes: 15
+        permissions:
+            contents: read
+        concurrency:
+            group: release-deploy-production
+            cancel-in-progress: false
+        steps:
+            - name: Check out the repository
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  persist-credentials: false
+
+            - name: Update the production environment
+              uses: ./.github/actions/deploy
+              with:
+                  tag: latest
+                  watchtower-url: ${{ vars.WATCHTOWER_URL }}
+                  watchtower-token: ${{ secrets.WATCHTOWER_TOKEN }}
+                  tailscale-oauth-client-id: ${{ vars.TAILSCALE_OAUTH_CLIENT_ID }}
+                  tailscale-oauth-secret: ${{ secrets.TAILSCALE_OAUTH_SECRET }}
+
     # Publishes the release on GitHub with the changelog section as its notes, once the image it announces is on
     # Docker Hub. This is the one job with write access to the repository, and it runs nothing but the release action;
     # the build runs the Dockerfile and every dependency and stays read-only. The action needs no checkout: the tag

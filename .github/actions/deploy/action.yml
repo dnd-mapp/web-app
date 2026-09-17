@@ -1,0 +1,103 @@
+name: Deploy
+description: Have the watchtower instance watching an environment pull a published dndmapp/web-app tag and recreate the container that runs it.
+
+# The steps every deployment shares; what differs between deployments is which tag the environment runs. Both
+# environments run on one Docker host beside a watchtower container in HTTP API mode, which pulls the newest image
+# behind a tag and recreates the container running it when asked to over HTTP. The API is reachable through the
+# tailnet only, so the runner joins the tailnet first. The calling workflow checks the repository out: a local action
+# only resolves once a checkout has put it on disk. A composite action cannot read secrets or variables of its own, so
+# the workflow hands the credentials in.
+inputs:
+    tag:
+        description: The dndmapp/web-app tag the environment runs, dev or latest.
+        required: true
+    watchtower-url:
+        description: The URL the watchtower HTTP API answers on inside the tailnet, such as https://watchtower-dma.<tailnet>.ts.net.
+        required: true
+    watchtower-token:
+        description: The token watchtower expects as the bearer token.
+        required: true
+    tailscale-oauth-client-id:
+        description: The client ID of the Tailscale OAuth client that lets the runner join the tailnet.
+        required: true
+    tailscale-oauth-secret:
+        description: The secret of that OAuth client.
+        required: true
+
+runs:
+    using: composite
+    steps:
+        # The Tailscale action can wait until a host answers a ping, which takes a machine name or an address rather
+        # than a URL, so the host is cut out of the URL first: everything between the scheme and the first slash,
+        # minus the port.
+        - name: Read the host out of the URL
+          id: host
+          shell: bash
+          env:
+              WATCHTOWER_URL: ${{ inputs.watchtower-url }}
+          run: |
+              host="${WATCHTOWER_URL#*://}"
+              host="${host%%/*}"
+              host="${host%%:*}"
+              echo "host=$host" >> "$GITHUB_OUTPUT"
+
+        # The OAuth client tags the runner tag:github-actions, so the tailnet policy decides what it may reach by that
+        # tag alone, and the node is ephemeral: the action logs it out when the job ends, and the coordination server
+        # removes it. News of a new node spreads through the tailnet with a delay, and until it has, the watchtower host
+        # refuses the connection. The action therefore pings the host and waits for an answer before the next step runs.
+        - name: Join the tailnet
+          uses: tailscale/github-action@780049a30b6ff5c378a9e7b389d15ece7a204888 # v4.1.3
+          with:
+              oauth-client-id: ${{ inputs.tailscale-oauth-client-id }}
+              oauth-secret: ${{ inputs.tailscale-oauth-secret }}
+              tags: tag:github-actions
+              ping: ${{ steps.host.outputs.host }}
+
+        # POST /v1/update with the image filter set to name and tag, so watchtower touches the one container running
+        # that tag and leaves the other environment alone. A filtered update waits for a running update to finish
+        # rather than being refused, and the response arrives once the update is done, with a summary of what
+        # happened. Watchtower gives up after ten minutes by default and answers 408, so curl waits a little longer
+        # than that and the job's timeout longer still, which keeps the reason for a failure in the log. The status is
+        # read from the response rather than through --fail, so a refusal's body ends up in the log as well.
+        #
+        # A response that scanned no container means nothing runs the tag on that host, which is a deployment that
+        # did not happen, and a failed update is one as well. A scanned container that was not updated already ran
+        # the newest image, which is what a rerun of the job sees, so that is a warning rather than a failure.
+        - name: Ask watchtower to update the container
+          shell: bash
+          env:
+              TAG: ${{ inputs.tag }}
+              WATCHTOWER_URL: ${{ inputs.watchtower-url }}
+              WATCHTOWER_TOKEN: ${{ inputs.watchtower-token }}
+          run: |
+              image="dndmapp/web-app:$TAG"
+              response="$RUNNER_TEMP/watchtower-response.json"
+
+              status="$(curl --silent --show-error \
+                  --request POST \
+                  --header "Authorization: Bearer $WATCHTOWER_TOKEN" \
+                  --max-time 660 \
+                  --output "$response" \
+                  --write-out '%{http_code}' \
+                  "$WATCHTOWER_URL/v1/update?image=$image")"
+
+              if [ "$status" != 200 ]; then
+                  echo "::error::Watchtower answered $status to the update request for $image: $(cat "$response")"
+                  exit 1
+              fi
+              scanned="$(jq --raw-output '.summary.scanned' "$response")"
+              updated="$(jq --raw-output '.summary.updated' "$response")"
+              failed="$(jq --raw-output '.summary.failed' "$response")"
+              echo "Watchtower scanned $scanned, updated $updated and failed $failed container(s) running $image."
+
+              if [ "$scanned" = 0 ]; then
+                  echo "::error::No watched container runs $image, so nothing was updated."
+                  exit 1
+              fi
+              if [ "$failed" != 0 ]; then
+                  echo "::error::Watchtower failed to update $failed container(s) running $image."
+                  exit 1
+              fi
+              if [ "$updated" = 0 ]; then
+                  echo "::warning::The container running $image already ran the newest image, so it was not updated."
+              fi
