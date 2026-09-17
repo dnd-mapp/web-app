@@ -19,13 +19,22 @@ export default defineConfig([
         extends: [angular.configs.tsRecommended],
         processor: angular.processInlineTemplates,
         rules: {
+            // A component is either an element of its own, or an attribute that dresses up a native element the way
+            // `button[appButton]` does; the attribute form follows the directive convention below.
             '@angular-eslint/component-selector': [
                 'error',
-                {
-                    type: 'element',
-                    prefix: 'app',
-                    style: 'kebab-case',
-                },
+                [
+                    {
+                        type: 'element',
+                        prefix: 'app',
+                        style: 'kebab-case',
+                    },
+                    {
+                        type: 'attribute',
+                        prefix: 'app',
+                        style: 'camelCase',
+                    },
+                ],
             ],
             '@angular-eslint/directive-selector': [
                 'error',

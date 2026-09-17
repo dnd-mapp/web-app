@@ -21,11 +21,15 @@ interface SetupTestEnvironmentParams<T, H extends ComponentHarness> {
 /**
  * What `setupTestEnvironment` hands back to the spec.
  *
+ * @typeParam T The host component's class.
  * @typeParam H The harness the spec asserts through.
  */
-interface SetupTestEnvironmentResult<H extends ComponentHarness> {
+interface SetupTestEnvironmentResult<T, H extends ComponentHarness> {
     /** The harness, loaded from the rendered host component. */
     harness: H;
+
+    /** The rendered host component, for a spec that observes what the component under test did to its host. */
+    componentInstance: T;
 }
 
 /**
@@ -37,19 +41,21 @@ interface SetupTestEnvironmentResult<H extends ComponentHarness> {
  * @typeParam T The host component's class.
  * @typeParam H The harness the spec asserts through.
  * @param params The host component to render and the harness to load from it.
- * @returns The loaded harness.
+ * @returns The loaded harness and the rendered host component.
  */
 export async function setupTestEnvironment<T, H extends ComponentHarness>(
     params: SetupTestEnvironmentParams<T, H>,
-): Promise<SetupTestEnvironmentResult<H>> {
+): Promise<SetupTestEnvironmentResult<T, H>> {
     TestBed.configureTestingModule({
         imports: [params.testComponent],
         providers: [provideLocalization()],
     });
 
-    const harnessLoader = TestbedHarnessEnvironment.loader(TestBed.createComponent(params.testComponent));
+    const fixture = TestBed.createComponent(params.testComponent);
+    const harnessLoader = TestbedHarnessEnvironment.loader(fixture);
 
     return {
         harness: await harnessLoader.getHarness(params.harness),
+        componentInstance: fixture.componentInstance,
     };
 }

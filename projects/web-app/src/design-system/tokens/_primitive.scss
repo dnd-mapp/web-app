@@ -44,4 +44,10 @@
     --space-500: 1.5rem;
     --space-600: 2rem;
     --space-700: 3rem;
+
+    // Radius: a three step scale in rem for the corners of controls and panels, from a subtle rounding on compact
+    // controls up to the rounding of a card or dialog.
+    --radius-100: 0.25rem;
+    --radius-200: 0.5rem;
+    --radius-300: 0.75rem;
 }
