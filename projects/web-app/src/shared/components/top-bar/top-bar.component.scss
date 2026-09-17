@@ -1,0 +1,9 @@
+:host {
+    display: block;
+}
+
+header {
+    height: 3rem;
+    border-bottom: 1px solid var(--color-border);
+    background-color: var(--color-surface);
+}
