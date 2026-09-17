@@ -28,4 +28,9 @@ describe('RootComponent', () => {
         const { harness } = await setupTest();
         expect(await harness.titleContents()).toEqual('root works!');
     });
+
+    it('should render the top bar', async () => {
+        const { harness } = await setupTest();
+        expect(await harness.hasTopBar()).toBe(true);
+    });
 });
