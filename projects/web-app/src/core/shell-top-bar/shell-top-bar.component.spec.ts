@@ -1,0 +1,37 @@
+import { ShellTopBarComponent } from '@/core';
+import { ShellTopBarHarness } from '@/core/testing';
+import { setupTestEnvironment } from '@/testing';
+import { Component } from '@angular/core';
+
+describe('ShellTopBarComponent', () => {
+    /** Hosts the component under test the way a page would, so the spec renders it through a template. */
+    @Component({
+        selector: 'app-test',
+        template: `<app-shell-top-bar />`,
+        imports: [ShellTopBarComponent],
+    })
+    class TestComponent {}
+
+    /**
+     * Renders the host component and loads the harness a test asserts through.
+     *
+     * @returns The loaded harness.
+     */
+    async function setupTest() {
+        const { harness } = await setupTestEnvironment({ testComponent: TestComponent, harness: ShellTopBarHarness });
+
+        return {
+            harness: harness,
+        };
+    }
+
+    it('should render the shared top bar', async () => {
+        const { harness } = await setupTest();
+        expect(await harness.hasTopBar()).toBe(true);
+    });
+
+    it('should offer logging in and signing up', async () => {
+        const { harness } = await setupTest();
+        expect(await harness.actionLabels()).toEqual(['Log in', 'Sign up']);
+    });
+});

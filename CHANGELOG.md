@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Added
 
 - An empty top bar across the top of the application.
+- Buttons to log in and to sign up at the right end of the top bar. The pages they open are still to come, so they do nothing yet.
 
 ## [0.1.0] - 2026-09-17
 
