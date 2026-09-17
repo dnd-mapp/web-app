@@ -11,10 +11,10 @@ The dictionaries are bundled with the application instead of fetched. The loader
 ## Marking text
 
 ```html
-<h1>{{ 'root.title' | translate }}</h1>
+<button appButton>{{ 'logInButton.label' | translate }}</button>
 ```
 
-Every text a user reads comes from a key. A template resolves one with the `translate` pipe from `TranslatePipe`, which the component lists in its `imports` like any other pipe, and an attribute a user reads takes the same pipe through a binding: `[title]="'mapCard.hint' | translate"`. Keys nest by the component the text belongs to, in camelCase, followed by what the text is: `root.title`. The dictionary in [en-US.ts](../projects/web-app/src/shared/localization/locales/en-US.ts) holds the texts under those same nested keys, in alphabetical order, so a component's texts sit together and a translator reads them in context.
+Every text a user reads comes from a key. A template resolves one with the `translate` pipe from `TranslatePipe`, which the component lists in its `imports` like any other pipe, and an attribute a user reads takes the same pipe through a binding: `[title]="'mapCard.hint' | translate"`. Keys nest by the component the text belongs to, in camelCase, followed by what the text is: `logInButton.label`, `root.title`. The dictionary in [en-US.ts](../projects/web-app/src/shared/localization/locales/en-US.ts) holds the texts under those same nested keys, in alphabetical order, so a component's texts sit together and a translator reads them in context.
 
 Keys are strings, so nothing checks a misspelled one at compile time. A key the dictionary does not hold renders as the key itself, which is what a missing text looks like in the interface and in a failing spec.
 
