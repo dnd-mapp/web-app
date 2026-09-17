@@ -38,7 +38,7 @@ RUN pnpm run build
 # port 4200, the same port as the dev server.
 
 # serve Serve the compiled application with nginx.
-FROM nginxinc/nginx-unprivileged:1.31.5-alpine3.24-slim@sha256:736aa11ab9f9c320825722e411661c64559881e15e77f37137eef168ebe9515c AS serve
+FROM nginxinc/nginx-unprivileged:1.31.6-alpine3.24-slim@sha256:dcc9bf9c084901dddbbce305130a7295c5637b6a8fce3e29cf678d86336982e4 AS serve
 
 COPY .docker/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist/web-app/browser /usr/share/nginx/html
