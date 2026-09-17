@@ -21,6 +21,13 @@ header {
     background-color: var(--top-bar-background-color);
 }
 
+// Each slot lays its own content out, so what the bar's own flex does to the slot as a whole stays separate
+// from how the content inside it sits.
+.brand {
+    display: flex;
+    align-items: center;
+}
+
 .actions {
     display: flex;
     gap: var(--top-bar-actions-gap);

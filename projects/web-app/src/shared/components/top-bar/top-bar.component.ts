@@ -2,11 +2,13 @@ import { Component } from '@angular/core';
 
 /**
  * The bar across the top of every page. It renders a `header` landmark, so assistive technology announces it as the
- * banner, and holds one slot: `actions`, a row at the end of the bar for the controls a page offers. Content picks
- * its slot with `ngProjectAs`, naming the slot as an attribute selector, and content carrying none is not rendered.
+ * banner, and holds two slots: `brand`, at the start of the bar, for the mark that says which application this is,
+ * and `actions`, a row at the end of the bar for the controls a page offers. Content picks its slot with
+ * `ngProjectAs`, naming the slot as an attribute selector, and content carrying none is not rendered.
  *
  * ```html
  * <app-top-bar>
+ *     <app-brand ngProjectAs="[brand]" />
  *     <ng-container ngProjectAs="[actions]">
  *         <app-log-in-button />
  *         <app-sign-up-button />
