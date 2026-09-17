@@ -10,7 +10,7 @@ The design system lives under [projects/web-app/src/design-system](../projects/w
 
 ### Semantic tokens
 
-[\_semantic.scss](../projects/web-app/src/design-system/tokens/_semantic.scss) names each value after its purpose in the interface and maps it onto a primitive: `--color-text` and `--color-background` for color, and `--text-body-family`, `--text-body-size` and `--text-body-line-height` for body text. These are the tokens that global and component styles reference. The file also sets `color-scheme: dark`, since the mapping it holds is the dark theme; a second theme would remap the same semantic names onto other primitives.
+[\_semantic.scss](../projects/web-app/src/design-system/tokens/_semantic.scss) names each value after its purpose in the interface and maps it onto a primitive: `--color-text` and `--color-background` for the page, `--color-surface` and `--color-border` for a bar or panel that sits on it, and `--text-body-family`, `--text-body-size` and `--text-body-line-height` for body text. These are the tokens that global and component styles reference. The file also sets `color-scheme: dark`, since the mapping it holds is the dark theme; a second theme would remap the same semantic names onto other primitives.
 
 ### Adding a token
 
