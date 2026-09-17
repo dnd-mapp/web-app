@@ -99,7 +99,7 @@ target "docker-metadata-action" {
         "org.opencontainers.image.licenses"    = "MIT"
         "org.opencontainers.image.url"         = "https://github.com/dnd-mapp/web-app#readme"
         "org.opencontainers.image.source"      = "https://github.com/dnd-mapp/web-app"
-        "org.opencontainers.image.version"     = "0.0.0-dev"
+        "org.opencontainers.image.version"     = "0.1.0-dev"
         "org.opencontainers.image.created"     = timestamp()
     }
 }
