@@ -8,7 +8,17 @@ import { ComponentHarness } from '@angular/cdk/testing';
 export class TopBarHarness extends ComponentHarness {
     public static readonly hostSelector = 'app-top-bar';
 
+    private readonly brandLocator = this.locatorFor('.brand');
     private readonly actionsLocator = this.locatorFor('.actions');
+
+    /**
+     * Reads what the bar renders in its `brand` slot.
+     *
+     * @returns The text of the content the slot was given.
+     */
+    public async brandContents(): Promise<string> {
+        return await (await this.brandLocator()).text();
+    }
 
     /**
      * Reads what the bar renders in its `actions` slot.

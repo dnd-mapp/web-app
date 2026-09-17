@@ -1,6 +1,6 @@
 import { LogInButtonHarness, SignUpButtonHarness } from '@/auth/components/testing';
 import { type ButtonVariant } from '@/components';
-import { TopBarHarness } from '@/components/testing';
+import { BrandHarness, TopBarHarness } from '@/components/testing';
 import { ComponentHarness } from '@angular/cdk/testing';
 
 /**
@@ -11,6 +11,7 @@ export class ShellTopBarHarness extends ComponentHarness {
     public static readonly hostSelector = 'app-shell-top-bar';
 
     private readonly topBarLocator = this.locatorForOptional(TopBarHarness);
+    private readonly brandLocator = this.locatorFor(BrandHarness);
     private readonly logInButtonLocator = this.locatorFor(LogInButtonHarness);
     private readonly signUpButtonLocator = this.locatorFor(SignUpButtonHarness);
 
@@ -21,6 +22,15 @@ export class ShellTopBarHarness extends ComponentHarness {
      */
     public async hasTopBar(): Promise<boolean> {
         return (await this.topBarLocator()) !== null;
+    }
+
+    /**
+     * Reads the application's name as the bar carries it.
+     *
+     * @returns The text the wordmark shows.
+     */
+    public async brandName(): Promise<string> {
+        return await (await this.brandLocator()).name();
     }
 
     /**

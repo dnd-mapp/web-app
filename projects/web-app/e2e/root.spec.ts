@@ -17,6 +17,13 @@ test.describe('Application shell', () => {
         await expect(page.getByRole('banner')).toBeVisible();
     });
 
+    test("carries the application's name in the top bar, leading back to the home page", async ({ page }) => {
+        const brand = page.getByRole('banner').getByRole('link', { name: 'D&D Mapp' });
+
+        await expect(brand).toBeVisible();
+        await expect(brand).toHaveAttribute('href', '/');
+    });
+
     test('offers logging in and signing up from the top bar', async ({ page }) => {
         const banner = page.getByRole('banner');
 

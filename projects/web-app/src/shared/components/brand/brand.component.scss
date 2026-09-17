@@ -1,0 +1,28 @@
+:host {
+    // Component tokens: every value the wordmark's styles use, mapped onto a semantic token or, for a measure that
+    // has no purpose across the interface, onto a primitive. See docs/design-system.md under Component tokens.
+    --brand-font-size: var(--text-brand-size);
+    --brand-font-weight: var(--text-brand-weight);
+    --brand-text-color: var(--color-text-brand);
+    --brand-focus-ring-color: var(--color-focus-ring);
+    --brand-focus-ring-width: var(--space-50);
+}
+
+a {
+    font-size: var(--brand-font-size);
+    font-weight: var(--brand-font-weight);
+    color: var(--brand-text-color);
+
+    // The mark reads as the application's name rather than as a link in a sentence, so it carries no underline in
+    // any state; the pointer it takes is what says it leads somewhere.
+    text-decoration: none;
+
+    // The name is one word group and reads as a mark rather than as a sentence, so it never wraps: a bar too
+    // narrow for it lets it run past its end instead of stacking it into two lines.
+    white-space: nowrap;
+
+    &:focus-visible {
+        outline: var(--brand-focus-ring-width) solid var(--brand-focus-ring-color);
+        outline-offset: var(--brand-focus-ring-width);
+    }
+}

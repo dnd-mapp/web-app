@@ -44,6 +44,13 @@
     --font-size-500: 1.875rem;
     --font-size-600: 2.25rem;
 
+    // Font weight: a four step scale over the weights the system font stack offers, numbered like the scales
+    // around it with 100 as the body weight. Each step above it adds emphasis, from medium through semibold to bold.
+    --font-weight-100: 400;
+    --font-weight-200: 500;
+    --font-weight-300: 600;
+    --font-weight-400: 700;
+
     // Line height: unitless ratios, so a value scales with whichever font size it sits next to. A step is tighter
     // the larger its font size, since a line of display text needs less room between its lines to stay readable.
     --line-height-100: 1.5;

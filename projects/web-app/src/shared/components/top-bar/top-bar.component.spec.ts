@@ -7,7 +7,10 @@ describe('TopBarComponent', () => {
     /** Hosts the component under test the way a page would, so the spec renders it through a template. */
     @Component({
         selector: 'app-test',
-        template: `<app-top-bar><span ngProjectAs="[actions]">Account actions</span></app-top-bar>`,
+        template: `<app-top-bar
+            ><span ngProjectAs="[brand]">Application name</span
+            ><span ngProjectAs="[actions]">Account actions</span></app-top-bar
+        >`,
         imports: [TopBarComponent],
     })
     class TestComponent {}
@@ -24,6 +27,11 @@ describe('TopBarComponent', () => {
             harness: harness,
         };
     }
+
+    it('should render the content given to its brand slot', async () => {
+        const { harness } = await setupTest();
+        expect(await harness.brandContents()).toEqual('Application name');
+    });
 
     it('should render the content given to its actions slot', async () => {
         const { harness } = await setupTest();
