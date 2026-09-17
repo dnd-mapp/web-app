@@ -1,13 +1,13 @@
 name: Pull request opened
 
+# No branches filter, for the same reason as in pull-request.yml: a pull request in a stack targets the branch of the
+# pull request below it.
 on:
     pull_request:
         types:
             - opened
             - reopened
             - ready_for_review
-        branches:
-            - main
 
 permissions: {}
 
@@ -15,10 +15,15 @@ jobs:
     # Turns auto-merge on, so GitHub merges the pull request itself once the ruleset is satisfied: an approving review
     # from a code owner on the last push and a passing CI check. Reopening runs it again because closing a pull request
     # turns auto-merge off. A draft has to wait for ready_for_review, since GitHub refuses to enable auto-merge on one.
-    # Only a branch of this repository qualifies: a fork cannot read the app credentials below.
+    # Only a branch of this repository qualifies: a fork cannot read the app credentials below. A pull request in a
+    # stack is skipped as well, since GitHub does not support auto-merge on one; the payload carries a stack object for
+    # exactly those pull requests, and their author merges the stack by hand. The stack has to exist by the time this
+    # job runs for the skip to take effect, which is why a stack's pull requests open as drafts.
     enable-auto-merge:
         name: Enable auto-merge
-        if: github.event.pull_request.draft == false && github.event.pull_request.head.repo.full_name == github.repository
+        if: >-
+            ${{ github.event.pull_request.draft == false && github.event.pull_request.stack == null &&
+            github.event.pull_request.head.repo.full_name == github.repository }}
         runs-on: ubuntu-24.04
         timeout-minutes: 2
         permissions: {}

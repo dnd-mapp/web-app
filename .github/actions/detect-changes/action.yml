@@ -15,8 +15,8 @@ runs:
     using: composite
     steps:
         # On a pull_request event the action lists the changed files through the GitHub API, whatever the activity
-        # type, so a filter answers both "does this pull request get an image" when it is opened and "did it get one"
-        # when it is closed. On a push event it diffs the pushed commit against the one before the push through git,
+        # type, so a filter answers "does this pull request touch the image" against whichever base the pull request
+        # has at that moment. On a push event it diffs the pushed commit against the one before the push through git,
         # fetching the history it needs itself, so a merge into main is judged by the same rules as its pull request.
         # A push with no previous commit, such as the first push to a branch, counts every file as changed.
         #

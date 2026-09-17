@@ -1,51 +1,26 @@
 name: Pull request closed
 
+# No branches filter, for the same reason as in pull-request.yml: a pull request in a stack targets the branch of the
+# pull request below it.
 on:
     pull_request:
         types:
             - closed
-        branches:
-            - main
 
 permissions: {}
 
 jobs:
-    # Decides whether the pull request got a preview image, by running the same filter that decided its build. The
-    # filter reads the changed files through the GitHub API; the checkout is only there because a local action has to
-    # be on disk before it resolves.
-    changes:
-        name: Detect changes
-        runs-on: ubuntu-24.04
-        timeout-minutes: 2
-        permissions:
-            contents: read
-            pull-requests: read
-        concurrency:
-            group: pull-request-closed-changes-${{ github.event.pull_request.number }}
-            cancel-in-progress: true
-        outputs:
-            image: ${{ steps.filter.outputs.image }}
-        steps:
-            # A pull_request run checks out the merge commit by default, and GitHub has none for a closed pull request
-            # that conflicts with its base. The head commit stays reachable through refs/pull/<N>/head, and it holds
-            # the version of the filter that decided the build.
-            - name: Check out the repository
-              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-              with:
-                  ref: ${{ github.event.pull_request.head.sha }}
-                  persist-credentials: false
-
-            - name: Detect changes
-              id: filter
-              uses: ./.github/actions/detect-changes
-
-    # Removes dndmapp/web-app:pr-<N> from Docker Hub under the same conditions that published it. The concurrency
+    # Removes dndmapp/web-app:pr-<N> from Docker Hub for every closed pull request from a branch of this repository, the
+    # ones pull-request.yml builds for. Whether a pull request got an image is not decided again here. A pull request
+    # in a stack gets one whatever its files, a stack can be taken apart again, and the filter's own answer moves with
+    # the base GitHub retargets. The rule that published the tag may therefore no longer hold when the pull request
+    # closes. Asking Docker Hub is cheaper than reconstructing that history, and a 404 below means there is nothing to
+    # remove. The concurrency
     # group is the one the Build image job in pull-request.yml uses, so closing a pull request mid-build cancels the
     # build before the tag is removed, and a build that starts on reopening waits for the removal to finish.
     delete-image:
         name: Delete image
-        needs: changes
-        if: needs.changes.outputs.image == 'true' && github.event.pull_request.head.repo.full_name == github.repository
+        if: github.event.pull_request.head.repo.full_name == github.repository
         runs-on: ubuntu-24.04
         timeout-minutes: 2
         permissions: {}

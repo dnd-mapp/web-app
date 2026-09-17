@@ -8,7 +8,7 @@ Install the Node.js and pnpm versions listed under [Prerequisites](docs/getting-
 
 ## Making a change
 
-Work on a branch off `main`, named as [Branch names](docs/commits.md#branch-names) describes, and keep a pull request to one change, so it reads and reviews as one thing. Along the way:
+Work on a branch off `main`, or off the branch below it in a [stack](docs/commits.md#stacked-pull-requests), named as [Branch names](docs/commits.md#branch-names) describes, and keep a pull request to one change, so it reads and reviews as one thing. Along the way:
 
 - **Tests.** Every component gets a spec that drives it through a component harness, and a flow that needs the served application gets an end-to-end test; [Testing](docs/testing.md) says which is which. Coverage below 80% fails CI.
 - **Changelog.** A change a user of the application notices gets one line under `## [Unreleased]` in [CHANGELOG.md](CHANGELOG.md), written for that user; [Changelog](docs/releasing.md#changelog) lists the categories. Tooling, tests, CI, the Docker image and documentation add no line.
@@ -39,7 +39,7 @@ CI runs exactly these checks, described under [run-checks](docs/ci.md#run-checks
 
 ## Pull requests
 
-Open the pull request against `main`, titled and described as [Pull requests](docs/commits.md#pull-requests) describes; the template GitHub fills in lays out the description. [Continuous integration](docs/ci.md#pull-requests) then runs the checks as a single `CI` check, publishes a preview image as `dndmapp/web-app:pr-<N>` when the change touches what the image is built from, and runs the end-to-end tests against it. GitHub requests a review from the code owners. The pull request merges on its own once one of them has approved the last push and the checks have passed; there is no merge queue and no button to press. Pushing to the branch dismisses the approval, so it takes a fresh one. A draft pull request is left alone until it is marked ready for review.
+Open the pull request against `main`, or against the branch below it in a stack, titled and described as [Pull requests](docs/commits.md#pull-requests) describes; the template GitHub fills in lays out the description. [Continuous integration](docs/ci.md#pull-requests) then runs the checks as a single `CI` check, publishes a preview image as `dndmapp/web-app:pr-<N>` when the change touches what the image is built from, and runs the end-to-end tests against it. GitHub requests a review from the code owners. Once one of them has approved the last push and the checks have passed, the pull request merges on its own. When auto-merge is not on, as for a pull request in a stack, its author merges it instead; see [Reviews and merging](docs/ci.md#reviews-and-merging). There is no merge queue. Pushing to the branch dismisses the approval, so it takes a fresh one. A draft pull request is left alone until it is marked ready for review.
 
 A pull request from a fork cannot read the repository's credentials, so it gets no preview image, no end-to-end run and no auto-merge; a maintainer runs those and merges it by hand.
 
