@@ -12,7 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - An empty top bar across the top of the application.
 - Buttons to log in and to sign up at the right end of the top bar, with signing up carrying the accent color that marks it as the action to take. The pages they open are still to come, so they do nothing yet.
 - The application's name at the left end of the top bar, so every page says which application it belongs to. It links to the home page, so it is the way back from anywhere.
-- A page saying a URL does not match anything, with a link back to the home page, shown for any path the application does not recognize.
+- A page saying a URL does not match anything, naming the path that did not match and linking back to the home page, shown for any path the application does not recognize.
 
 ## [0.1.0] - 2026-09-17
 

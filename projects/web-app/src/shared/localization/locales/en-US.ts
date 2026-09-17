@@ -17,6 +17,7 @@ export const enUS: TranslationObject = {
         label: 'Log in',
     },
     notFoundPage: {
+        attemptedPath: 'You tried to open {{ path }}.',
         homeLinkLabel: 'Go to the home page',
         intro: 'The page you were looking for does not exist or has moved.',
         title: 'Page not found',

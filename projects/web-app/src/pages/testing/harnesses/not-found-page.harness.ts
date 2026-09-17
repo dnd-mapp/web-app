@@ -9,6 +9,7 @@ export class NotFoundPageHarness extends ComponentHarness {
 
     private readonly titleLocator = this.locatorFor('h1');
     private readonly introLocator = this.locatorFor('p');
+    private readonly attemptedPathLocator = this.locatorForOptional('.attempted-path');
     private readonly homeLinkLocator = this.locatorFor('a');
 
     /**
@@ -27,6 +28,16 @@ export class NotFoundPageHarness extends ComponentHarness {
      */
     public async introContents(): Promise<string> {
         return await (await this.introLocator()).text();
+    }
+
+    /**
+     * Reads the line naming the path the visitor tried to open, when the page shows one.
+     *
+     * @returns The text of the line, or `null` when the page was not reached through a redirect that carried one.
+     */
+    public async attemptedPathContents(): Promise<string | null> {
+        const element = await this.attemptedPathLocator();
+        return element ? await element.text() : null;
     }
 
     /**
