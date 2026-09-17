@@ -1,0 +1,16 @@
+{
+    "id": "/",
+    "name": "D&D Mapp",
+    "short_name": "D&D Mapp",
+    "description": "A companion for tabletop D&D: manage characters, roll dice, and build maps and lore. Then play out combat and exploration in a virtual tabletop powered by a custom game engine built on the game rules.",
+    "icons": [
+        { "src": "/android-chrome-192x192.png", "sizes": "192x192", "type": "image/png" },
+        { "src": "/android-chrome-512x512.png", "sizes": "512x512", "type": "image/png" }
+    ],
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "orientation": "any",
+    "theme_color": "#648eed",
+    "background_color": "#151b24"
+}
