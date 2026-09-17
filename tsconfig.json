@@ -25,6 +25,8 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "paths": {
+            "@/auth/components": ["./projects/web-app/src/shared/auth/components/index.ts"],
+            "@/auth/components/testing": ["./projects/web-app/src/shared/auth/components/testing/index.ts"],
             "@/components": ["./projects/web-app/src/shared/components/index.ts"],
             "@/components/testing": ["./projects/web-app/src/shared/components/testing/index.ts"],
             "@/core": ["./projects/web-app/src/core/index.ts"],
