@@ -1,0 +1,45 @@
+:host {
+    // Component tokens: every value the button's styles use, mapped onto a semantic token or, for a measure that has
+    // no purpose across the interface, onto a primitive. See docs/design-system.md under Component tokens.
+    --button-height: var(--space-600);
+    --button-padding-inline: var(--space-400);
+    --button-border-radius: var(--radius-100);
+    --button-font-size: var(--text-control-size);
+    --button-text-color: var(--color-text);
+    --button-background-color: var(--color-control);
+    --button-hover-background-color: var(--color-control-hover);
+    --button-active-background-color: var(--color-control-active);
+    --button-focus-ring-color: var(--color-focus-ring);
+    --button-focus-ring-width: var(--space-50);
+
+    cursor: pointer;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    height: var(--button-height);
+    padding-inline: var(--button-padding-inline);
+    border: none;
+    border-radius: var(--button-border-radius);
+
+    font: inherit;
+    font-size: var(--button-font-size);
+    color: var(--button-text-color);
+    white-space: nowrap;
+
+    background-color: var(--button-background-color);
+
+    &:hover {
+        background-color: var(--button-hover-background-color);
+    }
+
+    &:active {
+        background-color: var(--button-active-background-color);
+    }
+
+    &:focus-visible {
+        outline: var(--button-focus-ring-width) solid var(--button-focus-ring-color);
+        outline-offset: var(--button-focus-ring-width);
+    }
+}
