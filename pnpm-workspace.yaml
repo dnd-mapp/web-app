@@ -1,6 +1,3 @@
-# yaml-language-server: $schema=https://www.schemastore.org/pnpm-workspace.json
-
-# Dependency Resolution Settings
 minimumReleaseAge: 4320 # 3 days
 minimumReleaseAgeExclude:
   - "@dnd-mapp/*"
@@ -55,7 +52,7 @@ catalogs:
     globals: ~17.12.0
     typescript-eslint: ~8.70.0
   lefthook:
-    lefthook: ~2.1.12
+    lefthook: ~2.1.14
   markdownlint:
     markdownlint-cli2: ~0.23.2
   playwright:
