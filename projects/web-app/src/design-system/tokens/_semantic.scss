@@ -6,9 +6,14 @@
     --color-background: var(--color-gray-900);
     --color-surface: var(--color-gray-800);
     --color-border: var(--color-gray-700);
+    --color-control: var(--color-gray-700);
+    --color-control-hover: var(--color-gray-600);
+    --color-control-active: var(--color-gray-500);
+    --color-focus-ring: var(--color-gray-100);
     --text-body-family: var(--font-family-sans);
     --text-body-size: var(--font-size-100);
     --text-body-line-height: var(--line-height-100);
+    --text-control-size: var(--font-size-75);
 
     color-scheme: dark;
 }
