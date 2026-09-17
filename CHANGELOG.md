@@ -9,5 +9,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Added
 
 - A placeholder root page with the application title.
+- A dark color theme with a system font across the application.
 
 [Unreleased]: https://github.com/dnd-mapp/web-app/commits/main
