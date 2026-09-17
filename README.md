@@ -35,7 +35,7 @@ The app is then served at `http://localhost:4200`. `latest` is the newest releas
 | Page                                                   | Covers                                                                                              |
 |:-------------------------------------------------------|:----------------------------------------------------------------------------------------------------|
 | [Getting started](docs/getting-started.md)             | Prerequisites, installing, running the dev server over TLS, building.                               |
-| [Dependencies](docs/dependencies.md)                   | pnpm catalogs and the other resolution settings that shape adding or updating a package.            |
+| [Dependencies](docs/dependencies.md)                   | pnpm catalogs, the resolution settings that shape adding or updating a package, and Renovate.       |
 | [Workspace](docs/workspace.md)                         | The Angular workspace, the tsconfig files and how the application is laid out into areas.           |
 | [Testing](docs/testing.md)                             | Unit tests with component harnesses, end-to-end tests and the compose stack they run on.            |
 | [Formatting and linting](docs/linting.md)              | Prettier, markdownlint, Stylelint and ESLint, and how their configs fit together.                   |

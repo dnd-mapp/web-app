@@ -1,0 +1,153 @@
+{
+    // Renovate keeps the dependencies current: the packages in the pnpm catalogs, the pinned Node.js, pnpm and base
+    // image versions, and the actions the workflows use. docs/dependencies.md#automated-updates describes how its pull
+    // requests fit the repository; https://docs.renovatebot.com/configuration-options/ describes every option below.
+    $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+    extends: [
+        'config:recommended',
+        // Every base image and action stays pinned by digest, the way the Dockerfile and the workflows already are.
+        'docker:pinDigests',
+        'helpers:pinGitHubActionDigests',
+        // npm packages wait three days after release, the same age pnpm-workspace.yaml requires. Without it Renovate
+        // would propose a version pnpm refuses to resolve, and the lockfile update would fail.
+        'security:minimumReleaseAgeNpm',
+        // Transitive dependencies only move through a lockfile refresh, since the catalogs pin the direct ones to a
+        // patch range. Once a month keeps that to one pull request.
+        ':maintainLockFilesMonthly',
+        ':configMigration',
+    ],
+    timezone: 'Europe/Amsterdam',
+    // pnpm-workspace.yaml keeps every version as a ~ range. Bumping the range moves the catalog entry with the lockfile,
+    // so a patch release shows up in the diff instead of only in pnpm-lock.yaml. Ranges keep their precision, so the
+    // ^24 under engines only changes on a major update.
+    rangeStrategy: 'bump',
+    // Ask the OSV database about known vulnerabilities as well as GitHub, so a fix is proposed either way.
+    osvVulnerabilityAlerts: true,
+    packageRules: [
+        // Commit messages follow Conventional Commits, as .commitlintrc.yaml checks: a dependency is a build change
+        // and an action a CI change, matching the types the history uses for both.
+        {
+            description: 'Dependencies are build changes',
+            matchPackageNames: ['*'],
+            semanticCommitType: 'build',
+        },
+        {
+            description: 'GitHub Actions are CI changes',
+            matchManagers: ['github-actions'],
+            semanticCommitType: 'ci',
+        },
+        // Catalogs are grouped by the tool they belong to, so the packages of one catalog move in one pull request.
+        // Every named catalog in pnpm-workspace.yaml has a rule here; the default catalog holds unrelated packages and
+        // gets a pull request per package. Major updates still come separately.
+        {
+            description: 'Update the angular catalog together',
+            matchDepTypes: ['pnpm.catalog.angular'],
+            groupName: 'angular catalog',
+        },
+        {
+            description: 'Update the commitlint catalog together',
+            matchDepTypes: ['pnpm.catalog.commitlint'],
+            groupName: 'commitlint catalog',
+        },
+        {
+            description: 'Update the eslint catalog together',
+            matchDepTypes: ['pnpm.catalog.eslint'],
+            groupName: 'eslint catalog',
+        },
+        {
+            description: 'Update the lefthook catalog together',
+            matchDepTypes: ['pnpm.catalog.lefthook'],
+            groupName: 'lefthook catalog',
+        },
+        {
+            description: 'Update the markdownlint catalog together',
+            matchDepTypes: ['pnpm.catalog.markdownlint'],
+            groupName: 'markdownlint catalog',
+        },
+        {
+            description: 'Update the playwright catalog together',
+            matchDepTypes: ['pnpm.catalog.playwright'],
+            groupName: 'playwright catalog',
+        },
+        {
+            description: 'Update the prettier catalog together',
+            matchDepTypes: ['pnpm.catalog.prettier'],
+            groupName: 'prettier catalog',
+        },
+        {
+            description: 'Update the stylelint catalog together',
+            matchDepTypes: ['pnpm.catalog.stylelint'],
+            groupName: 'stylelint catalog',
+        },
+        {
+            description: 'Update the vitest catalog together',
+            matchDepTypes: ['pnpm.catalog.vitest'],
+            groupName: 'vitest catalog',
+        },
+        // The Node.js version is pinned in three places that have to agree: the node image the Dockerfile builds in,
+        // devEngines.runtime in package.json and the engines range. The pnpm version is pinned in two: PNPM_VERSION in
+        // the Dockerfile and devEngines.packageManager. One pull request moves each set.
+        {
+            description: 'Move every Node.js pin together',
+            matchDepNames: ['node'],
+            groupName: 'node',
+        },
+        // Only an LTS release line runs here. The pins in package.json already follow Node's release schedule through
+        // the node-version datasource; the image in the Dockerfile would otherwise follow every major the moment it
+        // is published.
+        {
+            description: 'Only propose LTS majors for the node image, like the pins in package.json',
+            matchDatasources: ['docker'],
+            matchDepNames: ['node'],
+            versioning: 'node',
+        },
+        {
+            description: 'Move every pnpm pin together',
+            matchDepNames: ['pnpm'],
+            groupName: 'pnpm',
+        },
+        // The syntax directive at the top of the Dockerfile deliberately floats on the 1.x frontend, so it is not
+        // pinned to a digest like the base images.
+        {
+            description: 'Leave the Dockerfile syntax directive unpinned',
+            matchManagers: ['dockerfile'],
+            matchDepTypes: ['syntax'],
+            pinDigests: false,
+        },
+        // The compose stack serves whatever tag WEB_APP_TAG names; the image is this repository's own output.
+        {
+            description: 'Never update the dndmapp/web-app image in the compose stack',
+            matchManagers: ['docker-compose'],
+            matchPackageNames: ['dndmapp/web-app'],
+            enabled: false,
+        },
+    ],
+    // Renovate reads engines and packageManager from package.json, but not devEngines, so the two pins under it and
+    // the pnpm version the Dockerfile installs go through regex managers.
+    customManagers: [
+        {
+            customType: 'regex',
+            description: 'devEngines.runtime in package.json',
+            managerFilePatterns: ['/(^|/)package\\.json$/'],
+            matchStrings: ['"runtime":\\s*\\{\\s*"name":\\s*"node",\\s*"version":\\s*"(?<currentValue>[^"]+)"'],
+            depNameTemplate: 'node',
+            datasourceTemplate: 'node-version',
+        },
+        {
+            customType: 'regex',
+            description: 'devEngines.packageManager in package.json',
+            managerFilePatterns: ['/(^|/)package\\.json$/'],
+            matchStrings: ['"packageManager":\\s*\\{\\s*"name":\\s*"pnpm",\\s*"version":\\s*"(?<currentValue>[^"]+)"'],
+            depNameTemplate: 'pnpm',
+            datasourceTemplate: 'npm',
+        },
+        {
+            customType: 'regex',
+            description: 'PNPM_VERSION in the Dockerfile',
+            managerFilePatterns: ['/(^|/)Dockerfile$/'],
+            matchStrings: ['PNPM_VERSION=(?<currentValue>\\d+\\.\\d+\\.\\d+)'],
+            depNameTemplate: 'pnpm',
+            datasourceTemplate: 'npm',
+        },
+    ],
+}

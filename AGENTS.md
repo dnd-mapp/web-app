@@ -41,7 +41,7 @@ Give every table an alignment indicator in its separator row:
 [docs/](docs) is the source of truth for how the repository works, written for developers and agents alike. Read the page for the area a task touches before changing anything in it, and update that page when the change makes it stale:
 
 - **Getting started** ([docs/getting-started.md](docs/getting-started.md)): installing, running the dev server (TLS certificates and the hosts entry), building.
-- **Dependencies** ([docs/dependencies.md](docs/dependencies.md)): adding, updating or removing a package; a failing `pnpm install`.
+- **Dependencies** ([docs/dependencies.md](docs/dependencies.md)): adding, updating or removing a package; a failing `pnpm install`; Renovate and its pull requests.
 - **Workspace** ([docs/workspace.md](docs/workspace.md)): the Angular workspace, the tsconfig files, areas, barrels, `@/<area>` aliases and file naming.
 - **Testing** ([docs/testing.md](docs/testing.md)): specs, component harnesses, coverage, end-to-end tests and the compose stack.
 - **Formatting and linting** ([docs/linting.md](docs/linting.md)): a Prettier, markdownlint, Stylelint or ESLint finding, or a change to one of their configs.
