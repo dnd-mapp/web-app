@@ -1,6 +1,6 @@
-import { LogInButtonComponent, SignUpButtonComponent } from '@/auth/components';
-import { BrandComponent, TopBarComponent } from '@/components';
 import { Component } from '@angular/core';
+import { LogInButtonComponent, SignUpButtonComponent } from '@dnd-mapp/web-auth/components';
+import { BrandComponent, TopBarComponent } from '@dnd-mapp/web-ui/components';
 
 /**
  * This application's top bar: the shared bar with the wordmark at its start and the account actions in it, a button

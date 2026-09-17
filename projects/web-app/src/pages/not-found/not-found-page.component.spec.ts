@@ -1,8 +1,8 @@
 import { NotFoundPageComponent } from '@/pages';
 import { NotFoundPageHarness } from '@/pages/testing';
-import { setupTestEnvironment } from '@/testing';
 import { Component, type Type } from '@angular/core';
 import { provideRouter } from '@angular/router';
+import { setupTestEnvironment } from '@dnd-mapp/web-ui/testing';
 
 describe('NotFoundPageComponent', () => {
     /** Hosts the component under test the way a direct visit would, with no path carried onto it. */

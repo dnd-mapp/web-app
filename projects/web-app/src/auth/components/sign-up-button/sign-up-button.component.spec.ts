@@ -1,7 +1,7 @@
-import { SignUpButtonComponent } from '@/auth/components';
-import { SignUpButtonHarness } from '@/auth/components/testing';
-import { setupTestEnvironment } from '@/testing';
 import { Component } from '@angular/core';
+import { SignUpButtonComponent } from '@dnd-mapp/web-auth/components';
+import { SignUpButtonHarness } from '@dnd-mapp/web-auth/components/testing';
+import { setupTestEnvironment } from '@dnd-mapp/web-ui/testing';
 
 describe('SignUpButtonComponent', () => {
     /** Hosts the component under test the way a page would, so the spec renders it through a template. */

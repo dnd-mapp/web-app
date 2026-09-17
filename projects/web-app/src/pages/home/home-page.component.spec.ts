@@ -1,7 +1,7 @@
 import { HomePageComponent } from '@/pages';
 import { HomePageHarness } from '@/pages/testing';
-import { setupTestEnvironment } from '@/testing';
 import { Component } from '@angular/core';
+import { setupTestEnvironment } from '@dnd-mapp/web-ui/testing';
 
 describe('HomePageComponent', () => {
     /** Hosts the component under test the way the router would, so the spec renders it through a template. */

@@ -1,7 +1,7 @@
-import { LogInButtonHarness, SignUpButtonHarness } from '@/auth/components/testing';
-import { type ButtonVariant } from '@/components';
-import { BrandHarness, TopBarHarness } from '@/components/testing';
 import { ComponentHarness } from '@angular/cdk/testing';
+import { LogInButtonHarness, SignUpButtonHarness } from '@dnd-mapp/web-auth/components/testing';
+import { type ButtonVariant } from '@dnd-mapp/web-ui/components';
+import { BrandHarness, TopBarHarness } from '@dnd-mapp/web-ui/components/testing';
 
 /**
  * Drives a rendered `ShellTopBarComponent` from a spec. Specs of components that embed the bar reach it through this

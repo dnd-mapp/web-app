@@ -1,6 +1,6 @@
-import { type ButtonVariant } from '@/components';
-import { ButtonHarness } from '@/components/testing';
 import { ComponentHarness } from '@angular/cdk/testing';
+import { type ButtonVariant } from '@dnd-mapp/web-ui/components';
+import { ButtonHarness } from '@dnd-mapp/web-ui/components/testing';
 
 /**
  * Drives a rendered `SignUpButtonComponent` from a spec. Specs of components that embed the button reach it through
