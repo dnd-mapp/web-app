@@ -20,4 +20,11 @@ test.describe('Root page', () => {
     test('shows the top bar', async ({ page }) => {
         await expect(page.getByRole('banner')).toBeVisible();
     });
+
+    test('offers logging in and signing up from the top bar', async ({ page }) => {
+        const banner = page.getByRole('banner');
+
+        await expect(banner.getByRole('button', { name: 'Log in' })).toBeVisible();
+        await expect(banner.getByRole('button', { name: 'Sign up' })).toBeVisible();
+    });
 });
