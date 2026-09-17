@@ -11,6 +11,7 @@ Install the Node.js and pnpm versions listed under [Prerequisites](docs/getting-
 Work on a branch off `main`, or off the branch below it in a [stack](docs/commits.md#stacked-pull-requests), named as [Branch names](docs/commits.md#branch-names) describes, and keep a pull request to one change, so it reads and reviews as one thing. Along the way:
 
 - **Tests.** Every component gets a spec that drives it through a component harness, and a flow that needs the served application gets an end-to-end test; [Testing](docs/testing.md) says which is which. Coverage below 80% fails CI.
+- **Text.** Every text a user reads comes from a message key resolved through the `translate` pipe, and the text itself lives in the dictionary of the source locale; [Localization](docs/localization.md) describes both.
 - **Changelog.** A change a user of the application notices gets one line under `## [Unreleased]` in [CHANGELOG.md](CHANGELOG.md), written for that user; [Changelog](docs/releasing.md#changelog) lists the categories. Tooling, tests, CI, the Docker image and documentation add no line.
 - **Documentation.** When a change makes a page under `docs/` stale, update the page in the same pull request.
 - **Commit messages.** Every message follows [Conventional Commits](docs/commits.md#commit-messages). A commit a hook rejects gets fixed rather than bypassed.
