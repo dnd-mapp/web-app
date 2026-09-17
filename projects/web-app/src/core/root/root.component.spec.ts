@@ -1,8 +1,7 @@
 import { RootComponent } from '@/core';
 import { RootHarness } from '@/core/testing';
-import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
+import { setupTestEnvironment } from '@/testing';
 import { Component } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
 
 describe('RootComponent', () => {
     @Component({
@@ -13,14 +12,10 @@ describe('RootComponent', () => {
     class TestComponent {}
 
     async function setupTest() {
-        TestBed.configureTestingModule({
-            imports: [TestComponent],
-        });
-
-        const harnessLoader = TestbedHarnessEnvironment.loader(TestBed.createComponent(TestComponent));
+        const { harness } = await setupTestEnvironment({ testComponent: TestComponent, harness: RootHarness });
 
         return {
-            harness: await harnessLoader.getHarness(RootHarness),
+            harness: harness,
         };
     }
 
