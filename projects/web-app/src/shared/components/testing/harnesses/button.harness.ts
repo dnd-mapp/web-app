@@ -1,4 +1,4 @@
-import { type ButtonVariant } from '@/components';
+import { type ButtonVariant, buttonVariants } from '@/components';
 import { type BaseHarnessFilters, ComponentHarness, HarnessPredicate } from '@angular/cdk/testing';
 
 /** Narrows the buttons `ButtonHarness.with` matches, on top of the ancestor and selector filters every harness has. */
@@ -42,7 +42,7 @@ export class ButtonHarness extends ComponentHarness {
      * @returns The variant the button renders as.
      */
     public async variant(): Promise<ButtonVariant> {
-        return (await (await this.host()).hasClass('primary')) ? 'primary' : 'default';
+        return (await (await this.host()).hasClass('primary')) ? buttonVariants.primary : buttonVariants.default;
     }
 
     /**

@@ -1,7 +1,5 @@
-import { Component, input } from '@angular/core';
-
-/** How much weight a button carries: `primary` for the one action a page leads with, `default` for every other. */
-export type ButtonVariant = 'default' | 'primary';
+import { Component, computed, input } from '@angular/core';
+import { type ButtonVariant, buttonVariants, toButtonVariant } from './button-variant';
 
 /**
  * A push button, applied to a native `button` element as an attribute: `<button appButton>Save</button>`. The
@@ -11,7 +9,9 @@ export type ButtonVariant = 'default' | 'primary';
  *
  * `variant` picks the button's weight: `<button appButton variant="primary">Sign up</button>` gives it the accent
  * color, which marks it as the action to take among the buttons around it. A group of them holds one at most, so the
- * emphasis stays worth something; every other button is left at the default.
+ * emphasis stays worth something; every other button is left at the default. The input takes the value a template
+ * wrote, whatever its type, and `toButtonVariant` turns it into a variant, so a value that names none renders the
+ * default button instead of an unstyled one.
  */
 @Component({
     selector: 'button[appButton]',
@@ -19,10 +19,14 @@ export type ButtonVariant = 'default' | 'primary';
     styleUrl: './button.component.scss',
     host: {
         'type': 'button',
-        '[class.primary]': "variant() === 'primary'",
+        '[class.primary]': 'isPrimary()',
     },
 })
 export class ButtonComponent {
     /** The weight the button carries, `default` unless a page marks it as the primary action. */
-    public readonly variant = input<ButtonVariant>('default');
+    public readonly variant = input<ButtonVariant, unknown>(buttonVariants.default, { transform: toButtonVariant });
+
+    /** Drives the host class the stylesheet's primary rule matches. A host expression is not type checked, so the
+     * comparison lives here, where a variant that no longer exists is a compile error. */
+    protected readonly isPrimary = computed(() => this.variant() === buttonVariants.primary);
 }

@@ -26,6 +26,14 @@ describe('ButtonComponent', () => {
     })
     class PrimaryTestComponent {}
 
+    /** Hosts a button handed a value that names no variant, the case the input's transform has to absorb. */
+    @Component({
+        selector: 'app-unknown-variant-test',
+        template: `<button appButton variant="highlighted">Save</button>`,
+        imports: [ButtonComponent],
+    })
+    class UnknownVariantTestComponent {}
+
     /** Hosts a button that asks to submit its form, the one case the component's default `type` has to yield to. */
     @Component({
         selector: 'app-submit-test',
@@ -66,6 +74,11 @@ describe('ButtonComponent', () => {
     it('should render as the primary action when a page asks for it', async () => {
         const { harness } = await setupTest(PrimaryTestComponent);
         expect(await harness.variant()).toEqual('primary');
+    });
+
+    it('should fall back to the default for a value that names no variant', async () => {
+        const { harness } = await setupTest(UnknownVariantTestComponent);
+        expect(await harness.variant()).toEqual('default');
     });
 
     it('should not submit a form it sits in', async () => {
