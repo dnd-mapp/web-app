@@ -71,7 +71,7 @@
     "vitest": "catalog:vitest"
   },
   "engines": {
-    "node": "^24"
+    "node": "^24.21.0"
   },
   "devEngines": {
     "runtime": {
