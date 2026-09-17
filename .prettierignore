@@ -11,6 +11,7 @@
 !*.css
 !*.[tj]s
 !*.[cm][tj]s
+!*.webmanifest
 
 node_modules/
 pnpm-lock.yaml
