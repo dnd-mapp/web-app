@@ -16,7 +16,7 @@ There is no merge queue: a pull request merges once its `CI` check has passed on
 
 Every workflow follows five conventions:
 
-- **Pinned actions.** Use an action's latest release, referenced by the commit SHA that release points at, with the tag in a trailing comment: `uses: owner/action@<sha> # v1.2.3`.
+- **Pinned actions.** Use an action's latest release, referenced by the commit SHA that release points at, with the tag in a trailing comment: `uses: owner/action@<sha> # v1.2.3`. [Renovate](dependencies.md#automated-updates) updates the SHA and the comment together, and pins an action added by tag.
 - **Pinned runners.** Name a specific runner image such as `ubuntu-24.04` rather than `ubuntu-latest`.
 - **Named steps.** Every workflow, job and step carries a `name`.
 - **Explicit shells.** Every step that uses `run` declares a `shell`, which composite actions require anyway and which gives workflow steps `pipefail` on top of the default `-e`.

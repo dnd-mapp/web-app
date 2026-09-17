@@ -5,6 +5,7 @@
 !*.yml
 !*.yaml
 !*.json
+!*.json5
 !*.html
 !*.scss
 !*.css
