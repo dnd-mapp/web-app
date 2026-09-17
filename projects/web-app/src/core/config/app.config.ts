@@ -1,6 +1,6 @@
-import { provideLocalization } from '@/localization';
 import { type ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter } from '@angular/router';
+import { provideLocalization } from '@dnd-mapp/shared/localization';
 import { routes } from './app.routes';
 
 /**

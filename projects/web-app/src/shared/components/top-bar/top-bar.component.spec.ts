@@ -1,7 +1,7 @@
-import { TopBarComponent } from '@/components';
-import { TopBarHarness } from '@/components/testing';
-import { setupTestEnvironment } from '@/testing';
 import { Component } from '@angular/core';
+import { TopBarComponent } from '@dnd-mapp/shared/components';
+import { TopBarHarness } from '@dnd-mapp/shared/components/testing';
+import { setupTestEnvironment } from '@dnd-mapp/shared/testing';
 
 describe('TopBarComponent', () => {
     /** Hosts the component under test the way a page would, so the spec renders it through a template. */

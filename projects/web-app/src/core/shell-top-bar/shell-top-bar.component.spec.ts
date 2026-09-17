@@ -1,8 +1,8 @@
 import { ShellTopBarComponent } from '@/core';
 import { ShellTopBarHarness } from '@/core/testing';
-import { setupTestEnvironment } from '@/testing';
 import { Component } from '@angular/core';
 import { provideRouter } from '@angular/router';
+import { setupTestEnvironment } from '@dnd-mapp/shared/testing';
 
 describe('ShellTopBarComponent', () => {
     /** Hosts the component under test the way a page would, so the spec renders it through a template. */

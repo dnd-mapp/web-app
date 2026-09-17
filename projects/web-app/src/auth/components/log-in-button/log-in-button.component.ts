@@ -1,5 +1,5 @@
-import { ButtonComponent } from '@/components';
 import { Component } from '@angular/core';
+import { ButtonComponent } from '@dnd-mapp/shared/components';
 import { TranslatePipe } from '@ngx-translate/core';
 
 /**
