@@ -2,6 +2,7 @@ import { ShellTopBarComponent } from '@/core';
 import { ShellTopBarHarness } from '@/core/testing';
 import { Component } from '@angular/core';
 import { provideRouter } from '@angular/router';
+import { authComponentTexts } from '@dnd-mapp/web-auth/components';
 import { setupTestEnvironment } from '@dnd-mapp/web-ui/testing';
 
 describe('ShellTopBarComponent', () => {
@@ -24,6 +25,7 @@ describe('ShellTopBarComponent', () => {
         const { harness } = await setupTestEnvironment({
             testComponent: TestComponent,
             harness: ShellTopBarHarness,
+            texts: [authComponentTexts],
             providers: [provideRouter([])],
         });
 

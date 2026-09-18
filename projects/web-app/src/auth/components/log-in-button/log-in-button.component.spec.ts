@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { LogInButtonComponent } from '@dnd-mapp/web-auth/components';
+import { authComponentTexts, LogInButtonComponent } from '@dnd-mapp/web-auth/components';
 import { LogInButtonHarness } from '@dnd-mapp/web-auth/components/testing';
 import { setupTestEnvironment } from '@dnd-mapp/web-ui/testing';
 
@@ -18,7 +18,11 @@ describe('LogInButtonComponent', () => {
      * @returns The loaded harness.
      */
     async function setupTest() {
-        const { harness } = await setupTestEnvironment({ testComponent: TestComponent, harness: LogInButtonHarness });
+        const { harness } = await setupTestEnvironment({
+            testComponent: TestComponent,
+            harness: LogInButtonHarness,
+            texts: [authComponentTexts],
+        });
 
         return {
             harness: harness,

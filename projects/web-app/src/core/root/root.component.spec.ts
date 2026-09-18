@@ -2,6 +2,7 @@ import { RootComponent } from '@/core';
 import { RootHarness } from '@/core/testing';
 import { Component } from '@angular/core';
 import { provideRouter } from '@angular/router';
+import { authComponentTexts } from '@dnd-mapp/web-auth/components';
 import { setupTestEnvironment } from '@dnd-mapp/web-ui/testing';
 
 describe('RootComponent', () => {
@@ -24,6 +25,7 @@ describe('RootComponent', () => {
         const { harness } = await setupTestEnvironment({
             testComponent: TestComponent,
             harness: RootHarness,
+            texts: [authComponentTexts],
             providers: [provideRouter([])],
         });
 
