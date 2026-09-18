@@ -6,9 +6,6 @@ import type { TranslationObject } from '@ngx-translate/core';
  * reads `{{ 'logInButton.label' | translate }}`. See docs/localization.md.
  */
 export const enUS: TranslationObject = {
-    brand: {
-        name: 'D&D Mapp',
-    },
     homePage: {
         intro: 'Manage characters, roll dice, and build maps and lore.',
         title: 'Your companion for tabletop D&D',

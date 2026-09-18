@@ -13,4 +13,12 @@ import { BrandComponent, TopBarComponent } from '@dnd-mapp/web-ui/components';
     templateUrl: './shell-top-bar.component.html',
     imports: [BrandComponent, LogInButtonComponent, SignUpButtonComponent, TopBarComponent],
 })
-export class ShellTopBarComponent {}
+export class ShellTopBarComponent {
+    /**
+     * The name this application goes by, which the wordmark in the bar writes out. The shared wordmark takes it as
+     * an input, since the name belongs to this application rather than to the component that renders it, so this is
+     * where the name is spelled out for the interface; `index.html` spells it out again for the browser's title bar,
+     * which no Angular template reaches.
+     */
+    public readonly applicationName = 'D&D Mapp';
+}
