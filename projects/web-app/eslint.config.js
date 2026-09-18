@@ -47,6 +47,46 @@ export default defineConfig([
         },
     },
     {
+        // The areas written to be lifted out carry one direction of dependency, which Application layout in
+        // docs/workspace.md lays out. An import pointing the other way only breaks once the area has become a
+        // package, with no application around it to resolve the alias, so it is reported where it is written.
+        files: ['**/src/shared/**/*.ts'],
+        rules: {
+            // typescript-eslint's counterpart of the base rule is the one that knows about `import type`. Leaving
+            // its `allowTypeImports` off restricts a type import as well, which reaches just as far.
+            '@typescript-eslint/no-restricted-imports': [
+                'error',
+                {
+                    patterns: [
+                        {
+                            group: ['@dnd-mapp/web-auth/*', '@/core', '@/core/*', '@/pages', '@/pages/*'],
+                            message:
+                                'shared is lifted out as @dnd-mapp/web-ui, which auth and the application both read from, so it reads from neither. See Application layout in docs/workspace.md.',
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        // auth reads from shared, so only the application is out of bounds for it.
+        files: ['**/src/auth/**/*.ts'],
+        rules: {
+            '@typescript-eslint/no-restricted-imports': [
+                'error',
+                {
+                    patterns: [
+                        {
+                            group: ['@/core', '@/core/*', '@/pages', '@/pages/*'],
+                            message:
+                                'auth is lifted out as @dnd-mapp/web-auth, which the application reads from, so it does not read back. See Application layout in docs/workspace.md.',
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
         files: ['**/*.html'],
         extends: [angular.configs.templateRecommended, angular.configs.templateAccessibility],
         rules: {
