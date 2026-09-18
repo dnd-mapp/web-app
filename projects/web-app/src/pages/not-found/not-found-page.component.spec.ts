@@ -1,4 +1,4 @@
-import { NotFoundPageComponent } from '@/pages';
+import { NotFoundPageComponent, pageTexts } from '@/pages';
 import { NotFoundPageHarness } from '@/pages/testing';
 import { Component, type Type } from '@angular/core';
 import { provideRouter } from '@angular/router';
@@ -33,6 +33,7 @@ describe('NotFoundPageComponent', () => {
         const { harness } = await setupTestEnvironment({
             testComponent: testComponent,
             harness: NotFoundPageHarness,
+            texts: [pageTexts],
             providers: [provideRouter([])],
         });
 

@@ -5,10 +5,13 @@ import { BrandHarness } from '@dnd-mapp/web-ui/components/testing';
 import { setupTestEnvironment } from '@dnd-mapp/web-ui/testing';
 
 describe('BrandComponent', () => {
-    /** Hosts the component under test the way a page would, so the spec renders it through a template. */
+    /**
+     * Hosts the component under test the way a page would, so the spec renders it through a template. The name is
+     * fixture data rather than this application's, since the wordmark writes out whatever name it is handed.
+     */
     @Component({
         selector: 'app-test',
-        template: `<app-brand />`,
+        template: `<app-brand name="Test Application" />`,
         imports: [BrandComponent],
     })
     class TestComponent {}
@@ -32,9 +35,9 @@ describe('BrandComponent', () => {
         };
     }
 
-    it("should show the application's name", async () => {
+    it('should show the name it is given', async () => {
         const { harness } = await setupTest();
-        expect(await harness.name()).toBe('D&D Mapp');
+        expect(await harness.name()).toBe('Test Application');
     });
 
     it('should lead to the home page', async () => {

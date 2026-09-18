@@ -10,7 +10,7 @@ export class BrandHarness extends ComponentHarness {
     private readonly linkLocator = this.locatorFor('a');
 
     /**
-     * Reads the application's name.
+     * Reads the name the wordmark writes out.
      *
      * @returns The text the wordmark shows.
      */
