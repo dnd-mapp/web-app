@@ -16,7 +16,7 @@ ENV PATH="${PNPM_HOME}/bin:${PATH}"
 # Make the install fail when the download does, instead of handing an empty script to sh.
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-RUN curl -fsSL https://get.pnpm.io/install.sh | env PNPM_VERSION=12.4.1 SHELL=/bin/sh ENV=/root/.shrc sh -
+RUN curl -fsSL https://get.pnpm.io/install.sh | env PNPM_VERSION=12.4.2 SHELL=/bin/sh ENV=/root/.shrc sh -
 
 ENV CI="true"
 
