@@ -61,7 +61,7 @@ catalogs:
     "@playwright/test": ~1.63.0
     playwright: ~1.63.0
   prettier:
-    prettier: ~3.9.6
+    prettier: ~3.9.7
     prettier-plugin-organize-imports: ~4.3.0
   stylelint:
     postcss: ~8.5.28
