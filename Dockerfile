@@ -5,7 +5,7 @@
 # platform of a multi-platform build, instead of being repeated under emulation for each of them.
 
 # build Compile the application.
-FROM --platform=$BUILDPLATFORM node:24.21.0@sha256:22553920add6fb1fd909104346924cd30b4b3ac76ca2980f3b8dba8ede3cf945 AS build
+FROM --platform=$BUILDPLATFORM node:24.21.0@sha256:64af3819f9275802414d7cdc38c27e9d82bd564dec4d4da87d008255d36c63b4 AS build
 
 # Install the pnpm version pinned under devEngines in package.json through pnpm's standalone installer. It downloads
 # the executable from the npm registry, checks it against the published checksum and npm signature, and installs it
