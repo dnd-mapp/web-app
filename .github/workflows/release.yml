@@ -17,7 +17,7 @@ jobs:
     # workspace is set up first, so the scripts run on the pinned Node.js rather than the runner's.
     verify:
         name: Verify the release
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         timeout-minutes: 5
         permissions:
             contents: read
@@ -78,7 +78,7 @@ jobs:
     build-image:
         name: Build image
         needs: verify
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         timeout-minutes: 10
         permissions:
             contents: read
@@ -112,7 +112,7 @@ jobs:
     deploy-production:
         name: Deploy to production
         needs: build-image
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         timeout-minutes: 15
         permissions:
             contents: read
@@ -144,7 +144,7 @@ jobs:
         needs:
             - verify
             - build-image
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         timeout-minutes: 2
         permissions:
             contents: write
