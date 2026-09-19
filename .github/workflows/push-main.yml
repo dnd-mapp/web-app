@@ -14,7 +14,7 @@ jobs:
     # request already checked them.
     ci:
         name: CI
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         timeout-minutes: 5
         permissions:
             contents: read
@@ -41,7 +41,7 @@ jobs:
     # is enough.
     changes:
         name: Detect changes
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         timeout-minutes: 2
         permissions:
             contents: read
@@ -73,7 +73,7 @@ jobs:
             - ci
             - changes
         if: needs.changes.outputs.image == 'true'
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         timeout-minutes: 10
         permissions:
             contents: read
@@ -107,7 +107,7 @@ jobs:
     deploy-dev:
         name: Deploy to dev
         needs: build-image
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         timeout-minutes: 15
         permissions:
             contents: read
@@ -140,7 +140,7 @@ jobs:
             - changes
             - build-image
         if: ${{ !cancelled() && (needs.build-image.result == 'success' || needs.changes.outputs.image == 'false') }}
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         timeout-minutes: 10
         permissions:
             contents: read
@@ -187,7 +187,7 @@ jobs:
         name: Update Docker Hub description
         needs: changes
         if: needs.changes.outputs.hub == 'true'
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         timeout-minutes: 2
         permissions:
             contents: read

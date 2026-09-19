@@ -11,7 +11,7 @@ permissions: {}
 jobs:
     ci:
         name: CI
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         timeout-minutes: 5
         permissions:
             contents: read
@@ -53,7 +53,7 @@ jobs:
     # it resolves.
     changes:
         name: Detect changes
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         timeout-minutes: 2
         permissions:
             contents: read
@@ -83,7 +83,7 @@ jobs:
         if: >-
             ${{ needs.changes.outputs.preview == 'true' &&
             github.event.pull_request.head.repo.full_name == github.repository }}
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         timeout-minutes: 10
         permissions:
             contents: read
@@ -121,7 +121,7 @@ jobs:
             ${{ !cancelled() && needs.changes.result == 'success' &&
             github.event.pull_request.head.repo.full_name == github.repository &&
             (needs.build-image.result == 'success' || needs.changes.outputs.preview == 'false') }}
-        runs-on: ubuntu-24.04
+        runs-on: ubuntu-26.04
         timeout-minutes: 10
         permissions:
             contents: read
