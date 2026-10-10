@@ -13,7 +13,8 @@
         "module": "preserve",
         "target": "es2022",
         "paths": {
-            "@/core": ["./src/core/index.ts"]
+            "@/core": ["./src/core/index.ts"],
+            "@/core/testing": ["./src/core/testing/index.ts"]
         }
     },
     "angularCompilerOptions": {

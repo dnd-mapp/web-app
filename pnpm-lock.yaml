@@ -168,6 +168,9 @@ catalogs:
     '@angular/build':
       specifier: ~22.2.1
       version: 22.2.2
+    '@angular/cdk':
+      specifier: ~22.2.1
+      version: 22.2.2
     '@angular/cli':
       specifier: ~22.2.1
       version: 22.2.2
@@ -181,6 +184,9 @@ catalogs:
       specifier: ~22.2.1
       version: 22.2.1
     '@angular/core':
+      specifier: ~22.2.1
+      version: 22.2.1
+    '@angular/forms':
       specifier: ~22.2.1
       version: 22.2.1
     '@angular/platform-browser':
@@ -266,6 +272,9 @@ importers:
 
   .:
     dependencies:
+      '@angular/cdk':
+        specifier: catalog:angular
+        version: 22.2.2(@angular/common@22.2.1)(@angular/core@22.2.1)(@angular/forms@22.2.1)(@angular/platform-browser@22.2.1)(rxjs@7.8.2)
       '@angular/common':
         specifier: catalog:angular
         version: 22.2.1(@angular/core@22.2.1)(rxjs@7.8.2)
@@ -275,6 +284,9 @@ importers:
       '@angular/core':
         specifier: catalog:angular
         version: 22.2.1(@angular/compiler@22.2.1)(rxjs@7.8.2)
+      '@angular/forms':
+        specifier: catalog:angular
+        version: 22.2.1(@angular/common@22.2.1)(@angular/core@22.2.1)(@angular/platform-browser@22.2.1)(rxjs@7.8.2)
       '@angular/platform-browser':
         specifier: catalog:angular
         version: 22.2.1(@angular/common@22.2.1)(@angular/core@22.2.1)
@@ -475,6 +487,15 @@ packages:
       vitest:
         optional: true
 
+  '@angular/cdk@22.2.2':
+    resolution: {integrity: sha512-d5PWfIargIEV0rlwZea2pYDGb8FhF9df6a6XFRLThla6NKiJRs8utqW+7pyY9wCPFR3SSCGHC05xFh7qv91hdw==}
+    peerDependencies:
+      '@angular/common': ^22.0.0 || ^23.0.0
+      '@angular/core': ^22.0.0 || ^23.0.0
+      '@angular/forms': ^22.0.0 || ^23.0.0
+      '@angular/platform-browser': ^22.0.0 || ^23.0.0
+      rxjs: ^6.5.3 || ^7.4.0
+
   '@angular/cli@22.2.2':
     resolution: {integrity: sha512-AALIN+zai0CiA7HgSCGVPHyZyiw3yFWliCfbaS4ueHDJHVZ8QhVjRUrnfGZc3EJnigcyQ0w2DKeTxjwqpDjKew==}
     engines: {node: ^22.22.3 || ^24.15.0 || >=26.0.0, npm: ^6.11.0 || ^7.5.6 || >=8.0.0, yarn: '>= 1.13.0'}
@@ -514,6 +535,15 @@ packages:
         optional: true
       zone.js:
         optional: true
+
+  '@angular/forms@22.2.1':
+    resolution: {integrity: sha512-xHM+PhrvYDJ+edPxh6PWhkE99tXWbsMcxdXCWF6QcyByX+bsW2rVlNZ7dumOsUle9MYa8Yj0lZFACUWbwFw+4w==}
+    engines: {node: ^22.22.3 || ^24.15.0 || >=26.0.0}
+    peerDependencies:
+      '@angular/common': 22.2.1
+      '@angular/core': 22.2.1
+      '@angular/platform-browser': 22.2.1
+      rxjs: ^6.5.3 || ^7.4.0
 
   '@angular/platform-browser@22.2.1':
     resolution: {integrity: sha512-KQ3oguemaSqyNP00yqEvPouY7NC4Lji+6S8yfjaWaUZjSth/GckpeP/Fo9HtMqd04y6MZ6lEb2hbQtTqFcSdEQ==}
@@ -1692,6 +1722,9 @@ packages:
   '@sindresorhus/merge-streams@4.0.0':
     resolution: {integrity: sha512-tlqY9xq5ukxTUZBmoOp+m61cqwQD5pHJtFY3Mn8CA8ps6yghLH/Hw8UPdqg4OLmFW3IFlcXnQNmo/dh8HzXYIQ==}
     engines: {node: '>=18'}
+
+  '@standard-schema/spec@1.1.0':
+    resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
 
   '@types/chai@5.2.3':
     resolution: {integrity: sha512-Mw558oeA9fFbv65/y4mHtXDs9bPnFMZAL/jxdPFUpOHHIXX91mcgEHbS5Lahr+pwZFR8A7GQleRWeI6cGFC2UA==}
@@ -3570,6 +3603,16 @@ snapshots:
       - tsx
       - yaml
 
+  '@angular/cdk@22.2.2(@angular/common@22.2.1)(@angular/core@22.2.1)(@angular/forms@22.2.1)(@angular/platform-browser@22.2.1)(rxjs@7.8.2)':
+    dependencies:
+      '@angular/common': 22.2.1(@angular/core@22.2.1)(rxjs@7.8.2)
+      '@angular/core': 22.2.1(@angular/compiler@22.2.1)(rxjs@7.8.2)
+      '@angular/forms': 22.2.1(@angular/common@22.2.1)(@angular/core@22.2.1)(@angular/platform-browser@22.2.1)(rxjs@7.8.2)
+      '@angular/platform-browser': 22.2.1(@angular/common@22.2.1)(@angular/core@22.2.1)
+      parse5: 8.0.1
+      rxjs: 7.8.2
+      tslib: 2.8.1
+
   '@angular/cli@22.2.2(@types/node@24.19.1)(chokidar@5.0.0)':
     dependencies:
       '@angular-devkit/architect': 0.2202.2(chokidar@5.0.0)
@@ -3620,6 +3663,16 @@ snapshots:
       tslib: 2.8.1
     optionalDependencies:
       '@angular/compiler': 22.2.1
+
+  '@angular/forms@22.2.1(@angular/common@22.2.1)(@angular/core@22.2.1)(@angular/platform-browser@22.2.1)(rxjs@7.8.2)':
+    dependencies:
+      '@angular/common': 22.2.1(@angular/core@22.2.1)(rxjs@7.8.2)
+      '@angular/core': 22.2.1(@angular/compiler@22.2.1)(rxjs@7.8.2)
+      '@angular/platform-browser': 22.2.1(@angular/common@22.2.1)(@angular/core@22.2.1)
+      '@standard-schema/spec': 1.1.0
+      rxjs: 7.8.2
+      tslib: 2.8.1
+      zod: 4.6.5
 
   '@angular/platform-browser@22.2.1(@angular/common@22.2.1)(@angular/core@22.2.1)':
     dependencies:
@@ -4533,6 +4586,8 @@ snapshots:
   '@simple-libs/stream-utils@2.0.0': {}
 
   '@sindresorhus/merge-streams@4.0.0': {}
+
+  '@standard-schema/spec@1.1.0': {}
 
   '@types/chai@5.2.3':
     dependencies:

@@ -17,6 +17,7 @@ The repository is an Angular workspace with a single application project, `web-a
 | `src/core/config/app.config.ts`  | The providers of the application, such as the router                                     |
 | `src/core/config/app.routes.ts`  | The routes of the application, which holds none yet                                      |
 | `src/core/root/root.component*`  | The root component, which renders the router outlet                                      |
+| `src/core/testing/index.ts`      | The component harnesses of the core, which the specs import as `@/core/testing`          |
 | `vitest.config.ts`               | The Vitest options that the test target in `angular.json` has no builder option for      |
 | `tsconfig.json`                  | The compiler options of the workspace, which refers to the app, spec, and tools projects |
 
@@ -49,6 +50,8 @@ pnpm run build
 Tests use Vitest through the Angular unit-test builder, and run in headless Chromium through [Playwright](https://playwright.dev/). The builder sets up the Angular `TestBed`, and the Vitest globals, such as `describe`, `it`, `expect`, and `vi`, are available without an import. The test target in `angular.json` holds the test options, and coverage must stay above its thresholds. Its `development` configuration is the default and runs in watch mode with the Vitest UI. The `ci` configuration runs the tests once.
 
 `tsconfig.json` refers to three projects: `tsconfig.app.json` for the application, `tsconfig.spec.json` for the specs, and `tsconfig.tools.json` for the config files. Only the spec project has the types of the Vitest globals, so the application cannot use them by mistake.
+
+Test a component through a [component harness](https://angular.dev/guide/testing/using-component-harnesses) of the Angular CDK, the way a user interacts with it, rather than through its DOM. Keep each harness in the `testing/harnesses` folder of the area its component belongs to, such as `src/core/testing/harnesses`, and export it from the `testing/index.ts` of that area. Give each spec only the providers that its component needs.
 
 Install the browser as the section on [frontend repositories](https://github.com/dnd-mapp/.github/blob/main/CONTRIBUTING.md#frontend-repositories) describes before you run the tests.
 
