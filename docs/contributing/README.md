@@ -35,7 +35,7 @@ The application runs without Zone.js, which is the default since Angular 21. It 
 Generate a component with the Angular CLI, and pass the folder of its area with `--path`, since the CLI writes to `src/app` otherwise. The schematic defaults in `angular.json` apply the 2016 naming, so it writes `<name>.component.ts`, `.html`, `.scss`, and `.spec.ts` files:
 
 ```bash
-pnpm ng generate component <name> --path src/<folder>
+pnpm exec ng generate component <name> --path src/<folder>
 ```
 
 ## Building and testing

@@ -16,7 +16,6 @@
     "url": "git+https://github.com/dnd-mapp/web-app.git"
   },
   "scripts": {
-    "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",

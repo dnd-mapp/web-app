@@ -10,7 +10,6 @@
 !*.html
 !*.scss
 
-.angular/
 .idea/
 
 node_modules/
@@ -19,4 +18,5 @@ pnpm-lock.yaml
 .coverage/
 .vitest/
 
+.angular/
 dist/

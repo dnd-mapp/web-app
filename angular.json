@@ -6,48 +6,48 @@
         "packageManager": "pnpm"
     },
     "newProjectRoot": "projects",
+    "schematics": {
+        "@schematics/angular:component": {
+            "style": "scss",
+            "type": "component"
+        },
+        "@schematics/angular:directive": {
+            "type": "directive"
+        },
+        "@schematics/angular:service": {
+            "type": "service"
+        },
+        "@schematics/angular:guard": {
+            "typeSeparator": "."
+        },
+        "@schematics/angular:interceptor": {
+            "typeSeparator": "."
+        },
+        "@schematics/angular:module": {
+            "typeSeparator": "."
+        },
+        "@schematics/angular:pipe": {
+            "typeSeparator": "."
+        },
+        "@schematics/angular:resolver": {
+            "typeSeparator": "."
+        }
+    },
     "projects": {
         "web-app": {
             "projectType": "application",
             "root": "",
             "sourceRoot": "src",
             "prefix": "app",
-            "schematics": {
-                "@schematics/angular:component": {
-                    "style": "scss",
-                    "type": "component"
-                },
-                "@schematics/angular:directive": {
-                    "type": "directive"
-                },
-                "@schematics/angular:service": {
-                    "type": "service"
-                },
-                "@schematics/angular:guard": {
-                    "typeSeparator": "."
-                },
-                "@schematics/angular:interceptor": {
-                    "typeSeparator": "."
-                },
-                "@schematics/angular:module": {
-                    "typeSeparator": "."
-                },
-                "@schematics/angular:pipe": {
-                    "typeSeparator": "."
-                },
-                "@schematics/angular:resolver": {
-                    "typeSeparator": "."
-                }
-            },
             "architect": {
                 "build": {
                     "builder": "@angular/build:application",
-                    "defaultConfiguration": "production",
                     "options": {
                         "browser": "src/main.ts",
                         "tsConfig": "tsconfig.app.json",
                         "inlineStyleLanguage": "scss"
                     },
+                    "defaultConfiguration": "production",
                     "configurations": {
                         "production": {
                             "budgets": [
@@ -74,19 +74,12 @@
                 },
                 "serve": {
                     "builder": "@angular/build:dev-server",
-                    "defaultConfiguration": "development",
-                    "configurations": {
-                        "production": {
-                            "buildTarget": "web-app:build:production"
-                        },
-                        "development": {
-                            "buildTarget": "web-app:build:development"
-                        }
+                    "options": {
+                        "buildTarget": "web-app:build:development"
                     }
                 },
                 "test": {
                     "builder": "@angular/build:unit-test",
-                    "defaultConfiguration": "development",
                     "options": {
                         "tsConfig": "tsconfig.spec.json",
                         "runnerConfig": "vitest.config.ts",
@@ -104,6 +97,7 @@
                         },
                         "reporters": ["dot"]
                     },
+                    "defaultConfiguration": "development",
                     "configurations": {
                         "ci": {
                             "reporters": ["dot", "github-actions"],

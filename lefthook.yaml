@@ -10,7 +10,7 @@ pre-commit:
           run: pnpm exec markdownlint-cli2 {staged_files}
 
         - name: eslint
-          glob: "*.{js,mjs,cjs,ts,mts,cts}"
+          glob: "*.{js,mjs,cjs,ts,mts,cts,html}"
           run: pnpm exec eslint {staged_files}
 
 commit-msg:
