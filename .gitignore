@@ -1,4 +1,6 @@
 .idea/*
+!.idea/inspectionProfiles/
+!.idea/jsLinters/
 !.idea/runConfigurations/
 !.idea/markdown.xml
 !.idea/prettier.xml
@@ -9,3 +11,12 @@
 !.vscode/tasks.json
 
 node_modules/
+
+.angular/
+dist/
+*.tsbuildinfo
+
+.coverage/
+.vitest/
+
+tsc-out/
