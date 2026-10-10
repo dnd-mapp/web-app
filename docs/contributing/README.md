@@ -8,30 +8,33 @@ This repository holds the website and the web application of D&D Mapp, in one An
 
 The repository is an Angular workspace with a single application project, `web-app`, in the root of the repository.
 
-| File                     | Purpose                                                                                  |
-|:-------------------------|:-----------------------------------------------------------------------------------------|
-| `angular.json`           | The workspace config, with the build, serve, and test targets of the application         |
-| `src/index.html`         | The page that loads the application                                                      |
-| `src/main.ts`            | The entry point, which bootstraps `AppComponent`                                         |
-| `src/app/app.config.ts`  | The providers of the application, such as the router                                     |
-| `src/app/app.routes.ts`  | The routes of the application, which holds none yet                                      |
-| `src/app/app.component*` | The root component, which renders the router outlet                                      |
-| `vitest.config.ts`       | The Vitest options that the test target in `angular.json` has no builder option for      |
-| `tsconfig.json`          | The compiler options of the workspace, which refers to the app, spec, and tools projects |
+| File                             | Purpose                                                                                  |
+|:---------------------------------|:-----------------------------------------------------------------------------------------|
+| `angular.json`                   | The workspace config, with the build, serve, and test targets of the application         |
+| `src/index.html`                 | The page that loads the application                                                      |
+| `src/main.ts`                    | The entry point, which bootstraps `RootComponent`                                        |
+| `src/core/index.ts`              | The public API of the core, which the rest of the application imports as `@/core`        |
+| `src/core/config/app.config.ts`  | The providers of the application, such as the router                                     |
+| `src/core/config/app.routes.ts`  | The routes of the application, which holds none yet                                      |
+| `src/core/root/root.component*`  | The root component, which renders the router outlet                                      |
+| `vitest.config.ts`               | The Vitest options that the test target in `angular.json` has no builder option for      |
+| `tsconfig.json`                  | The compiler options of the workspace, which refers to the app, spec, and tools projects |
+
+`tsconfig.json` maps each `@/` path alias to the `index.ts` it exports from. Import through the alias from outside a folder, and through a relative path inside it.
 
 The application runs without Zone.js, which is the default since Angular 21. It renders in the browser only. Server-side rendering and prerendering wait for the decision on deployment.
 
 ## Components
 
 - Give selectors the `app` prefix, such as `app-root`. The prefix tells the components of the application apart from those of `@dnd-mapp/ui`, which use `dma`.
-- Name files and classes after the [2016 Angular style guide](https://v19.angular.dev/style-guide): put the type in both, such as `AppComponent` in `app.component.ts`. ESLint checks the class suffixes of components and directives.
+- Name files and classes after the [2016 Angular style guide](https://v19.angular.dev/style-guide): put the type in both, such as `RootComponent` in `root.component.ts`. ESLint checks the class suffixes of components and directives.
 - Write the styles in SCSS.
 - Keep the components accessible. ESLint checks the templates against the accessibility rules of angular-eslint.
 
-Generate a component with the Angular CLI. The schematic defaults in `angular.json` apply the 2016 naming, so it writes `<name>.component.ts`, `.html`, `.scss`, and `.spec.ts` files:
+Generate a component with the Angular CLI, and pass the folder of its area with `--path`, since the CLI writes to `src/app` otherwise. The schematic defaults in `angular.json` apply the 2016 naming, so it writes `<name>.component.ts`, `.html`, `.scss`, and `.spec.ts` files:
 
 ```bash
-pnpm ng generate component <name>
+pnpm ng generate component <name> --path src/<folder>
 ```
 
 ## Building and testing

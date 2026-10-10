@@ -29,7 +29,7 @@ export default defineConfig([
         rules: {
             '@angular-eslint/component-selector': ['error', { type: 'element', prefix: 'app', style: 'kebab-case' }],
             '@angular-eslint/directive-selector': ['error', { type: 'attribute', prefix: 'app', style: 'camelCase' }],
-            // The classes follow the naming of the 2016 Angular style guide, such as `AppComponent`.
+            // The classes follow the naming of the 2016 Angular style guide, such as `RootComponent`.
             '@angular-eslint/component-class-suffix': 'error',
             '@angular-eslint/directive-class-suffix': 'error',
         },
