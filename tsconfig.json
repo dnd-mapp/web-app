@@ -1,0 +1,27 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "extends": "@dnd-mapp/config-typescript/base",
+    "references": [
+        { "path": "./tsconfig.app.json" },
+        { "path": "./tsconfig.spec.json" },
+        { "path": "./tsconfig.tools.json" }
+    ],
+    "files": [],
+    "compilerOptions": {
+        "experimentalDecorators": true,
+        "importHelpers": true,
+        "module": "preserve",
+        "target": "es2022",
+        "paths": {
+            "@/core": ["./src/core/index.ts"],
+            "@/core/testing": ["./src/core/testing/index.ts"]
+        }
+    },
+    "angularCompilerOptions": {
+        "enableI18nLegacyMessageIdFormat": false,
+        "strictInjectionParameters": true,
+        "strictInputAccessModifiers": true,
+        "strictStandalone": true,
+        "strictTemplates": true
+    }
+}

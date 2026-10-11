@@ -7,13 +7,16 @@
 !*.yml
 !*.[tj]s
 !*.[cm][tj]s
+!*.html
+!*.scss
 
 .idea/
 
-.vscode/*
-!.vscode/extensions.json
-!.vscode/settings.json
-!.vscode/tasks.json
-
 node_modules/
 pnpm-lock.yaml
+
+.coverage/
+.vitest/
+
+.angular/
+dist/
