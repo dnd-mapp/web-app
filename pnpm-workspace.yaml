@@ -26,7 +26,7 @@ catalogMode: "strict"
 savePrefix: "~"
 
 catalog:
-  "@dnd-mapp/config-typescript": ~1.1.0
+  "@dnd-mapp/config-typescript": ~1.2.0
   "@types/node": ~24.19.1
   typescript: ~6.0.3
 catalogs:
